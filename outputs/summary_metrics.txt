@@ -1,0 +1,3 @@
+Total Sales: 215074.01
+Total Profit: 42900.39
+Total Orders: 700

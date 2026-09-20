@@ -1,0 +1,704 @@
+Order_ID,Order_Date,Customer_ID,Product_Name,Category,Region,Sales,Quantity,Profit,Payment_Mode
+ORD100496,2025-06-03,CUST1880,Tennis Racket,Sports,Central,291.27,1,75.33,UPI
+ORD100165,2026-02-11,CUST1489,Formal Shirt,Apparel,West,102.49,1,19.38,Cash
+ORD100055,2025-12-01,CUST1274,Trail Backpack,Sports,South,178.8,1,13.78,Net Banking
+ORD100583,2025-08-19,CUST1516,Denim Jacket,Apparel,Central,69.06,1,19.2,UPI
+ORD100609,2025-03-05,CUST1818,Electric Kettle,Home,South,41.86,1,2.62,Net Banking
+ORD100368,2025-12-13,CUST1006,Formal Shirt,Apparel,South,249.21,3,81.82,Debit Card
+ORD100372,2024-09-25,CUST1224,Wireless Mouse,Electronics,Central,782.81,1,175.37,Debit Card
+ORD100671,2024-10-06,CUST1027,Noise-Cancel Headphones,Electronics,East,365.82,1,117.77,Credit Card
+ORD100584,2025-07-08,CUST1322,Scented Candle,Home,West,133.78,1,15.33,Debit Card
+ORD100311,2025-08-05,CUST1392,Classic Lamp,Home,North,169.04,1,58.37,Net Banking
+ORD100356,2024-11-05,CUST1766,Gourmet Tea,Grocery,South,8.47,1,0.7,Cash
+ORD100605,2025-06-27,CUST1646,Trail Backpack,Sports,West,152.08,1,11.35,UPI
+ORD100522,2026-02-02,CUST1019,Protein Bar Pack,Grocery,Central,11.05,1,1.96,Cash
+ORD100559,2025-03-13,CUST1067,Smartwatch Pro,Electronics,West,506.23,1,37.6,Net Banking
+ORD100133,2025-10-04,CUST1016,Formal Shirt,Apparel,Central,122.74,2,33.79,UPI
+ORD100293,2025-12-18,CUST1484,Noise-Cancel Headphones,Electronics,South,239.9,1,13.95,Cash
+ORD100132,2025-06-11,CUST1113,Electric Kettle,Home,South,88.04,1,28.99,Credit Card
+ORD100082,2024-05-31,CUST1300,Gourmet Tea,Grocery,East,24.17,1,7.94,Debit Card
+ORD100087,2024-12-16,CUST1694,Blender Pro,Home,North,202.47,1,47.48,Debit Card
+ORD100653,2025-01-15,CUST1921,Formal Shirt,Apparel,Central,62.99,1,15.17,Net Banking
+ORD100454,2024-11-17,CUST1760,Yoga Mat,Sports,South,214.54,1,24.29,Cash
+ORD100625,2026-01-23,CUST1289,Trail Backpack,Sports,North,114.78,1,30.97,Debit Card
+ORD100448,2026-01-04,CUST1702,"LED Monitor 24""",Electronics,West,270.19,1,72.45,Net Banking
+ORD100520,2026-01-22,CUST1315,Protein Bar Pack,Grocery,Central,4.28,1,1.37,Cash
+ORD100397,2025-06-09,CUST1511,Blender Pro,Home,Central,161.85,1,11.36,Credit Card
+ORD100645,2025-04-02,CUST1787,Noise-Cancel Headphones,Electronics,Central,244.31,1,61.8,Credit Card
+ORD100078,2025-04-29,CUST1395,Blender Pro,Home,West,261.45,1,51.7,UPI
+ORD100478,2025-03-05,CUST1146,Organic Coffee,Grocery,Central,20.91,1,5.23,Net Banking
+ORD100276,2025-06-25,CUST1810,Protein Bar Pack,Grocery,East,73.88,2,11.38,Debit Card
+ORD100666,2025-05-28,CUST1396,"LED Monitor 24""",Electronics,West,126.58,1,8.95,Credit Card
+ORD100339,2024-04-17,CUST1535,Organic Coffee,Grocery,North,15.71,1,1.64,Cash
+ORD100325,2025-09-23,CUST1785,Smartwatch Pro,Electronics,Central,1075.55,1,63.84,Net Banking
+ORD100137,2024-10-25,CUST1907,Noise-Cancel Headphones,Electronics,East,1139.52,2,166.14,Debit Card
+ORD100073,2026-03-20,CUST1496,Organic Coffee,Grocery,North,10.18,1,2.49,Net Banking
+ORD100491,2025-07-11,CUST1544,Electric Kettle,Home,West,185.07,1,58.03,Cash
+ORD100232,2026-03-10,CUST1359,Kitchen Knife Set,Home,West,52.12,1,12.15,Cash
+ORD100119,2024-05-16,CUST1460,Smartwatch Pro,Electronics,South,660.83,1,38.3,Cash
+ORD100622,2025-11-22,CUST1994,Classic Lamp,Home,Central,244.26,1,80.9,Credit Card
+ORD100543,2025-08-06,CUST1755,Smartwatch Pro,Electronics,South,984.53,1,77.78,UPI
+ORD100602,2026-03-04,CUST1252,Denim Jacket,Apparel,South,100.22,1,28.3,Net Banking
+ORD100635,2026-03-11,CUST1691,Scented Candle,Home,East,34.7,1,9.5,Debit Card
+ORD100312,2026-01-05,CUST1751,"LED Monitor 24""",Electronics,South,409.73,1,53.96,Debit Card
+ORD100431,2025-02-05,CUST1227,Yoga Mat,Sports,East,179.03,1,39.43,Net Banking
+ORD100659,2025-06-13,CUST1848,Wireless Mouse,Electronics,North,660.49,1,84.4,Net Banking
+ORD100079,2024-04-19,CUST1739,Blender Pro,Home,West,250.93,1,33.68,Net Banking
+ORD100651,2025-02-20,CUST1411,Smartphone X,Electronics,West,866.07,1,198.73,Credit Card
+ORD100515,2024-06-17,CUST1072,Smartwatch Pro,Electronics,East,68.19,1,23.11,Credit Card
+ORD100329,2025-05-22,CUST1422,Noise-Cancel Headphones,Electronics,Central,1047.98,1,268.83,Net Banking
+ORD100582,2026-02-28,CUST1334,Blender Pro,Home,East,165.74,1,32.22,UPI
+ORD100654,2026-01-28,CUST1414,Yoga Mat,Sports,East,277.42,1,47.99,Net Banking
+ORD100536,2025-01-14,CUST1014,Wireless Mouse,Electronics,South,481.84,1,139.79,Net Banking
+ORD100600,2024-12-03,CUST1614,Organic Coffee,Grocery,East,26.96,1,1.45,UPI
+ORD100285,2024-09-25,CUST1653,Electric Kettle,Home,North,155.89,1,17.39,Cash
+ORD100361,2024-08-25,CUST1912,Air Purifier,Home,South,71.34,1,12.5,Net Banking
+ORD100440,2025-06-30,CUST1638,Blender Pro,Home,West,26.76,1,1.82,Credit Card
+ORD100260,2025-12-01,CUST1581,Noise-Cancel Headphones,Electronics,West,227.96,1,55.24,UPI
+ORD100494,2025-06-23,CUST1558,Yoga Mat,Sports,South,347.95,1,29.95,Debit Card
+ORD100216,2025-05-27,CUST1689,Protein Bar Pack,Grocery,South,64.08,2,16.26,Credit Card
+ORD100159,2024-07-12,CUST1403,Gourmet Tea,Grocery,East,31.54,1,2.28,Credit Card
+ORD100011,2025-01-29,CUST1445,Smartphone X,Electronics,West,808.4,1,56.2,Net Banking
+ORD100064,2025-02-10,CUST1582,Kitchen Knife Set,Home,North,142.15,1,45.37,Credit Card
+ORD100355,2025-02-03,CUST1693,Gourmet Tea,Grocery,North,3.24,1,0.57,Net Banking
+ORD100553,2026-03-27,CUST1302,Protein Bar Pack,Grocery,East,26.91,1,4.55,UPI
+ORD100182,2025-10-10,CUST1061,Running Shoes,Apparel,West,105.05,1,16.54,UPI
+ORD100261,2025-02-23,CUST1463,Denim Jacket,Apparel,South,103.39,1,12.98,Debit Card
+ORD100110,2025-01-19,CUST1694,Smartwatch Pro,Electronics,West,411.9,1,51.21,Debit Card
+ORD100328,2024-11-30,CUST1080,Tennis Racket,Sports,West,44.95,1,3.26,UPI
+ORD100032,2024-07-23,CUST1391,Noise-Cancel Headphones,Electronics,West,1145.73,1,227.01,Debit Card
+ORD100691,2025-12-27,CUST1770,Wireless Mouse,Electronics,South,1010.79,1,112.67,UPI
+ORD100643,2025-12-15,CUST1503,Organic Coffee,Grocery,West,24.6,1,5.97,Cash
+ORD100700,2024-10-03,CUST1200,Classic Lamp,Home,South,250.04,1,42.2,Credit Card
+ORD100603,2024-05-29,CUST1707,"LED Monitor 24""",Electronics,East,374.86,1,38.32,Credit Card
+ORD100146,2025-02-05,CUST1871,Smartphone X,Electronics,South,558.29,1,165.57,UPI
+ORD100502,2025-01-22,CUST1496,Running Shoes,Apparel,South,44.27,1,7.51,Cash
+ORD100056,2025-08-23,CUST1871,Trail Backpack,Sports,South,416.16,2,44.09,Cash
+ORD100619,2025-08-20,CUST1782,Blender Pro,Home,Central,411.16,2,113.69,Debit Card
+ORD100320,2025-07-15,CUST1303,Denim Jacket,Apparel,West,97.87,1,26.56,Cash
+ORD100210,2025-06-01,CUST1397,Running Shoes,Apparel,Central,64.9,1,8.16,Debit Card
+ORD100077,2025-07-14,CUST1955,Trail Backpack,Sports,South,330.0,2,95.19,Cash
+ORD100003,2024-09-14,CUST1714,Wireless Mouse,Electronics,East,356.08,1,82.02,Cash
+ORD100236,2025-11-20,CUST1002,Running Shoes,Apparel,West,408.28,4,119.61,UPI
+ORD100290,2026-03-04,CUST1445,Yoga Mat,Sports,South,39.17,1,13.08,UPI
+ORD100395,2025-03-21,CUST1374,Smartphone X,Electronics,West,650.48,1,52.53,UPI
+ORD100699,2024-10-20,CUST1646,Smartwatch Pro,Electronics,East,98.2,1,21.93,Debit Card
+ORD100332,2024-09-19,CUST1504,Blender Pro,Home,West,44.35,1,3.44,UPI
+ORD100149,2024-08-14,CUST1443,Formal Shirt,Apparel,North,115.36,2,39.89,Debit Card
+ORD100121,2026-02-28,CUST1612,Noise-Cancel Headphones,Electronics,East,175.71,1,32.94,Net Banking
+ORD100303,2025-01-12,CUST1267,Electric Kettle,Home,South,107.52,2,13.74,Net Banking
+ORD100212,2024-07-22,CUST1138,Electric Kettle,Home,North,212.71,1,39.19,Cash
+ORD100631,2025-07-23,CUST1676,Smartwatch Pro,Electronics,East,731.07,1,212.03,UPI
+ORD100098,2024-12-03,CUST1602,Trail Backpack,Sports,North,310.71,1,49.11,UPI
+ORD100193,2025-08-07,CUST1936,"LED Monitor 24""",Electronics,Central,617.8,1,122.1,UPI
+ORD100394,2024-04-16,CUST1690,Yoga Mat,Sports,West,242.73,1,37.03,Debit Card
+ORD100091,2024-07-23,CUST1691,"LED Monitor 24""",Electronics,West,2505.1,2,776.89,Credit Card
+ORD100136,2025-03-16,CUST1833,Smartphone X,Electronics,West,1207.44,2,64.3,UPI
+ORD100429,2025-02-20,CUST1563,Trail Backpack,Sports,East,97.09,1,7.41,Net Banking
+ORD100061,2025-10-22,CUST1299,Blender Pro,Home,West,39.03,1,12.78,Credit Card
+ORD100156,2025-09-13,CUST1478,Protein Bar Pack,Grocery,East,19.21,1,5.97,Net Banking
+ORD100031,2024-12-02,CUST1885,Smartphone X,Electronics,South,89.13,1,24.8,Debit Card
+ORD100070,2025-08-20,CUST1992,Running Shoes,Apparel,West,72.73,1,7.15,UPI
+ORD100175,2024-07-01,CUST1410,Organic Coffee,Grocery,South,11.58,3,3.49,UPI
+ORD100545,2026-02-22,CUST1968,Running Shoes,Apparel,South,27.36,1,8.98,Credit Card
+ORD100045,2025-10-11,CUST1477,Wireless Mouse,Electronics,North,,1,174.82,Net Banking
+ORD100291,2025-01-11,CUST1532,Tennis Racket,Sports,North,144.62,1,35.17,Debit Card
+ORD100071,2025-10-19,CUST1037,Tennis Racket,Sports,North,208.41,1,51.18,Credit Card
+ORD100278,2025-12-21,CUST1226,Smartwatch Pro,Electronics,North,191.91,1,19.75,Debit Card
+ORD100295,2025-02-05,CUST1997,Tennis Racket,Sports,East,73.0,1,21.17,UPI
+ORD100211,2024-08-31,CUST1064,Smartphone X,Electronics,West,476.85,1,97.04,UPI
+ORD100620,2024-09-18,CUST1722,Tennis Racket,Sports,West,410.87,1,110.34,Net Banking
+ORD100508,2024-07-13,CUST1261,Smartwatch Pro,Electronics,West,1637.72,2,131.72,Net Banking
+ORD100405,2025-09-25,CUST1858,Smartphone X,Electronics,North,537.67,1,138.78,Net Banking
+ORD100324,2026-03-05,CUST1901,Blender Pro,Home,West,258.44,1,85.56,Cash
+ORD100205,2025-05-07,CUST1693,Air Purifier,Home,East,95.58,1,29.83,Cash
+ORD100391,2024-08-04,CUST1942,Running Shoes,Apparel,West,89.28,1,21.39,Net Banking
+ORD100066,2024-12-30,CUST1806,Smartwatch Pro,Electronics,South,771.18,1,246.11,Credit Card
+ORD100399,2024-04-24,CUST1421,Organic Coffee,Grocery,East,29.14,1,9.97,Debit Card
+ORD100050,2024-10-25,CUST1859,Classic Lamp,Home,Central,47.92,1,6.4,Cash
+ORD100200,2024-10-04,CUST1109,Organic Coffee,Grocery,Central,30.74,1,1.91,UPI
+ORD100134,2025-09-22,CUST1998,Gourmet Tea,Grocery,North,19.41,1,6.23,UPI
+ORD100040,2025-08-03,CUST1625,Running Shoes,Apparel,West,42.75,1,9.05,Debit Card
+ORD100209,2025-07-07,CUST1570,Air Purifier,Home,Central,113.57,1,21.44,Cash
+ORD100514,2025-12-19,CUST1402,Smartphone X,Electronics,West,761.48,1,62.49,UPI
+ORD100007,2024-05-31,CUST1234,Noise-Cancel Headphones,Electronics,East,121.89,1,28.47,Debit Card
+ORD100102,2026-02-03,CUST1666,Air Purifier,Home,South,135.62,1,46.48,Credit Card
+ORD100590,2025-03-14,CUST1508,Formal Shirt,Apparel,East,116.83,1,19.67,Credit Card
+ORD100221,2024-11-01,CUST1533,Protein Bar Pack,Grocery,East,18.42,1,4.27,Credit Card
+ORD100336,2025-01-30,CUST1463,Blender Pro,Home,South,129.52,1,39.47,Cash
+ORD100469,2026-01-02,CUST1362,Blender Pro,Home,Central,155.36,1,47.11,Net Banking
+ORD100427,2024-10-15,CUST1197,Formal Shirt,Apparel,South,77.28,1,18.2,Net Banking
+ORD100418,2026-01-04,CUST1061,Noise-Cancel Headphones,Electronics,East,768.24,1,67.26,Net Banking
+ORD100333,2025-03-16,CUST1110,Wireless Mouse,Electronics,North,1833.14,2,614.23,Net Banking
+ORD100688,2025-12-01,CUST1816,Trail Backpack,Sports,East,339.29,1,63.71,Net Banking
+ORD100282,2024-07-08,CUST1346,Kitchen Knife Set,Home,Central,615.09,3,107.26,UPI
+ORD100042,2026-02-16,CUST1543,Air Purifier,Home,Central,87.51,1,15.59,UPI
+ORD100109,2024-05-24,CUST1690,Running Shoes,Apparel,East,270.51,3,58.51,Net Banking
+ORD100432,2024-07-09,CUST1038,Tennis Racket,Sports,East,113.66,1,12.51,Cash
+ORD100057,2024-10-16,CUST1087,"LED Monitor 24""",Electronics,West,1001.5,1,253.65,Credit Card
+ORD100307,2025-06-08,CUST1807,Trail Backpack,Sports,East,275.96,1,85.7,Net Banking
+ORD100519,2025-04-06,CUST1498,Running Shoes,Apparel,West,32.98,1,7.69,UPI
+ORD100025,2025-11-01,CUST1102,Running Shoes,Apparel,Central,132.9,1,34.83,Cash
+ORD100430,2024-12-20,CUST1368,Tennis Racket,Sports,West,13.42,1,0.99,Debit Card
+ORD100166,2024-12-12,CUST1285,Air Purifier,Home,East,77.71,1,5.7,UPI
+ORD100235,2026-01-06,CUST1424,Scented Candle,Home,West,33.77,1,2.33,Cash
+ORD100287,2026-02-16,CUST1099,Running Shoes,Apparel,East,82.75,1,23.39,UPI
+ORD100266,2026-01-25,CUST1454,Blender Pro,Home,North,558.02,2,122.51,Debit Card
+ORD100111,2024-08-22,CUST1782,Denim Jacket,Apparel,East,107.75,1,5.85,Debit Card
+ORD100083,2025-12-29,CUST1699,"LED Monitor 24""",Electronics,West,265.37,1,89.98,Credit Card
+ORD100052,2024-06-20,CUST1606,"LED Monitor 24""",Electronics,North,493.75,1,60.54,Net Banking
+ORD100228,2025-08-13,CUST1139,Yoga Mat,Sports,West,138.96,1,34.82,UPI
+ORD100577,2025-07-02,CUST1231,Air Purifier,Home,West,190.36,2,27.01,UPI
+ORD100677,2024-08-25,CUST1742,Air Purifier,Home,East,246.8,1,27.01,Cash
+ORD100538,2024-04-16,CUST1709,Wireless Mouse,Electronics,South,414.81,1,61.1,Cash
+ORD100354,2025-06-26,CUST1390,Scented Candle,Home,North,154.75,1,53.42,Net Banking
+ORD100578,2024-04-17,CUST1690,Protein Bar Pack,Grocery,North,7.86,1,1.4,Net Banking
+ORD100665,2025-12-15,CUST1135,Blender Pro,Home,Central,150.44,1,41.43,Credit Card
+ORD100019,2025-07-21,CUST1255,Running Shoes,Apparel,West,30.81,1,2.36,Credit Card
+ORD100258,2026-02-06,CUST1385,Electric Kettle,Home,North,121.08,2,20.49,Debit Card
+ORD100265,2024-11-17,CUST1133,Yoga Mat,Sports,West,107.27,1,5.95,Credit Card
+ORD100438,2025-05-13,CUST1667,Smartwatch Pro,Electronics,South,2558.5,2,755.24,UPI
+ORD100529,2025-10-08,CUST1519,"LED Monitor 24""",Electronics,West,2924.4,4,756.08,UPI
+ORD100062,2024-07-29,CUST1841,Running Shoes,Apparel,West,166.0,2,41.17,Cash
+ORD100426,2025-12-26,CUST1272,Formal Shirt,Apparel,North,21.95,1,7.59,Credit Card
+ORD100695,2025-11-25,CUST1673,Blender Pro,Home,North,90.54,1,19.16,Debit Card
+ORD100030,2024-05-14,CUST1920,Gourmet Tea,Grocery,South,28.57,1,5.48,Net Banking
+ORD100319,2026-02-20,CUST1091,Organic Coffee,Grocery,Central,22.0,1,4.52,Credit Card
+ORD100255,2024-05-27,CUST1183,"LED Monitor 24""",Electronics,Central,1316.49,1,79.07,Cash
+ORD100248,2025-06-03,CUST1433,Scented Candle,Home,North,192.26,1,38.61,Debit Card
+ORD100337,2026-01-11,CUST1222,Yoga Mat,Sports,South,359.38,1,41.82,Debit Card
+ORD100445,2025-12-06,CUST1544,Running Shoes,Apparel,South,92.23,1,31.58,Net Banking
+ORD100614,2026-03-05,CUST1662,Tennis Racket,Sports,North,243.25,1,43.69,UPI
+ORD100376,2025-11-28,CUST1823,Smartwatch Pro,Electronics,North,303.22,1,52.32,Net Banking
+ORD100350,2024-09-22,CUST1994,Air Purifier,Home,Central,25.98,1,1.46,UPI
+ORD100250,2024-05-30,CUST1316,Smartphone X,Electronics,North,251.97,1,59.79,Net Banking
+ORD100658,2025-02-04,CUST1291,Smartwatch Pro,Electronics,South,1242.42,2,255.22,Cash
+ORD100334,2025-08-27,CUST1004,Formal Shirt,Apparel,North,70.63,1,15.01,Debit Card
+ORD100370,2024-12-09,CUST1044,Blender Pro,Home,Central,176.3,1,16.95,Debit Card
+ORD100177,2026-03-25,CUST1788,Electric Kettle,Home,North,199.6,1,58.66,UPI
+ORD100224,2024-06-07,CUST1591,Organic Coffee,Grocery,Central,11.68,1,3.73,Net Banking
+ORD100214,2026-03-16,CUST1648,Protein Bar Pack,Grocery,Central,27.52,1,4.04,Net Banking
+ORD100240,2024-07-10,CUST1001,Yoga Mat,Sports,West,34.38,3,9.26,Cash
+ORD100183,2025-07-07,CUST1890,Scented Candle,Home,West,43.02,1,8.87,Credit Card
+ORD100660,2025-05-13,CUST1892,Denim Jacket,Apparel,Central,73.39,1,22.21,UPI
+ORD100164,2025-05-31,CUST1707,Yoga Mat,Sports,West,531.24,2,125.39,Debit Card
+ORD100292,2024-07-15,CUST1947,Organic Coffee,Grocery,Central,30.59,1,2.96,Cash
+ORD100617,2025-09-01,CUST1504,Trail Backpack,Sports,West,110.22,2,14.96,Credit Card
+ORD100446,2024-09-11,CUST1018,Gourmet Tea,Grocery,East,36.46,1,9.26,Credit Card
+ORD100353,2025-12-28,CUST1064,Smartwatch Pro,Electronics,North,134.92,1,26.17,Cash
+ORD100400,2025-03-02,CUST1689,Formal Shirt,Apparel,West,80.13,3,7.13,Debit Card
+ORD100524,2026-02-27,CUST1411,Trail Backpack,Sports,North,303.33,1,30.46,Credit Card
+ORD100105,2025-03-30,CUST1106,Smartwatch Pro,Electronics,Central,994.53,1,299.15,Cash
+ORD100115,2024-10-19,CUST1927,Gourmet Tea,Grocery,East,12.02,1,2.04,Debit Card
+ORD100632,2025-05-11,CUST1046,Running Shoes,Apparel,West,82.18,1,22.18,Net Banking
+ORD100197,2024-08-25,CUST1737,Air Purifier,Home,West,56.77,1,5.2,Credit Card
+ORD100484,2025-07-24,CUST1581,Blender Pro,Home,North,217.07,1,51.09,UPI
+ORD100093,2026-02-19,CUST1972,Air Purifier,Home,West,172.15,1,44.86,Net Banking
+ORD100008,2026-01-22,CUST1469,Blender Pro,Home,East,50.39,1,8.06,Net Banking
+ORD100090,2025-04-13,CUST1092,Scented Candle,Home,North,80.32,1,11.09,UPI
+ORD100533,2025-06-24,CUST1148,Yoga Mat,Sports,Central,198.3,1,15.01,Cash
+ORD100640,2025-08-01,CUST1119,Protein Bar Pack,Grocery,Central,3.79,1,0.66,Debit Card
+ORD100526,2025-12-22,CUST1385,Smartphone X,Electronics,North,122.76,1,29.78,Net Banking
+ORD100381,2024-04-09,CUST1823,Running Shoes,Apparel,South,47.98,2,12.16,Net Banking
+ORD100410,2025-12-22,CUST1826,Denim Jacket,Apparel,East,53.76,1,9.29,Debit Card
+ORD100213,2026-01-30,CUST1997,Kitchen Knife Set,Home,South,84.38,1,11.03,UPI
+ORD100141,2026-01-18,CUST1810,Noise-Cancel Headphones,Electronics,North,602.91,1,46.64,Credit Card
+ORD100029,2024-04-13,CUST1114,Running Shoes,Apparel,South,74.65,1,20.07,Cash
+ORD100044,2025-01-21,CUST1240,Denim Jacket,Apparel,East,30.03,1,3.5,Debit Card
+ORD100043,2024-09-13,CUST1761,Protein Bar Pack,Grocery,West,74.84,2,3.9,Debit Card
+ORD100074,2024-07-29,CUST1472,Organic Coffee,Grocery,South,29.2,2,6.44,UPI
+ORD100168,2024-06-23,CUST1354,Tennis Racket,Sports,East,195.82,1,57.6,Cash
+ORD100364,2024-08-25,CUST1456,Smartphone X,Electronics,South,859.8,1,210.56,Cash
+ORD100697,2024-09-17,CUST1107,Tennis Racket,Sports,North,337.98,2,95.54,Debit Card
+ORD100067,2025-12-04,CUST1766,Smartwatch Pro,Electronics,East,1368.78,2,332.08,Net Banking
+ORD100012,2025-02-03,CUST1861,Formal Shirt,Apparel,Central,118.53,3,34.67,Credit Card
+ORD100249,2025-03-04,CUST1400,Smartwatch Pro,Electronics,North,669.17,1,110.53,UPI
+ORD100572,2024-07-11,CUST1801,Organic Coffee,Grocery,Central,13.98,1,4.87,Cash
+ORD100179,2025-07-05,CUST1540,Gourmet Tea,Grocery,North,44.7,1,13.63,Net Banking
+ORD100347,2024-11-08,CUST1679,Trail Backpack,Sports,East,340.52,1,72.14,Credit Card
+ORD100500,2025-03-21,CUST1547,Classic Lamp,Home,West,124.67,1,38.52,Cash
+ORD100251,2024-09-21,CUST1380,Blender Pro,Home,East,231.18,1,55.09,Net Banking
+ORD100297,2024-10-18,CUST1896,Yoga Mat,Sports,North,97.71,1,26.06,UPI
+ORD100646,2025-07-16,CUST1985,Organic Coffee,Grocery,North,12.96,2,3.86,Net Banking
+ORD100178,2025-12-15,CUST1382,Wireless Mouse,Electronics,Central,4599.8,4,996.45,Net Banking
+ORD100507,2025-09-28,CUST1699,Noise-Cancel Headphones,Electronics,North,955.94,1,65.08,Cash
+ORD100452,2025-12-21,CUST1631,Denim Jacket,Apparel,Central,41.14,1,12.84,UPI
+ORD100084,2025-01-23,CUST1693,Air Purifier,Home,South,71.6,2,11.85,Cash
+ORD100219,2024-04-14,CUST1100,Denim Jacket,Apparel,South,68.44,1,9.25,UPI
+ORD100580,2025-11-20,CUST1607,Denim Jacket,Apparel,West,114.43,1,19.94,Debit Card
+ORD100362,2025-11-17,CUST1414,Smartwatch Pro,Electronics,South,1680.58,2,319.68,Debit Card
+ORD100672,2025-12-06,CUST1600,"LED Monitor 24""",Electronics,West,669.76,1,116.09,Net Banking
+ORD100468,2026-01-08,CUST1541,Running Shoes,Apparel,West,84.53,1,22.9,Cash
+ORD100080,2025-03-06,CUST1872,Air Purifier,Home,West,265.36,1,27.37,Net Banking
+ORD100024,2026-02-18,CUST1733,,Sports,South,1510.6,4,165.58,Credit Card
+ORD100016,2024-06-15,CUST1724,Noise-Cancel Headphones,Electronics,South,83.94,1,17.29,UPI
+ORD100389,2025-01-23,CUST1095,Scented Candle,Home,East,44.13,1,13.22,Cash
+ORD100245,2024-10-14,CUST1765,Scented Candle,Home,East,178.61,1,28.16,Debit Card
+ORD100486,2025-08-03,CUST1115,Gourmet Tea,Grocery,West,57.12,2,14.45,Credit Card
+ORD100396,2025-11-14,CUST1702,"LED Monitor 24""",Electronics,North,,2,154.31,Debit Card
+ORD100673,2025-05-26,CUST1648,"LED Monitor 24""",Electronics,North,1401.1,1,79.23,Debit Card
+ORD100517,2026-03-10,CUST1837,Protein Bar Pack,Grocery,North,31.14,1,10.45,Credit Card
+ORD100138,2024-05-22,CUST1886,Trail Backpack,Sports,East,1159.53,3,257.45,UPI
+ORD100550,2025-10-04,CUST1292,Smartphone X,Electronics,South,1969.3,2,517.18,Credit Card
+ORD100335,2024-08-13,CUST1106,Scented Candle,Home,Central,364.4,2,106.39,Debit Card
+ORD100034,2024-12-27,CUST1182,Smartwatch Pro,Electronics,East,634.9,1,152.96,Net Banking
+ORD100474,2025-09-19,CUST1306,Smartwatch Pro,Electronics,East,139.68,2,28.24,Cash
+ORD100301,2024-12-18,CUST1622,Electric Kettle,Home,East,101.1,1,10.56,Net Banking
+ORD100613,2025-01-18,CUST1744,Yoga Mat,Sports,West,88.74,1,29.14,UPI
+ORD100010,2025-07-27,CUST1541,Denim Jacket,Apparel,Central,98.56,1,6.3,Cash
+ORD100023,2024-11-30,CUST1413,Organic Coffee,Grocery,Central,21.67,1,1.57,Net Banking
+ORD100685,2025-07-12,CUST1002,Wireless Mouse,Electronics,North,517.66,1,157.88,Net Banking
+ORD100222,2024-07-24,CUST1693,Smartphone X,Electronics,South,609.87,1,58.46,UPI
+ORD100412,2025-06-26,CUST1744,Classic Lamp,Home,South,45.25,1,7.27,UPI
+ORD100689,2025-12-09,CUST1634,Tennis Racket,Sports,North,24.85,1,2.74,Cash
+ORD100351,2026-03-24,CUST1899,Wireless Mouse,Electronics,North,481.56,2,159.74,Credit Card
+ORD100085,2025-05-02,CUST1873,Protein Bar Pack,Grocery,North,77.62,2,7.83,UPI
+ORD100343,2026-01-27,CUST1376,Smartwatch Pro,Electronics,Central,655.54,2,95.53,Credit Card
+ORD100257,2025-10-15,CUST1778,"LED Monitor 24""",Electronics,South,,1,51.13,Credit Card
+ORD100587,2025-11-22,CUST1027,Trail Backpack,Sports,West,251.07,1,46.78,Debit Card
+ORD100204,2024-04-20,CUST1984,Yoga Mat,Sports,Central,96.75,1,28.04,Net Banking
+ORD100592,2024-06-11,CUST1580,Formal Shirt,Apparel,West,80.55,3,11.65,Cash
+ORD100094,2024-05-07,CUST1706,Gourmet Tea,Grocery,South,8.05,1,1.22,Net Banking
+ORD100300,2025-01-04,CUST1667,Wireless Mouse,Electronics,Central,,2,122.58,Debit Card
+ORD100630,2026-03-05,CUST1924,Electric Kettle,Home,South,160.04,1,55.62,Credit Card
+ORD100383,2025-09-16,CUST1292,Yoga Mat,Sports,North,,1,81.26,Cash
+ORD100185,2025-03-24,CUST1158,Denim Jacket,Apparel,South,28.85,1,9.03,Credit Card
+ORD100637,2024-09-21,CUST1924,Blender Pro,Home,West,219.83,1,31.15,Net Banking
+ORD100345,2024-05-14,CUST1157,Trail Backpack,Sports,Central,158.8,1,11.61,Net Banking
+ORD100154,2025-02-24,CUST1751,Gourmet Tea,Grocery,West,13.28,1,3.25,Cash
+ORD100076,2024-04-06,CUST1289,Electric Kettle,Home,Central,190.07,1,31.92,Cash
+ORD100482,2025-02-16,CUST1627,Trail Backpack,Sports,Central,55.09,1,5.68,Credit Card
+ORD100069,2026-02-21,CUST1841,Denim Jacket,Apparel,Central,54.98,1,4.42,Debit Card
+ORD100535,2026-01-17,CUST1975,Kitchen Knife Set,Home,South,151.74,1,10.75,Debit Card
+ORD100189,2025-03-22,CUST1964,Scented Candle,Home,Central,101.33,1,16.99,UPI
+ORD100272,2025-05-06,CUST1363,Smartphone X,Electronics,South,996.0,2,204.83,Cash
+ORD100237,2025-02-28,CUST1848,Electric Kettle,Home,East,163.77,1,45.54,Credit Card
+ORD100089,2025-08-10,CUST1990,Electric Kettle,Home,East,469.92,2,121.76,UPI
+ORD100595,2024-10-26,CUST1373,Tennis Racket,Sports,South,165.17,1,40.93,Credit Card
+ORD100118,2024-06-01,CUST1377,Electric Kettle,Home,North,374.74,2,37.05,Net Banking
+ORD100126,2024-12-03,CUST1992,Tennis Racket,Sports,Central,136.87,1,7.8,UPI
+ORD100576,2024-08-21,CUST1507,Gourmet Tea,Grocery,East,7.67,1,2.68,Net Banking
+ORD100239,2025-01-09,CUST1095,Gourmet Tea,Grocery,East,6.01,1,1.8,Debit Card
+ORD100001,2026-01-18,CUST1114,Classic Lamp,Home,East,93.9,1,25.32,Net Banking
+ORD100696,2024-06-13,CUST1349,Yoga Mat,Sports,West,184.38,1,45.55,Cash
+ORD100423,2025-05-28,CUST1656,Trail Backpack,Sports,North,73.71,1,16.95,Credit Card
+ORD100579,2024-09-23,CUST1066,Gourmet Tea,Grocery,South,9.09,1,1.68,UPI
+ORD100544,2025-03-23,CUST1463,Protein Bar Pack,Grocery,Central,32.38,1,5.0,Cash
+ORD100279,2026-03-30,CUST1686,Trail Backpack,Sports,West,282.46,1,91.65,Credit Card
+ORD100117,2025-02-21,CUST1154,Tennis Racket,Sports,North,142.67,1,28.67,Credit Card
+ORD100229,2024-05-05,CUST1814,"LED Monitor 24""",Electronics,East,662.0,2,146.62,UPI
+ORD100315,2025-04-23,CUST1897,Denim Jacket,Apparel,Central,23.68,1,2.65,Credit Card
+ORD100327,2025-08-24,CUST1890,Smartphone X,Electronics,North,455.89,1,68.51,Net Banking
+ORD100275,2024-07-26,CUST1866,Formal Shirt,Apparel,East,114.96,1,24.28,Cash
+ORD100450,2024-09-12,CUST1325,Running Shoes,Apparel,Central,42.75,1,2.65,Credit Card
+ORD100145,2024-06-18,CUST1462,Smartphone X,Electronics,West,874.5,1,65.79,Credit Card
+ORD100638,2025-03-11,CUST1008,Organic Coffee,Grocery,West,62.54,2,10.04,Cash
+ORD100382,2025-05-19,CUST1628,Formal Shirt,Apparel,East,109.36,1,34.29,UPI
+ORD100636,2026-01-28,CUST1148,"LED Monitor 24""",Electronics,West,1278.76,1,205.09,Debit Card
+ORD100537,2024-05-19,CUST1041,Protein Bar Pack,Grocery,Central,34.67,1,10.89,UPI
+ORD100269,2024-12-15,CUST1645,Air Purifier,Home,North,283.35,1,93.59,Net Banking
+ORD100481,2026-01-01,CUST1573,Formal Shirt,Apparel,North,128.97,3,32.47,Cash
+ORD100047,2025-03-14,CUST1684,Scented Candle,Home,South,264.24,1,89.51,Net Banking
+ORD100262,2024-08-05,CUST1548,Gourmet Tea,Grocery,South,5.85,1,1.89,Cash
+ORD100196,2024-12-11,CUST1511,Air Purifier,Home,East,69.71,1,6.18,Debit Card
+ORD100397,2025-06-09,CUST1511,Blender Pro,Home,Central,161.85,1,11.36,Credit Card
+ORD100588,2024-06-29,CUST1932,Running Shoes,Apparel,East,127.22,2,25.0,UPI
+ORD100108,2025-04-24,CUST1429,Tennis Racket,Sports,East,236.98,1,31.75,Credit Card
+ORD100470,2024-10-19,CUST1001,Organic Coffee,Grocery,North,23.14,2,7.18,UPI
+ORD100569,2025-06-30,CUST1911,Kitchen Knife Set,Home,Central,174.55,1,42.28,Debit Card
+ORD100330,2025-07-15,CUST1973,Trail Backpack,Sports,East,256.99,1,76.0,Net Banking
+ORD100101,2026-01-03,CUST1648,Smartwatch Pro,Electronics,Central,518.56,1,110.03,UPI
+ORD100358,2024-08-13,CUST1687,"LED Monitor 24""",Electronics,North,112.93,1,6.25,Cash
+ORD100629,2026-04-04,CUST1158,Protein Bar Pack,Grocery,Central,19.85,1,1.05,UPI
+ORD100341,2025-10-30,CUST1398,"LED Monitor 24""",Electronics,Central,938.56,1,307.21,UPI
+ORD100180,2025-09-18,CUST1452,Organic Coffee,Grocery,South,20.07,1,1.78,Debit Card
+ORD100305,2026-04-04,CUST1227,Air Purifier,Home,West,231.65,1,49.95,Net Banking
+ORD100357,2025-11-05,CUST1872,Noise-Cancel Headphones,Electronics,Central,658.17,1,91.41,Net Banking
+ORD100676,2025-03-29,CUST1862,Yoga Mat,Sports,Central,38.59,1,13.29,Credit Card
+ORD100150,2025-01-19,CUST1866,Running Shoes,Apparel,East,43.84,1,3.29,Credit Card
+ORD100125,2025-12-27,CUST1134,Kitchen Knife Set,Home,West,62.31,1,4.45,UPI
+ORD100667,2025-11-10,CUST1645,Electric Kettle,Home,Central,162.14,1,20.84,Credit Card
+ORD100610,2025-10-27,CUST1662,Kitchen Knife Set,Home,South,801.93,3,110.54,UPI
+ORD100186,2025-12-03,CUST1034,Tennis Racket,Sports,Central,143.9,1,8.44,Net Banking
+ORD100501,2025-12-06,CUST1767,Electric Kettle,Home,Central,83.23,1,4.8,Cash
+ORD100480,2024-11-04,CUST1328,Yoga Mat,Sports,South,95.59,1,24.09,Debit Card
+ORD100694,2025-06-24,CUST1525,Gourmet Tea,Grocery,East,,1,1.22,Cash
+ORD100495,2024-08-10,CUST1137,Classic Lamp,Home,North,144.15,1,21.24,Debit Card
+ORD100322,2025-05-19,CUST1409,Tennis Racket,Sports,East,300.54,1,47.1,Debit Card
+ORD100649,2025-04-20,CUST1732,Wireless Mouse,Electronics,East,351.18,1,63.94,Debit Card
+ORD100143,2025-04-19,CUST1454,Running Shoes,Apparel,Central,57.86,1,8.98,Credit Card
+ORD100142,2025-06-26,CUST1035,Blender Pro,Home,North,64.85,1,13.93,Debit Card
+ORD100682,2024-11-16,CUST1239,Protein Bar Pack,Grocery,East,30.36,1,8.1,UPI
+ORD100321,2024-05-20,CUST1009,Blender Pro,Home,South,104.32,1,12.89,Cash
+ORD100020,2024-12-02,CUST1170,Wireless Mouse,Electronics,West,906.59,1,133.81,UPI
+ORD100173,2025-03-13,CUST1291,Tennis Racket,Sports,Central,120.67,1,41.77,Credit Card
+ORD100570,2026-03-09,CUST1232,Electric Kettle,Home,South,74.94,1,18.36,Credit Card
+ORD100313,2025-01-26,CUST1466,Formal Shirt,Apparel,Central,105.9,1,9.04,UPI
+ORD100655,2024-07-08,CUST1523,Air Purifier,Home,East,280.8,2,62.21,Net Banking
+ORD100013,2024-07-27,CUST1951,Gourmet Tea,Grocery,East,5.26,1,1.34,Credit Card
+ORD100306,2024-08-13,CUST1758,Denim Jacket,Apparel,Central,83.59,1,27.96,Cash
+ORD100026,2025-10-12,CUST1720,Electric Kettle,Home,Central,285.32,1,20.6,Credit Card
+ORD100523,2025-12-20,CUST1174,Smartwatch Pro,Electronics,North,153.02,1,36.29,Debit Card
+ORD100170,2024-04-09,CUST1987,Air Purifier,Home,South,279.42,2,74.81,Cash
+ORD100488,2024-06-10,CUST1348,Yoga Mat,Sports,Central,219.59,1,54.32,Debit Card
+ORD100548,2026-01-25,CUST1805,Trail Backpack,Sports,West,240.02,2,56.9,Debit Card
+ORD100246,2025-09-26,CUST1910,Classic Lamp,Home,East,472.88,2,139.49,Debit Card
+ORD100299,2024-12-24,CUST1766,Running Shoes,Apparel,East,97.53,1,13.45,Debit Card
+ORD100539,2025-11-09,CUST1765,Smartwatch Pro,Electronics,North,652.04,1,227.07,Cash
+ORD100273,2025-11-01,CUST1971,Yoga Mat,Sports,West,,1,14.39,Credit Card
+ORD100155,2024-05-25,CUST1297,Scented Candle,Home,Central,125.85,1,42.62,Cash
+ORD100127,2026-02-27,CUST1969,Smartwatch Pro,Electronics,West,720.2,2,61.54,Debit Card
+ORD100479,2024-05-19,CUST1703,Kitchen Knife Set,Home,North,83.32,1,11.86,Credit Card
+ORD100342,2026-03-06,CUST1320,Air Purifier,Home,North,84.66,3,16.28,Debit Card
+ORD100288,2025-10-04,CUST1703,Protein Bar Pack,Grocery,Central,38.58,1,7.03,Net Banking
+ORD100114,2025-11-28,CUST1410,Formal Shirt,Apparel,North,53.01,1,10.18,Net Banking
+ORD100409,2025-10-30,CUST1447,Scented Candle,Home,South,63.62,1,10.77,UPI
+ORD100174,2026-01-27,CUST1263,Smartphone X,Electronics,North,1043.47,1,171.41,UPI
+ORD100363,2025-11-28,CUST1750,Electric Kettle,Home,South,116.33,1,40.41,Net Banking
+ORD100058,2026-03-13,CUST1249,Electric Kettle,Home,Central,110.63,1,13.05,Cash
+ORD100498,2025-08-11,CUST1721,Gourmet Tea,Grocery,North,28.24,1,2.03,Cash
+ORD100223,2026-02-06,CUST1442,Scented Candle,Home,North,173.35,1,18.37,Debit Card
+ORD100281,2024-09-17,CUST1462,Running Shoes,Apparel,North,128.19,1,13.26,UPI
+ORD100018,2024-05-29,CUST1689,Organic Coffee,Grocery,North,14.96,1,4.76,UPI
+ORD100413,2024-05-06,CUST1338,Running Shoes,Apparel,South,46.76,2,15.92,Cash
+ORD100323,2024-06-03,CUST1965,Smartphone X,Electronics,North,706.64,1,155.41,UPI
+ORD100256,2024-04-12,CUST1377,Yoga Mat,Sports,East,243.9,1,76.35,UPI
+ORD100425,2024-11-03,CUST1671,Protein Bar Pack,Grocery,North,26.42,1,5.13,Cash
+ORD100674,2024-06-28,CUST1866,Formal Shirt,Apparel,South,88.63,1,19.33,UPI
+ORD100191,2025-07-08,CUST1867,Gourmet Tea,Grocery,North,19.73,1,3.33,Credit Card
+ORD100447,2024-05-04,CUST1966,Air Purifier,Home,East,61.98,1,7.89,Net Banking
+ORD100621,2024-09-02,CUST1126,Gourmet Tea,Grocery,North,34.21,1,3.53,Net Banking
+ORD100378,2026-01-31,CUST1599,Denim Jacket,Apparel,East,47.11,1,5.47,Debit Card
+ORD100095,2024-06-05,CUST1407,Denim Jacket,Apparel,South,90.13,1,20.14,Net Banking
+ORD100181,2024-06-02,CUST1572,Tennis Racket,Sports,East,677.19,3,80.31,Credit Card
+ORD100302,2024-07-17,CUST1007,Formal Shirt,Apparel,East,45.51,1,14.46,Cash
+ORD100435,2026-02-01,CUST1869,Kitchen Knife Set,Home,North,176.82,1,46.45,Net Banking
+ORD100516,2026-03-21,CUST1337,Scented Candle,Home,Central,,1,5.26,Credit Card
+ORD100589,2025-01-02,CUST1020,Protein Bar Pack,Grocery,Central,14.63,1,3.97,UPI
+ORD100692,2025-03-17,CUST1666,Classic Lamp,Home,West,334.02,2,103.94,Net Banking
+ORD100437,2025-08-04,CUST1585,Noise-Cancel Headphones,Electronics,Central,173.85,1,12.87,Debit Card
+ORD100006,2026-02-19,CUST1273,Running Shoes,Apparel,Central,39.55,1,8.2,Net Banking
+ORD100690,2024-08-12,CUST1063,Tennis Racket,Sports,North,183.31,1,27.33,Cash
+ORD100046,2025-03-30,CUST1305,Scented Candle,Home,West,152.06,1,39.67,Cash
+ORD100406,2024-08-20,CUST1992,Air Purifier,Home,South,137.64,1,34.98,Net Banking
+ORD100530,2024-05-18,CUST1055,Gourmet Tea,Grocery,East,36.7,1,9.74,Credit Card
+ORD100172,2025-05-15,CUST1806,Protein Bar Pack,Grocery,South,61.52,2,3.56,Net Banking
+ORD100017,2025-11-09,CUST1590,Protein Bar Pack,Grocery,South,6.09,1,2.08,UPI
+ORD100049,2025-06-09,CUST1258,Running Shoes,Apparel,West,103.76,1,24.16,Credit Card
+ORD100680,2026-02-20,CUST1455,Organic Coffee,Grocery,East,16.27,1,2.04,Credit Card
+ORD100644,2024-09-13,CUST1178,Formal Shirt,Apparel,North,29.18,1,6.37,UPI
+ORD100004,2024-05-18,CUST1747,Tennis Racket,Sports,Central,192.02,1,65.47,Cash
+ORD100457,2025-10-27,CUST1396,Formal Shirt,Apparel,North,101.93,1,34.8,Debit Card
+ORD100444,2026-02-08,CUST1368,Organic Coffee,Grocery,North,42.08,1,11.18,Credit Card
+ORD100317,2025-12-15,CUST1717,Blender Pro,Home,West,459.66,2,105.79,Credit Card
+ORD100648,2024-08-23,CUST1125,Yoga Mat,Sports,West,199.09,1,52.22,Cash
+ORD100284,2025-10-18,CUST1860,Protein Bar Pack,Grocery,South,29.36,1,8.07,UPI
+ORD100512,2025-07-26,CUST1676,Running Shoes,Apparel,West,60.76,1,5.26,Cash
+ORD100286,2024-10-10,CUST1379,Scented Candle,Home,East,54.4,1,10.42,Net Banking
+ORD100421,2025-07-08,CUST1302,Denim Jacket,Apparel,Central,95.85,1,13.72,Credit Card
+ORD100226,2026-02-21,CUST1137,Trail Backpack,Sports,North,508.52,4,86.12,Net Banking
+ORD100027,2024-07-31,CUST1911,Organic Coffee,Grocery,Central,14.06,1,4.34,Cash
+ORD100552,2025-02-06,CUST1124,Classic Lamp,Home,West,207.23,1,68.61,Net Banking
+ORD100264,2025-05-23,CUST1875,Tennis Racket,Sports,Central,157.29,3,35.53,Credit Card
+ORD100051,2025-12-16,CUST1986,Organic Coffee,Grocery,South,27.5,2,2.57,UPI
+ORD100365,2024-11-27,CUST1064,Denim Jacket,Apparel,East,73.2,1,8.73,UPI
+ORD100230,2024-07-29,CUST1274,Air Purifier,Home,East,167.5,1,17.77,UPI
+ORD100038,2025-01-22,CUST1215,Wireless Mouse,Electronics,Central,513.91,1,150.29,Debit Card
+ORD100158,2025-11-08,CUST1575,Yoga Mat,Sports,East,273.45,3,86.78,Net Banking
+ORD100238,2025-07-18,CUST1016,Organic Coffee,Grocery,South,10.89,1,1.89,Debit Card
+ORD100675,2024-05-16,CUST1001,Tennis Racket,Sports,Central,302.98,2,53.21,Net Banking
+ORD100375,2025-12-12,CUST1552,Classic Lamp,Home,West,328.84,2,81.08,UPI
+ORD100371,2025-05-24,CUST1613,Smartwatch Pro,Electronics,North,1667.48,2,195.34,Net Banking
+ORD100176,2025-02-07,CUST1596,Smartwatch Pro,Electronics,North,470.87,1,62.17,Debit Card
+ORD100596,2025-01-02,CUST1843,Electric Kettle,Home,South,174.5,2,40.86,Debit Card
+ORD100683,2025-08-29,CUST1505,Smartphone X,Electronics,Central,1019.41,1,217.2,Net Banking
+ORD100518,2025-03-18,CUST1082,Tennis Racket,Sports,East,88.26,1,27.83,UPI
+ORD100195,2025-11-01,CUST1884,"LED Monitor 24""",Electronics,South,673.61,1,161.68,Debit Card
+ORD100598,2024-05-17,CUST1986,Protein Bar Pack,Grocery,North,14.8,1,3.76,UPI
+ORD100606,2025-06-10,CUST1897,Organic Coffee,Grocery,South,73.41,3,20.61,Cash
+ORD100433,2024-11-12,CUST1751,Running Shoes,Apparel,East,90.7,1,21.85,Credit Card
+ORD100463,2025-08-27,CUST1556,Classic Lamp,Home,Central,,1,68.61,Credit Card
+ORD100549,2024-12-26,CUST1232,Protein Bar Pack,Grocery,East,18.51,1,1.63,Debit Card
+ORD100679,2025-08-04,CUST1004,Classic Lamp,Home,South,113.85,1,9.59,Credit Card
+ORD100585,2025-05-07,CUST1499,Organic Coffee,Grocery,Central,22.88,1,7.84,Debit Card
+ORD100604,2025-07-01,CUST1397,Classic Lamp,Home,West,259.95,1,72.61,Cash
+ORD100068,2024-05-14,CUST1910,Wireless Mouse,Electronics,East,72.94,1,23.31,Net Banking
+ORD100449,2025-11-19,CUST1554,Yoga Mat,Sports,South,355.57,1,54.68,Debit Card
+ORD100169,2025-11-25,CUST1245,"LED Monitor 24""",Electronics,North,604.57,1,195.44,UPI
+ORD100661,2024-08-12,CUST1496,Tennis Racket,Sports,South,193.05,1,36.19,Credit Card
+ORD100163,2024-09-25,CUST1536,Kitchen Knife Set,Home,West,51.96,1,17.41,Credit Card
+ORD100310,2025-07-10,CUST1280,Yoga Mat,Sports,South,59.58,1,7.59,UPI
+ORD100194,2024-12-27,CUST1368,Formal Shirt,Apparel,West,93.91,1,32.31,Debit Card
+ORD100487,2024-07-22,CUST1333,Air Purifier,Home,North,225.23,1,37.87,Net Banking
+ORD100366,2026-01-28,CUST1331,Organic Coffee,Grocery,Central,22.9,1,2.43,UPI
+ORD100384,2024-09-12,CUST1088,Denim Jacket,Apparel,West,173.48,2,52.24,Credit Card
+ORD100634,2026-02-04,CUST1488,Tennis Racket,Sports,West,236.08,1,12.17,Net Banking
+ORD100560,2024-10-11,CUST1852,Scented Candle,Home,East,135.51,1,35.03,Net Banking
+ORD100153,2026-03-06,CUST1415,Electric Kettle,Home,West,38.16,1,2.55,Net Banking
+ORD100458,2024-05-29,CUST1706,Formal Shirt,Apparel,South,29.19,1,5.77,Net Banking
+ORD100471,2025-10-29,CUST1825,Yoga Mat,Sports,North,,1,13.13,Net Banking
+ORD100227,2024-10-11,CUST1498,Air Purifier,Home,South,529.8,3,156.36,Credit Card
+ORD100465,2025-12-12,CUST1305,Trail Backpack,Sports,North,230.38,1,34.81,Net Banking
+ORD100641,2025-09-05,CUST1224,Smartwatch Pro,Electronics,East,878.08,1,207.12,UPI
+ORD100104,2025-10-31,CUST1575,Trail Backpack,Sports,North,329.61,1,24.24,Credit Card
+ORD100422,2025-12-30,CUST1244,Trail Backpack,Sports,North,153.12,1,10.98,Net Banking
+ORD100501,2025-12-06,CUST1767,Electric Kettle,Home,Central,83.23,1,4.8,Cash
+ORD100532,2025-03-03,CUST1235,Organic Coffee,Grocery,East,11.85,1,2.65,Credit Card
+ORD100075,2025-05-01,CUST1195,Kitchen Knife Set,Home,Central,191.09,1,24.76,Cash
+ORD100116,2026-02-04,CUST1077,Smartphone X,Electronics,West,770.94,1,49.03,Net Banking
+ORD100408,2024-04-12,CUST1704,Protein Bar Pack,Grocery,West,25.66,1,8.55,Net Banking
+ORD100678,2026-03-29,CUST1463,Denim Jacket,Apparel,South,,1,13.13,Debit Card
+ORD100120,2026-01-25,CUST1176,Noise-Cancel Headphones,Electronics,South,1458.6,1,324.75,Cash
+ORD100054,2026-03-29,CUST1156,Wireless Mouse,Electronics,South,1156.95,1,277.31,UPI
+ORD100152,2025-11-15,CUST1271,Yoga Mat,Sports,Central,194.08,2,38.39,Cash
+ORD100404,2024-06-28,CUST1106,Denim Jacket,Apparel,Central,440.72,4,81.72,Cash
+ORD100663,2025-02-08,CUST1301,Protein Bar Pack,Grocery,North,5.03,1,0.91,Cash
+ORD100208,2026-01-13,CUST1157,Scented Candle,Home,East,102.77,1,20.08,Credit Card
+ORD100466,2025-07-14,CUST1767,Smartwatch Pro,Electronics,East,321.22,2,40.03,Credit Card
+ORD100540,2024-04-05,CUST1881,Running Shoes,Apparel,West,19.78,1,5.32,Net Banking
+ORD100483,2026-03-26,CUST1610,Smartwatch Pro,Electronics,West,485.13,1,161.73,Net Banking
+ORD100542,2024-05-15,CUST1374,Gourmet Tea,Grocery,South,87.3,3,22.44,Cash
+ORD100009,2024-08-23,CUST1521,Protein Bar Pack,Grocery,North,10.38,1,1.14,Net Banking
+ORD100568,2026-03-24,CUST1774,Organic Coffee,Grocery,West,36.23,1,7.31,Cash
+ORD100037,2025-10-23,CUST1130,Yoga Mat,Sports,West,,1,24.54,UPI
+ORD100453,2025-07-28,CUST1729,Gourmet Tea,Grocery,South,20.68,2,2.75,Credit Card
+ORD100140,2024-06-24,CUST1335,Electric Kettle,Home,East,137.15,1,37.81,Cash
+ORD100254,2024-05-10,CUST1566,Wireless Mouse,Electronics,South,481.47,1,69.1,Cash
+ORD100304,2024-08-25,CUST1738,Classic Lamp,Home,West,270.9,1,35.33,Net Banking
+ORD100528,2025-12-21,CUST1973,Running Shoes,Apparel,East,43.23,1,8.6,Credit Card
+ORD100531,2024-10-01,CUST1161,Classic Lamp,Home,West,172.55,1,15.27,UPI
+ORD100369,2024-08-03,CUST1676,"LED Monitor 24""",Electronics,West,3230.56,4,545.55,Debit Card
+ORD100060,2025-09-23,CUST1611,Electric Kettle,Home,North,259.03,1,23.64,Debit Card
+ORD100112,2025-04-01,CUST1073,Scented Candle,Home,North,104.5,1,6.5,UPI
+ORD100608,2026-04-04,CUST1992,Blender Pro,Home,Central,194.79,1,55.01,Cash
+ORD100513,2025-01-12,CUST1795,Noise-Cancel Headphones,Electronics,West,1341.72,1,140.12,Credit Card
+ORD100586,2025-08-23,CUST1605,Scented Candle,Home,Central,433.3,2,85.08,Debit Card
+ORD100263,2024-05-15,CUST1220,Trail Backpack,Sports,South,242.73,1,45.78,Cash
+ORD100591,2025-01-23,CUST1271,Noise-Cancel Headphones,Electronics,East,596.36,1,189.42,Net Banking
+ORD100298,2024-08-08,CUST1697,Classic Lamp,Home,South,249.82,2,42.26,Cash
+ORD100415,2025-08-01,CUST1398,Electric Kettle,Home,East,67.09,1,18.67,UPI
+ORD100151,2025-11-19,CUST1157,Smartphone X,Electronics,Central,800.63,1,141.92,Credit Card
+ORD100434,2025-11-15,CUST1390,Running Shoes,Apparel,North,92.63,1,30.65,Credit Card
+ORD100558,2025-07-01,CUST1295,Smartphone X,Electronics,West,1260.26,2,367.72,Cash
+ORD100441,2025-12-30,CUST1948,Blender Pro,Home,East,21.16,1,6.59,Debit Card
+ORD100669,2025-12-16,CUST1328,Scented Candle,Home,Central,35.01,1,6.47,Net Banking
+ORD100267,2025-05-13,CUST1508,Classic Lamp,Home,West,215.93,1,56.61,Debit Card
+ORD100612,2024-11-19,CUST1730,Yoga Mat,Sports,South,164.35,1,40.59,UPI
+ORD100360,2025-03-09,CUST1898,Protein Bar Pack,Grocery,West,6.59,1,2.21,Credit Card
+ORD100624,2025-07-12,CUST1643,Denim Jacket,Apparel,Central,23.08,1,2.63,Net Banking
+ORD100039,2026-02-12,CUST1648,Kitchen Knife Set,Home,East,49.72,1,14.47,Debit Card
+ORD100128,2024-12-16,CUST1053,Protein Bar Pack,Grocery,East,38.0,1,11.9,Debit Card
+ORD100424,2024-07-14,CUST1032,Smartwatch Pro,Electronics,West,738.49,1,227.48,Net Banking
+ORD100417,2024-05-17,CUST1595,Protein Bar Pack,Grocery,Central,47.14,2,13.62,Cash
+ORD100489,2026-04-02,CUST1587,Protein Bar Pack,Grocery,North,116.2,4,39.87,UPI
+ORD100308,2025-07-31,CUST1910,Yoga Mat,Sports,Central,369.7,1,107.2,Debit Card
+ORD100199,2024-04-20,CUST1006,Air Purifier,Home,Central,238.28,2,59.63,Net Banking
+ORD100352,2024-06-15,CUST1588,"LED Monitor 24""",Electronics,East,710.52,1,110.28,Credit Card
+ORD100504,2025-03-21,CUST1086,Blender Pro,Home,Central,275.94,1,73.24,Debit Card
+ORD100147,2025-04-16,CUST1478,Air Purifier,Home,South,141.87,1,10.7,Net Banking
+ORD100451,2025-06-01,CUST1984,Wireless Mouse,Electronics,East,2430.78,2,441.39,Debit Card
+ORD100652,2026-02-09,CUST1896,Formal Shirt,Apparel,East,,1,36.51,Cash
+ORD100527,2025-08-04,CUST1708,Blender Pro,Home,South,56.54,1,6.76,Credit Card
+ORD100420,2025-08-18,CUST1194,Smartwatch Pro,Electronics,South,369.74,1,83.04,Net Banking
+ORD100443,2024-12-21,CUST1174,Noise-Cancel Headphones,Electronics,East,992.17,1,245.67,Credit Card
+ORD100626,2024-07-04,CUST1021,Yoga Mat,Sports,South,67.78,1,13.73,Cash
+ORD100148,2025-11-13,CUST1075,Blender Pro,Home,East,670.76,4,108.12,Net Banking
+ORD100551,2025-06-29,CUST1266,Gourmet Tea,Grocery,South,38.06,1,4.91,UPI
+ORD100349,2025-01-18,CUST1025,Formal Shirt,Apparel,East,144.96,2,17.38,Cash
+ORD100464,2025-10-16,CUST1284,Kitchen Knife Set,Home,Central,197.03,1,14.2,Debit Card
+ORD100326,2024-12-14,CUST1493,Gourmet Tea,Grocery,West,27.94,1,1.83,Debit Card
+ORD100187,2024-05-31,CUST1143,Formal Shirt,Apparel,East,82.9,1,21.66,Cash
+ORD100124,2024-10-17,CUST1231,Blender Pro,Home,South,33.61,1,1.86,Net Banking
+ORD100597,2025-08-14,CUST1573,Wireless Mouse,Electronics,West,97.86,1,9.3,Cash
+ORD100097,2025-12-05,CUST1002,Denim Jacket,Apparel,South,107.38,1,6.35,Debit Card
+ORD100144,2025-05-05,CUST1935,Air Purifier,Home,North,72.77,1,20.26,UPI
+ORD100670,2024-07-30,CUST1101,Air Purifier,Home,South,75.03,1,14.73,Debit Card
+ORD100198,2024-04-10,CUST1422,Blender Pro,Home,South,32.88,1,5.05,Net Banking
+ORD100280,2025-06-07,CUST1992,Smartphone X,Electronics,West,525.45,1,125.94,Net Banking
+ORD100294,2025-08-03,CUST1942,Denim Jacket,Apparel,East,44.13,1,11.1,Credit Card
+ORD100401,2025-03-15,CUST1431,Kitchen Knife Set,Home,Central,97.25,1,5.51,Cash
+ORD100123,2025-03-06,CUST1832,Blender Pro,Home,Central,150.9,3,16.41,Debit Card
+ORD100184,2025-09-27,CUST1130,"LED Monitor 24""",Electronics,North,1243.51,1,380.08,UPI
+ORD100203,2024-11-25,CUST1216,Smartwatch Pro,Electronics,West,1108.01,1,222.74,Credit Card
+ORD100439,2024-07-04,CUST1115,Wireless Mouse,Electronics,West,297.97,1,61.95,Debit Card
+ORD100247,2024-06-17,CUST1017,Smartwatch Pro,Electronics,North,298.34,1,56.33,Cash
+ORD100416,2024-05-27,CUST1884,Yoga Mat,Sports,North,,1,11.26,UPI
+ORD100623,2026-03-02,CUST1696,Organic Coffee,Grocery,West,13.71,1,1.23,UPI
+ORD100130,2025-05-04,CUST1083,Gourmet Tea,Grocery,South,31.11,1,9.09,Debit Card
+ORD100403,2026-03-22,CUST1767,Running Shoes,Apparel,South,22.31,1,2.95,Credit Card
+ORD100581,2024-12-16,CUST1501,Protein Bar Pack,Grocery,South,11.34,2,3.18,Credit Card
+ORD100546,2026-03-18,CUST1151,Protein Bar Pack,Grocery,South,13.98,1,1.34,Net Banking
+ORD100220,2026-03-12,CUST1512,Blender Pro,Home,East,276.51,1,61.17,Debit Card
+ORD100639,2025-09-11,CUST1605,Kitchen Knife Set,Home,West,83.52,1,26.38,Cash
+ORD100534,2026-03-13,CUST1582,Noise-Cancel Headphones,Electronics,East,1907.98,2,280.49,Cash
+ORD100642,2026-02-22,CUST1668,Gourmet Tea,Grocery,West,15.71,1,1.22,UPI
+ORD100571,2024-05-17,CUST1201,Organic Coffee,Grocery,North,6.47,1,1.84,Credit Card
+ORD100387,2026-03-15,CUST1453,Scented Candle,Home,Central,226.16,2,67.34,Net Banking
+ORD100681,2024-10-18,CUST1455,Classic Lamp,Home,South,410.28,2,84.94,Net Banking
+ORD100510,2024-12-17,CUST1197,Noise-Cancel Headphones,Electronics,North,135.17,1,28.62,Net Banking
+ORD100268,2024-12-11,CUST1662,Electric Kettle,Home,West,124.0,1,28.77,Debit Card
+ORD100442,2025-10-15,CUST1535,Denim Jacket,Apparel,Central,37.01,1,5.59,Net Banking
+ORD100497,2025-12-14,CUST1007,Smartwatch Pro,Electronics,West,331.76,1,40.23,Cash
+ORD100113,2024-07-30,CUST1414,Classic Lamp,Home,East,134.72,2,25.9,UPI
+ORD100233,2024-09-23,CUST1331,Electric Kettle,Home,East,164.25,1,15.82,Debit Card
+ORD100611,2024-09-03,CUST1091,Gourmet Tea,Grocery,South,62.49,3,14.04,UPI
+ORD100374,2025-12-15,CUST1098,Smartphone X,Electronics,West,891.81,1,300.27,Credit Card
+ORD100234,2024-06-03,CUST1283,Blender Pro,Home,South,82.31,1,5.4,UPI
+ORD100555,2026-01-20,CUST1199,Smartwatch Pro,Electronics,Central,2361.9,2,821.11,UPI
+ORD100318,2024-12-29,CUST1851,Formal Shirt,Apparel,South,,1,9.5,UPI
+ORD100411,2025-12-27,CUST1463,Denim Jacket,Apparel,Central,58.36,2,6.65,Credit Card
+ORD100628,2025-06-11,CUST1092,Wireless Mouse,Electronics,East,1213.24,2,337.69,UPI
+ORD100359,2025-11-05,CUST1373,Trail Backpack,Sports,West,930.8,4,153.86,Cash
+ORD100259,2024-11-27,CUST1918,Formal Shirt,Apparel,West,106.76,1,12.68,Debit Card
+ORD100283,2024-10-31,CUST1997,Yoga Mat,Sports,West,132.02,1,26.49,Debit Card
+ORD100377,2024-10-14,CUST1005,Classic Lamp,Home,Central,133.72,1,35.71,UPI
+ORD100385,2025-10-28,CUST1936,Smartwatch Pro,Electronics,East,1108.41,1,261.12,UPI
+ORD100225,2025-05-06,CUST1625,Scented Candle,Home,Central,49.04,1,8.49,Cash
+ORD100668,2025-08-04,CUST1514,Classic Lamp,Home,North,207.82,1,25.95,Net Banking
+ORD100573,2024-09-15,CUST1875,Formal Shirt,Apparel,Central,28.66,1,9.89,Debit Card
+ORD100473,2025-08-02,CUST1816,Noise-Cancel Headphones,Electronics,South,693.26,1,128.71,UPI
+ORD100348,2024-12-06,CUST1926,Kitchen Knife Set,Home,Central,74.37,1,17.68,Credit Card
+ORD100506,2025-10-01,CUST1239,Scented Candle,Home,West,143.23,1,45.75,UPI
+ORD100693,2025-11-11,CUST1129,Formal Shirt,Apparel,East,82.63,1,28.55,Credit Card
+ORD100650,2025-05-28,CUST1919,Tennis Racket,Sports,Central,13.13,1,2.37,Net Banking
+ORD100633,2024-10-12,CUST1216,Smartphone X,Electronics,North,688.97,1,107.9,Credit Card
+ORD100599,2024-07-05,CUST1406,Blender Pro,Home,South,40.43,1,10.71,Net Banking
+ORD100557,2025-05-04,CUST1381,Classic Lamp,Home,East,116.91,1,19.2,UPI
+ORD100086,2026-03-07,CUST1796,Noise-Cancel Headphones,Electronics,Central,1233.97,1,319.36,Cash
+ORD100243,2025-07-01,CUST1880,Yoga Mat,Sports,North,151.3,1,16.72,UPI
+ORD100160,2025-03-11,CUST1823,Protein Bar Pack,Grocery,Central,18.73,1,3.88,Debit Card
+ORD100525,2024-08-05,CUST1280,Blender Pro,Home,West,70.1,1,8.06,Debit Card
+ORD100036,2026-02-13,CUST1942,Trail Backpack,Sports,Central,116.79,1,32.31,UPI
+ORD100541,2026-03-06,CUST1082,Kitchen Knife Set,Home,East,165.39,1,36.17,Credit Card
+ORD100171,2024-07-04,CUST1667,Smartwatch Pro,Electronics,South,896.83,1,295.79,Debit Card
+ORD100656,2025-02-09,CUST1743,Wireless Mouse,Electronics,Central,109.87,1,17.43,Credit Card
+ORD100607,2024-05-27,CUST1656,Smartphone X,Electronics,West,207.08,1,23.13,Credit Card
+ORD100686,2024-05-18,CUST1905,"LED Monitor 24""",Electronics,North,551.69,1,95.73,Credit Card
+ORD100096,2025-03-11,CUST1249,Blender Pro,Home,Central,69.63,1,14.82,Debit Card
+ORD100564,2024-08-20,CUST1365,Smartphone X,Electronics,North,489.81,1,98.34,Net Banking
+ORD100241,2025-06-10,CUST1710,Blender Pro,Home,West,66.96,2,4.68,Cash
+ORD100575,2026-02-22,CUST1980,Organic Coffee,Grocery,South,19.61,1,5.05,Cash
+ORD100461,2025-10-19,CUST1389,Noise-Cancel Headphones,Electronics,South,704.82,1,240.22,Debit Card
+ORD100554,2025-08-07,CUST1921,Noise-Cancel Headphones,Electronics,South,201.05,1,41.16,Cash
+ORD100616,2024-04-09,CUST1259,Formal Shirt,Apparel,Central,76.81,1,8.39,Credit Card
+ORD100207,2025-04-23,CUST1442,Smartphone X,Electronics,Central,341.46,2,35.97,Credit Card
+ORD100393,2025-08-06,CUST1962,Air Purifier,Home,North,121.04,1,33.69,Net Banking
+ORD100398,2024-06-04,CUST1220,Denim Jacket,Apparel,West,92.1,1,21.76,Net Banking
+ORD100594,2024-11-08,CUST1676,Tennis Racket,Sports,East,272.54,2,87.36,Net Banking
+ORD100218,2024-07-24,CUST1787,"LED Monitor 24""",Electronics,East,818.52,1,223.97,Cash
+ORD100005,2024-05-20,CUST1677,"LED Monitor 24""",Electronics,East,1932.72,2,202.06,Cash
+ORD100627,2025-02-15,CUST1925,Kitchen Knife Set,Home,South,110.38,1,28.33,UPI
+ORD100547,2025-06-08,CUST1454,Classic Lamp,Home,East,310.0,4,65.72,Cash
+ORD100099,2025-12-02,CUST1111,Tennis Racket,Sports,Central,247.81,1,69.63,Cash
+ORD100574,2024-09-26,CUST1923,Air Purifier,Home,North,221.21,1,19.12,Cash
+ORD100407,2025-10-08,CUST1232,Running Shoes,Apparel,West,30.07,1,10.08,Debit Card
+ORD100503,2024-09-29,CUST1931,Smartwatch Pro,Electronics,South,505.38,1,117.44,Debit Card
+ORD100048,2026-01-22,CUST1438,Blender Pro,Home,West,64.82,1,9.09,UPI
+ORD100033,2025-05-17,CUST1336,Denim Jacket,Apparel,North,84.09,1,4.85,Net Banking
+ORD100201,2025-07-18,CUST1578,"LED Monitor 24""",Electronics,South,963.62,1,99.35,Credit Card
+ORD100135,2025-04-21,CUST1259,Classic Lamp,Home,East,237.72,1,34.71,Cash
+ORD100028,2024-05-26,CUST1094,Wireless Mouse,Electronics,East,425.94,1,29.42,UPI
+ORD100618,2025-01-16,CUST1765,Gourmet Tea,Grocery,West,74.48,2,22.64,Cash
+ORD100231,2024-12-13,CUST1304,Noise-Cancel Headphones,Electronics,West,1062.54,1,214.93,Debit Card
+ORD100490,2025-12-05,CUST1789,Scented Candle,Home,East,160.2,1,45.61,Credit Card
+ORD100379,2025-08-11,CUST1183,Gourmet Tea,Grocery,Central,13.86,1,4.23,Debit Card
+ORD100289,2025-11-10,CUST1693,Kitchen Knife Set,Home,South,51.19,1,4.94,Debit Card
+ORD100419,2025-06-27,CUST1750,Yoga Mat,Sports,North,178.87,1,19.7,UPI
+ORD100392,2025-11-13,CUST1889,Denim Jacket,Apparel,West,75.78,1,16.07,Debit Card
+ORD100593,2024-10-25,CUST1424,Scented Candle,Home,East,167.84,1,21.22,Net Banking
+ORD100499,2025-12-19,CUST1090,"LED Monitor 24""",Electronics,West,908.69,1,214.31,Net Banking
+ORD100139,2026-03-13,CUST1509,Gourmet Tea,Grocery,Central,19.49,1,2.69,Debit Card
+ORD100063,2025-10-27,CUST1782,Wireless Mouse,Electronics,Central,1632.1,2,340.94,Cash
+ORD100472,2026-03-07,CUST1341,Trail Backpack,Sports,West,130.02,1,43.03,Cash
+ORD100129,2024-09-01,CUST1850,Wireless Mouse,Electronics,North,357.68,1,48.15,Credit Card
+ORD100684,2024-12-25,CUST1955,Smartwatch Pro,Electronics,South,917.83,1,179.35,Net Banking
+ORD100521,2024-08-03,CUST1216,Formal Shirt,Apparel,West,67.4,1,19.15,Credit Card
+ORD100065,2024-06-19,CUST1160,Classic Lamp,Home,West,272.76,2,41.38,UPI
+ORD100015,2026-02-20,CUST1665,Gourmet Tea,Grocery,West,6.52,1,0.83,Net Banking
+ORD100157,2025-08-23,CUST1611,Protein Bar Pack,Grocery,East,44.04,1,2.36,UPI
+ORD100041,2024-07-22,CUST1797,Wireless Mouse,Electronics,South,2783.42,2,404.71,Credit Card
+ORD100493,2025-10-29,CUST1840,Gourmet Tea,Grocery,North,66.94,2,19.37,Cash
+ORD100380,2024-11-25,CUST1457,Smartphone X,Electronics,North,532.21,1,121.2,Credit Card
+ORD100188,2026-02-09,CUST1533,"LED Monitor 24""",Electronics,West,108.64,1,5.91,UPI
+ORD100217,2025-11-21,CUST1410,Air Purifier,Home,Central,243.88,1,18.55,Net Banking
+ORD100053,2025-06-16,CUST1677,Gourmet Tea,Grocery,North,38.6,1,4.68,Cash
+ORD100338,2025-02-28,CUST1727,Organic Coffee,Grocery,East,143.76,4,8.89,Net Banking
+ORD100296,2025-04-21,CUST1840,Noise-Cancel Headphones,Electronics,Central,139.4,1,16.93,Net Banking
+ORD100252,2025-11-15,CUST1642,Running Shoes,Apparel,West,61.1,1,17.61,Cash
+ORD100462,2025-02-13,CUST1316,Tennis Racket,Sports,East,246.65,1,36.39,Cash
+ORD100456,2026-03-26,CUST1805,Noise-Cancel Headphones,Electronics,Central,653.88,1,211.01,Net Banking
+ORD100159,2024-07-12,CUST1403,Gourmet Tea,Grocery,East,31.54,1,2.28,Credit Card
+ORD100270,2024-10-05,CUST1026,Trail Backpack,Sports,Central,715.3,2,60.06,Net Banking
+ORD100202,2025-10-21,CUST1487,Noise-Cancel Headphones,Electronics,North,130.33,1,24.53,Credit Card
+ORD100162,2025-06-04,CUST1597,Electric Kettle,Home,North,170.46,1,54.61,Debit Card
+ORD100556,2025-09-10,CUST1403,Yoga Mat,Sports,West,247.84,2,81.58,Debit Card
+ORD100402,2025-05-13,CUST1277,Tennis Racket,Sports,East,314.09,1,88.3,Debit Card
+ORD100477,2024-05-12,CUST1796,Yoga Mat,Sports,North,89.39,1,16.66,UPI
+ORD100106,2024-11-21,CUST1826,Wireless Mouse,Electronics,Central,1004.65,1,102.46,Cash
+ORD100566,2025-04-10,CUST1098,Air Purifier,Home,Central,86.79,1,7.86,UPI
+ORD100390,2024-10-15,CUST1510,Yoga Mat,Sports,South,80.9,1,11.01,Net Banking
+ORD100002,2024-11-13,CUST1238,Formal Shirt,Apparel,Central,75.95,1,7.35,Net Banking
+ORD100657,2025-07-07,CUST1305,Smartwatch Pro,Electronics,North,1015.7,1,58.16,Net Banking
+ORD100562,2026-01-24,CUST1250,Classic Lamp,Home,North,353.78,2,109.18,UPI
+ORD100081,2025-01-23,CUST1232,Running Shoes,Apparel,West,328.5,3,106.58,Cash
+ORD100206,2024-06-20,CUST1348,Kitchen Knife Set,Home,Central,419.06,2,55.76,UPI
+ORD100035,2024-10-15,CUST1260,Noise-Cancel Headphones,Electronics,West,1173.95,1,378.33,Debit Card
+ORD100509,2024-10-05,CUST1320,Air Purifier,Home,North,166.48,1,22.55,UPI
+ORD100428,2026-02-14,CUST1437,Organic Coffee,Grocery,South,29.35,1,1.55,Net Banking
+ORD100455,2025-06-15,CUST1414,Noise-Cancel Headphones,Electronics,Central,537.45,1,145.08,Net Banking
+ORD100367,2026-02-02,CUST1919,Running Shoes,Apparel,Central,38.02,1,2.56,Cash
+ORD100092,2026-03-22,CUST1309,Wireless Mouse,Electronics,North,2400.54,2,481.2,Net Banking
+ORD100340,2024-06-06,CUST1707,Electric Kettle,Home,South,235.12,1,14.15,Net Banking
+ORD100565,2024-10-19,CUST1784,Smartphone X,Electronics,North,220.06,1,35.27,Cash
+ORD100346,2026-03-29,CUST1325,Formal Shirt,Apparel,South,96.19,1,25.72,UPI
+ORD100242,2024-08-18,CUST1656,Blender Pro,Home,North,153.35,1,46.4,Debit Card
+ORD100014,2024-08-10,CUST1131,Protein Bar Pack,Grocery,Central,34.77,1,6.9,Debit Card
+ORD100316,2025-04-28,CUST1126,Air Purifier,Home,East,116.81,1,37.38,Credit Card
+ORD100601,2024-11-09,CUST1993,Denim Jacket,Apparel,West,71.7,3,11.18,Credit Card
+ORD100388,2024-12-24,CUST1069,Scented Candle,Home,South,172.89,1,47.21,Credit Card
+ORD100274,2025-12-23,CUST1206,Blender Pro,Home,East,216.54,1,11.13,Net Banking
+ORD100167,2025-01-09,CUST1294,Organic Coffee,Grocery,Central,124.26,3,32.24,Debit Card
+ORD100698,2025-03-09,CUST1826,Scented Candle,Home,South,313.2,3,64.83,Net Banking
+ORD100647,2024-10-31,CUST1932,Gourmet Tea,Grocery,South,18.89,1,1.28,Debit Card
+ORD100485,2024-08-29,CUST1881,Kitchen Knife Set,Home,East,495.9,2,29.32,Cash
+ORD100687,2024-11-21,CUST1706,Wireless Mouse,Electronics,North,295.25,1,20.28,Credit Card
+ORD100505,2024-09-22,CUST1215,Smartwatch Pro,Electronics,East,910.59,3,99.01,UPI
+ORD100244,2025-01-12,CUST1660,Running Shoes,Apparel,South,72.16,1,21.24,Cash
+ORD100567,2024-07-17,CUST1223,Blender Pro,Home,Central,227.4,3,77.26,Net Banking
+ORD100563,2026-01-07,CUST1702,Protein Bar Pack,Grocery,North,26.34,2,6.11,Debit Card
+ORD100190,2026-03-29,CUST1147,Tennis Racket,Sports,North,112.17,1,17.33,Debit Card
+ORD100476,2024-05-06,CUST1278,Wireless Mouse,Electronics,North,826.29,3,277.26,Cash
+ORD100511,2024-08-04,CUST1088,Kitchen Knife Set,Home,South,116.49,1,30.85,Credit Card
+ORD100059,2024-12-17,CUST1236,Organic Coffee,Grocery,South,26.25,1,6.75,UPI
+ORD100475,2024-05-05,CUST1347,Scented Candle,Home,Central,194.37,1,67.25,Cash
+ORD100561,2024-04-06,CUST1157,Denim Jacket,Apparel,East,80.14,1,19.42,UPI
+ORD100253,2026-02-23,CUST1740,Organic Coffee,Grocery,South,3.67,1,1.17,Cash
+ORD100022,2024-05-25,CUST1598,Protein Bar Pack,Grocery,Central,20.97,1,4.46,Credit Card
+ORD100314,2025-05-22,CUST1019,"LED Monitor 24""",Electronics,South,192.78,1,41.69,Cash
+ORD100460,2026-01-28,CUST1928,Smartphone X,Electronics,North,856.72,1,195.23,Net Banking
+ORD100161,2025-02-04,CUST1607,Trail Backpack,Sports,Central,324.22,1,60.42,Cash
+ORD100277,2025-04-26,CUST1314,Electric Kettle,Home,South,62.75,1,7.37,Net Banking
+ORD100192,2025-11-26,CUST1741,Air Purifier,Home,South,155.65,1,52.12,Debit Card
+ORD100386,2025-05-25,CUST1518,Organic Coffee,Grocery,Central,29.88,1,9.39,Net Banking
+ORD100414,2024-08-06,CUST1997,"LED Monitor 24""",Electronics,West,669.86,1,189.56,Credit Card
+ORD100492,2025-03-22,CUST1091,Smartwatch Pro,Electronics,North,,1,156.37,Net Banking
+ORD100344,2025-09-12,CUST1122,Scented Candle,Home,North,205.06,2,46.93,Cash
+ORD100309,2025-05-28,CUST1583,Tennis Racket,Sports,South,192.89,1,25.19,Debit Card
+ORD100662,2025-04-17,CUST1943,Organic Coffee,Grocery,Central,12.39,1,0.92,Credit Card
+ORD100131,2025-07-31,CUST1712,Blender Pro,Home,West,500.12,4,80.82,Net Banking
+ORD100664,2025-08-17,CUST1002,Organic Coffee,Grocery,Central,27.98,1,2.73,Cash
+ORD100100,2024-06-05,CUST1490,Scented Candle,Home,West,195.43,1,14.78,Net Banking
+ORD100373,2025-07-12,CUST1610,Smartwatch Pro,Electronics,North,592.42,1,76.83,Net Banking
+ORD100088,2025-06-03,CUST1179,Yoga Mat,Sports,South,372.04,4,76.45,Debit Card
+ORD100459,2024-08-20,CUST1402,Wireless Mouse,Electronics,East,306.42,1,56.26,UPI
+ORD100331,2025-07-11,CUST1116,Organic Coffee,Grocery,South,36.77,1,4.84,Cash
+ORD100215,2024-10-05,CUST1698,Air Purifier,Home,North,234.65,1,20.16,Credit Card
+ORD100467,2024-06-09,CUST1299,Protein Bar Pack,Grocery,South,20.74,1,2.08,Debit Card
+ORD100122,2025-11-21,CUST1679,Blender Pro,Home,East,112.05,1,18.58,Credit Card
+ORD100615,2024-12-22,CUST1074,Organic Coffee,Grocery,Central,40.09,1,13.35,Net Banking
+ORD100021,2025-07-13,CUST1292,Wireless Mouse,Electronics,Central,584.39,1,174.51,Net Banking
+ORD100072,2025-06-01,CUST1055,Yoga Mat,Sports,Central,89.89,1,10.89,Net Banking
+ORD100107,2025-02-14,CUST1943,Trail Backpack,Sports,East,55.33,1,11.88,Credit Card
+ORD100271,2024-11-28,CUST1997,Smartphone X,Electronics,North,1552.24,4,135.66,Debit Card
+ORD100436,2024-11-16,CUST1156,Noise-Cancel Headphones,Electronics,West,2079.96,2,604.27,UPI
+ORD100103,2024-12-21,CUST1383,Blender Pro,Home,West,34.7,1,10.01,Debit Card
