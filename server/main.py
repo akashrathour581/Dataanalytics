@@ -22,6 +22,14 @@ from starlette.concurrency import run_in_threadpool
 from server.analytics_engine import store, parse_uploaded_file, generate_automated_eda, query_aggregation, export_dataframe_bytes, sanitize_val
 from server.cleaning import transform
 from server.storage import MAX_BYTES
+from server.tools_engine import (
+    csv_to_excel_bytes, excel_to_csv_bytes, excel_to_pdf_bytes,
+    csv_to_json_bytes, json_to_csv_bytes, pdf_to_excel_bytes,
+    merge_pdfs_bytes, compress_pdf_bytes, pdf_to_jpg_bytes, jpg_to_pdf_bytes,
+    jpg_to_png_bytes, png_to_jpg_bytes, compress_image_bytes, resize_image_bytes,
+    analyze_csv_data, analyze_excel_data, clean_csv_data, remove_duplicate_rows,
+    format_json_string
+)
 
 
 @asynccontextmanager
@@ -95,7 +103,7 @@ async def privacy_and_limits(request, call_next):
         if count >= 120:
             return JSONResponse({'detail': 'Too many requests. Try again in one minute.'}, 429, headers={'Retry-After': '60'})
         origin = request.headers.get('origin')
-        if request.method in {'POST', 'DELETE'} and origin and origin not in origins and urlsplit(origin).netloc != request.url.netloc:
+        if request.method in {'POST', 'DELETE'} and origin and origin not in origins and (urlsplit(origin).scheme, urlsplit(origin).netloc) != (request.url.scheme, request.url.netloc):
             return JSONResponse({'detail': 'Cross-origin request is not allowed.'}, 403)
         owner = request.cookies.get('datasphere_session', '')
         new_owner = not re.fullmatch(r'[A-Za-z0-9_-]{43}', owner)
@@ -148,11 +156,42 @@ def ingest(content, filename, owner, sheet=None):
     if df.empty: raise ValueError('Choose a file containing at least one row and one column.')
     with store.lock:
         key = store.save(df, filename, sheets, active, owner, content if filename.lower().endswith('.xlsx') else b'')
-        return report(store.get(key))
+        try:
+            return report(store.get(key))
+        except Exception:
+            store.delete(key)
+            raise
 
 
 @app.get('/api/health')
 def health(): return {'status': 'healthy', 'version': '3.0.0'}
+
+
+async def read_upload(file):
+    try:
+        content = await file.read(MAX_BYTES + 1)
+        if len(content) > MAX_BYTES:
+            raise HTTPException(413, 'Choose a file no larger than 10 MB.')
+        if not content:
+            raise HTTPException(400, 'Choose a non-empty file.')
+        return content
+    finally:
+        await file.close()
+
+
+def attachment(filename):
+    fallback = re.sub(r'[^A-Za-z0-9_. -]', '_', filename)
+    return f'attachment; filename="{fallback}"; filename*=UTF-8\'\'{quote(filename)}'
+
+
+async def run_file_tool(function, *args):
+    try:
+        return await run_in_threadpool(function, *args)
+    except HTTPException:
+        raise
+    except Exception as exc:
+        # Parser exceptions can include uploaded values and filesystem details.
+        raise HTTPException(400, 'Check the file format and processing options.') from exc
 
 
 @app.post('/api/upload')
@@ -165,7 +204,7 @@ async def upload(request: Request, file: UploadFile = File(...), sheet_name: str
             'json': {'application/json', 'text/json', 'text/plain'}}
         if ext not in allowed or file.content_type not in allowed[ext] | {'application/octet-stream', '', None}:
             raise HTTPException(415, 'This file format is not supported. Choose CSV, XLSX or JSON.')
-        content = await file.read(MAX_BYTES + 1)
+        content = await read_upload(file)
         return await run_in_threadpool(ingest, content, filename, request.state.owner, sheet_name)
     except (pd.errors.ParserError, pd.errors.EmptyDataError, UnicodeError):
         raise HTTPException(400, 'Invalid or empty file. Check headers, delimiters and encoding.')
@@ -210,7 +249,8 @@ def switch_sheet(req: SheetRequest, request: Request):
         df, _, active = parse_uploaded_file(d['source'], d['filename'], req.sheet_name)
         if df.empty: raise ValueError('Choose a worksheet containing data.')
         additional = int(df.memory_usage(deep=True).sum()) * 2
-        if store.size() + additional > store.max_bytes: raise ValueError('Memory capacity reached.')
+        replaced = sum(int(frame.memory_usage(deep=True).sum()) for frame in [d['df'], d['cleaned_df'], *d['undo']])
+        if store.size() - replaced + additional > store.max_bytes: raise ValueError('Memory capacity reached.')
         d.update(df=df.copy(), cleaned_df=df, active_sheet=active, undo=[], revision=d['revision'] + 1)
         return report(d)
 
@@ -242,7 +282,7 @@ class CleaningOperation(BaseModel):
 
 class CleanRequest(BaseModel):
     dataset_id: str
-    operations: list[CleaningOperation] = Field(default_factory=list, max_length=20)
+    operations: list[CleaningOperation] = Field(default_factory=list, max_length=201)
     action: Literal['preview', 'apply', 'undo', 'reset'] = 'preview'
     revision: int = Field(ge=0)
 
@@ -300,6 +340,202 @@ def export(key: str, request: Request, format: Literal['csv', 'xlsx', 'json'] = 
         headers={'Content-Disposition': "attachment; filename=dataset." + format + "; filename*=UTF-8''" + quote(name)})
 
 
+# ---------------------------------------------------------------------------
+# File Tool Endpoints — wires tools_engine.py to the frontend OmniTools
+# ---------------------------------------------------------------------------
+
+class JsonFormatRequest(BaseModel):
+    raw_json: str = Field(max_length=500_000)
+    indent: int = Field(default=2, ge=1, le=8)
+    minify: bool = False
+
+
+@app.post('/api/tools/format-json')
+async def tool_format_json(req: JsonFormatRequest):
+    result = await run_file_tool(format_json_string, req.raw_json, req.indent, req.minify)
+    return {'success': True, 'result': result}
+
+
+@app.post('/api/tools/csv-to-excel')
+async def tool_csv_to_excel(file: UploadFile = File(...)):
+    content = await read_upload(file)
+    buf, media = await run_file_tool(csv_to_excel_bytes, content)
+    stem = re.sub(r'[^\w. -]', '_', (file.filename or 'data').rsplit('.', 1)[0])
+    return StreamingResponse(buf, media_type=media, headers={'Content-Disposition': attachment(f'{stem}.xlsx')})
+
+
+@app.post('/api/tools/excel-to-csv')
+async def tool_excel_to_csv(file: UploadFile = File(...)):
+    content = await read_upload(file)
+    buf, media = await run_file_tool(excel_to_csv_bytes, content)
+    stem = re.sub(r'[^\w. -]', '_', (file.filename or 'data').rsplit('.', 1)[0])
+    return StreamingResponse(buf, media_type=media, headers={'Content-Disposition': attachment(f'{stem}.csv')})
+
+
+@app.post('/api/tools/excel-to-pdf')
+async def tool_excel_to_pdf(file: UploadFile = File(...)):
+    content = await read_upload(file)
+    buf, media = await run_file_tool(excel_to_pdf_bytes, content)
+    stem = re.sub(r'[^\w. -]', '_', (file.filename or 'data').rsplit('.', 1)[0])
+    return StreamingResponse(buf, media_type=media, headers={'Content-Disposition': attachment(f'{stem}.pdf')})
+
+
+@app.post('/api/tools/csv-to-json')
+async def tool_csv_to_json(file: UploadFile = File(...)):
+    content = await read_upload(file)
+    buf, media = await run_file_tool(csv_to_json_bytes, content)
+    stem = re.sub(r'[^\w. -]', '_', (file.filename or 'data').rsplit('.', 1)[0])
+    return StreamingResponse(buf, media_type=media, headers={'Content-Disposition': attachment(f'{stem}.json')})
+
+
+@app.post('/api/tools/json-to-csv')
+async def tool_json_to_csv(file: UploadFile = File(...)):
+    content = await read_upload(file)
+    buf, media = await run_file_tool(json_to_csv_bytes, content)
+    stem = re.sub(r'[^\w. -]', '_', (file.filename or 'data').rsplit('.', 1)[0])
+    return StreamingResponse(buf, media_type=media, headers={'Content-Disposition': attachment(f'{stem}.csv')})
+
+
+@app.post('/api/tools/pdf-to-excel')
+async def tool_pdf_to_excel(file: UploadFile = File(...)):
+    content = await read_upload(file)
+    buf, media = await run_file_tool(pdf_to_excel_bytes, content)
+    stem = re.sub(r'[^\w. -]', '_', (file.filename or 'data').rsplit('.', 1)[0])
+    return StreamingResponse(buf, media_type=media, headers={'Content-Disposition': attachment(f'{stem}.xlsx')})
+
+
+@app.post('/api/tools/merge-pdf')
+async def tool_merge_pdf(files: list[UploadFile] = File(...)):
+    if len(files) < 2:
+        raise HTTPException(400, 'Select at least 2 PDF files to merge.')
+    contents = [await read_upload(f) for f in files]
+    buf, media = await run_file_tool(merge_pdfs_bytes, contents)
+    return StreamingResponse(buf, media_type=media, headers={'Content-Disposition': 'attachment; filename="merged.pdf"'})
+
+
+@app.post('/api/tools/compress-pdf')
+async def tool_compress_pdf(file: UploadFile = File(...)):
+    content = await read_upload(file)
+    orig_size = len(content)
+    buf, media = await run_file_tool(compress_pdf_bytes, content)
+    comp_size = len(buf.getvalue())
+    stem = re.sub(r'[^\w. -]', '_', (file.filename or 'document').rsplit('.', 1)[0])
+    return StreamingResponse(buf, media_type=media, headers={
+        'Content-Disposition': attachment(f'{stem}_compressed.pdf'),
+        'X-Original-Size': str(orig_size),
+        'X-Compressed-Size': str(comp_size),
+        'Access-Control-Expose-Headers': 'X-Original-Size, X-Compressed-Size'
+    })
+
+
+@app.post('/api/tools/pdf-to-jpg')
+async def tool_pdf_to_jpg(file: UploadFile = File(...)):
+    content = await read_upload(file)
+    buf, media, filename = await run_file_tool(pdf_to_jpg_bytes, content)
+    return StreamingResponse(buf, media_type=media, headers={'Content-Disposition': attachment(f'{filename}')})
+
+
+@app.post('/api/tools/jpg-to-pdf')
+async def tool_jpg_to_pdf(files: list[UploadFile] = File(...)):
+    contents = [await read_upload(f) for f in files]
+    buf, media = await run_file_tool(jpg_to_pdf_bytes, contents)
+    return StreamingResponse(buf, media_type=media, headers={'Content-Disposition': 'attachment; filename="images.pdf"'})
+
+
+@app.post('/api/tools/jpg-to-png')
+async def tool_jpg_to_png(file: UploadFile = File(...)):
+    content = await read_upload(file)
+    buf, media = await run_file_tool(jpg_to_png_bytes, content)
+    stem = re.sub(r'[^\w. -]', '_', (file.filename or 'image').rsplit('.', 1)[0])
+    return StreamingResponse(buf, media_type=media, headers={'Content-Disposition': attachment(f'{stem}.png')})
+
+
+@app.post('/api/tools/png-to-jpg')
+async def tool_png_to_jpg(file: UploadFile = File(...)):
+    content = await read_upload(file)
+    buf, media = await run_file_tool(png_to_jpg_bytes, content)
+    stem = re.sub(r'[^\w. -]', '_', (file.filename or 'image').rsplit('.', 1)[0])
+    return StreamingResponse(buf, media_type=media, headers={'Content-Disposition': attachment(f'{stem}.jpg')})
+
+
+@app.post('/api/tools/compress-image')
+async def tool_compress_image(file: UploadFile = File(...), quality: int = Form(75)):
+    if not 10 <= quality <= 95:
+        raise HTTPException(400, 'Quality must be between 10 and 95.')
+    content = await read_upload(file)
+    buf, media, orig_size, comp_size = await run_file_tool(compress_image_bytes, content, quality)
+    stem = re.sub(r'[^\w. -]', '_', (file.filename or 'image').rsplit('.', 1)[0])
+    ext = 'jpg' if 'jpeg' in media else 'png'
+    return StreamingResponse(buf, media_type=media, headers={
+        'Content-Disposition': attachment(f'{stem}_compressed.{ext}'),
+        'X-Original-Size': str(orig_size),
+        'X-Compressed-Size': str(comp_size),
+        'Access-Control-Expose-Headers': 'X-Original-Size, X-Compressed-Size'
+    })
+
+
+@app.post('/api/tools/resize-image')
+async def tool_resize_image(
+    file: UploadFile = File(...),
+    width: int | None = Form(None),
+    height: int | None = Form(None),
+    scale_pct: int | None = Form(None)
+):
+    content = await read_upload(file)
+    buf, media, orig_dims, new_dims = await run_file_tool(resize_image_bytes, content, width, height, scale_pct)
+    stem = re.sub(r'[^\w. -]', '_', (file.filename or 'image').rsplit('.', 1)[0])
+    ext = media.split('/')[-1].replace('jpeg', 'jpg')
+    return StreamingResponse(buf, media_type=media, headers={'Content-Disposition': attachment(f'{stem}_{new_dims[0]}x{new_dims[1]}.{ext}')})
+
+
+@app.post('/api/tools/analyze-csv')
+async def tool_analyze_csv(file: UploadFile = File(...)):
+    content = await read_upload(file)
+    analysis = await run_file_tool(analyze_csv_data, content)
+    return {'success': True, 'analysis': analysis}
+
+
+@app.post('/api/tools/analyze-excel')
+async def tool_analyze_excel(file: UploadFile = File(...)):
+    content = await read_upload(file)
+    analysis = await run_file_tool(analyze_excel_data, content)
+    return {'success': True, 'analysis': analysis}
+
+
+@app.post('/api/tools/clean-csv')
+async def tool_clean_csv(
+    file: UploadFile = File(...),
+    trim_whitespace: str = Form('true'),
+    drop_empty_rows: str = Form('true'),
+    drop_empty_cols: str = Form('true')
+):
+    content = await read_upload(file)
+    trim = trim_whitespace.lower() == 'true'
+    drop_rows = drop_empty_rows.lower() == 'true'
+    drop_cols = drop_empty_cols.lower() == 'true'
+    buf, media, rows_removed, cols_removed = await run_file_tool(clean_csv_data, content, trim, drop_rows, drop_cols)
+    stem = re.sub(r'[^\w. -]', '_', (file.filename or 'data').rsplit('.', 1)[0])
+    return StreamingResponse(buf, media_type=media, headers={
+        'Content-Disposition': attachment(f'{stem}_cleaned.csv'),
+        'X-Rows-Removed': str(rows_removed),
+        'Access-Control-Expose-Headers': 'X-Rows-Removed'
+    })
+
+
+@app.post('/api/tools/remove-duplicates')
+async def tool_remove_duplicates(file: UploadFile = File(...)):
+    content = await read_upload(file)
+    filename = file.filename or 'data.csv'
+    buf, media, dups_removed = await run_file_tool(remove_duplicate_rows, content, filename)
+    stem = re.sub(r'[^\w. -]', '_', filename.rsplit('.', 1)[0])
+    ext = 'xlsx' if filename.lower().endswith(('.xlsx', '.xls')) else 'csv'
+    return StreamingResponse(buf, media_type=media, headers={
+        'Content-Disposition': attachment(f'{stem}_deduped.{ext}'),
+        'X-Duplicates-Removed': str(dups_removed),
+        'Access-Control-Expose-Headers': 'X-Duplicates-Removed'
+    })
+
+
 # Built frontend and prerendered tool pages are served from the same origin.
 DIST = Path(__file__).resolve().parent.parent / 'frontend' / 'dist'
 if (DIST / 'assets').is_dir(): app.mount('/assets', StaticFiles(directory=DIST / 'assets'), name='assets')
@@ -311,8 +547,20 @@ def frontend(path: str):
     if not DIST.is_dir(): raise HTTPException(404, 'Build the frontend or use the Vite development server.')
     target = (DIST / path).resolve()
     if not target.is_relative_to(DIST.resolve()): raise HTTPException(404)
-    # Serve static assets directly (e.g. /favicon.svg, /robots.txt, images, etc.) if it's a file
+    # Serve assets and prerendered pages without treating missing routes as the homepage.
     if target.is_file() and target.name != 'index.html':
         return FileResponse(target)
-    # Return the Single Page Application index.html for all routes
-    return FileResponse(DIST / 'index.html', status_code=200)
+    if path and '/' not in path and (DIST / 'tools' / path / 'index.html').is_file():
+        return RedirectResponse('/tools/' + path, status_code=308)
+    if (target / 'index.html').is_file():
+        return FileResponse(target / 'index.html')
+    legacy = {'ai-data-analyst', 'chart-builder', 'data-profiler', 'data-table',
+        'excel-to-pdf', 'csv-to-json', 'json-to-csv', 'pdf-to-excel', 'merge-pdf',
+        'compress-pdf', 'pdf-to-jpg', 'jpg-to-pdf', 'jpg-to-png', 'png-to-jpg',
+        'image-compressor', 'image-resizer', 'sgpa-calculator', 'cgpa-to-percentage',
+        'percentage-to-cgpa', 'overall-cgpa-calculator', 'calculator', 'scientific-calculator',
+        'csv-analyzer', 'excel-analyzer', 'csv-cleaner', 'duplicate-remover', 'json-formatter',
+        'clean-csv', 'remove-duplicates', 'format-json'}
+    if path.removeprefix('tools/').rstrip('/') in legacy:
+        return FileResponse(DIST / 'index.html')
+    raise HTTPException(404, 'Page not found.')

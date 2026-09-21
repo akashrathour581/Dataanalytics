@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, useSyncExternalStore } from 'react';
 import { 
   Sparkles,
   BarChart3, 
@@ -27,7 +27,7 @@ import {
   X
 } from 'lucide-react';
 
-export const SECTIONS = [
+const SECTIONS = [
   {
     group: 'ANALYTICS & BI',
     groupColor: 'linear-gradient(90deg, #38bdf8, #818cf8)',
@@ -95,25 +95,68 @@ export const SECTIONS = [
   }
 ];
 
+const mobileQuery = '(max-width: 1024px)';
+const subscribeViewport = callback => {
+  const media = window.matchMedia(mobileQuery);
+  media.addEventListener('change', callback);
+  return () => media.removeEventListener('change', callback);
+};
+const mobileSnapshot = () => window.matchMedia(mobileQuery).matches;
+
 export default function Sidebar({ activePath, onNavigate, isOpen, onClose }) {
+  const drawerRef = useRef(null);
+  const isMobile = useSyncExternalStore(subscribeViewport, mobileSnapshot, () => false);
+  useEffect(() => {
+    if (!isOpen) return;
+    if (!isMobile) { onClose(); return; }
+    const drawer = drawerRef.current;
+    // Pointer activation in WebKit does not necessarily focus the menu button.
+    const trigger = document.querySelector('[aria-controls="app-navigation"]');
+    const main = document.querySelector('.app-main-content');
+    const scrollY = window.scrollY;
+    const previousStyle = document.body.getAttribute('style');
+    const previouslyInert = main.inert;
+    main.inert = true;
+    Object.assign(document.body.style, {position:'fixed', top:`-${scrollY}px`, width:'100%', overflow:'hidden'});
+    drawer.querySelector('.sidebar-close-btn').focus();
+    const onKeyDown = event => {
+      if (event.key === 'Escape') { event.preventDefault(); onClose(); }
+      if (event.key !== 'Tab') return;
+      const controls = [...drawer.querySelectorAll('button:not(:disabled), a[href], [tabindex="0"]')].filter(el => el.getClientRects().length);
+      const first = controls[0], last = controls[controls.length - 1];
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+    };
+    document.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.removeEventListener('keydown', onKeyDown);
+      main.inert = previouslyInert;
+      if (previousStyle === null) document.body.removeAttribute('style');
+      else document.body.setAttribute('style', previousStyle);
+      window.scrollTo({top:scrollY, behavior:'instant'});
+      if (trigger?.isConnected && trigger.getClientRects().length) trigger.focus({preventScroll:true});
+    };
+  }, [isOpen, isMobile, onClose]);
   return (
     <>
       {/* Mobile Backdrop Overlay */}
-      {isOpen && (
+      {isOpen && isMobile && (
         <div 
           className="sidebar-backdrop" 
           onClick={onClose}
-          aria-label="Close Sidebar Overlay"
+          aria-hidden="true"
         />
       )}
 
-      <aside className={`app-sidebar ${isOpen ? 'mobile-open' : ''}`}>
+      <aside id="app-navigation" ref={drawerRef} className={`app-sidebar ${isOpen ? 'mobile-open' : ''}`}
+        role={isMobile && isOpen ? 'dialog' : undefined} aria-modal={isMobile && isOpen ? true : undefined}
+        aria-label="Main navigation" aria-hidden={isMobile && !isOpen ? true : undefined} inert={isMobile && !isOpen}>
         {/* Brand Header */}
         <div className="sidebar-brand">
           <div 
             onClick={() => {
               onNavigate('/ai-data-analyst');
-              onClose && onClose();
+              onClose?.();
             }}
             style={{ display: 'flex', alignItems: 'center', gap: 12, flex: 1, cursor: 'pointer' }}
           >
@@ -121,7 +164,7 @@ export default function Sidebar({ activePath, onNavigate, isOpen, onClose }) {
               width: 38, 
               height: 38,
               background: 'linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%)',
-              boxShadow: '0 0 16px rgba(56, 189, 248, 0.45)'
+              boxShadow: 'var(--theme-shadow, 0 0 16px rgba(56, 189, 248, 0.45))'
             }}>
               <Sparkles size={20} color="#090d16" />
             </div>
@@ -137,7 +180,7 @@ export default function Sidebar({ activePath, onNavigate, isOpen, onClose }) {
               <span className="brand-badge" style={{
                 background: 'rgba(56, 189, 248, 0.15)',
                 border: '1px solid rgba(56, 189, 248, 0.4)',
-                color: '#38bdf8'
+                color: 'var(--theme-ink-teal, #38bdf8)'
               }}>
                 STUDIO v2.0
               </span>
@@ -179,21 +222,21 @@ export default function Sidebar({ activePath, onNavigate, isOpen, onClose }) {
                   borderRadius: '50%',
                   background: sec.groupColor,
                   display: 'inline-block',
-                  boxShadow: '0 0 8px rgba(56, 189, 248, 0.6)'
+                  boxShadow: 'var(--theme-shadow, 0 0 8px rgba(56, 189, 248, 0.6))'
                 }} />
                 {sec.group}
               </div>
               <div className="nav-group-items">
                 {sec.items.map((item) => {
                   const IconComponent = item.icon;
-                  const isActive = activePath === item.path || activePath === item.id;
+                  const isActive = activePath === item.path || activePath === item.id || (activePath.startsWith('/tools') && activePath.replace('/tools', '') === item.path);
                   return (
                     <button
                       key={item.id}
                       className={`nav-item-btn ${isActive ? 'active' : ''}`}
                       onClick={() => {
                         onNavigate(item.path);
-                        onClose && onClose();
+                        onClose?.();
                       }}
                       title={item.name}
                       style={{
@@ -221,7 +264,7 @@ export default function Sidebar({ activePath, onNavigate, isOpen, onClose }) {
                         />
                       </div>
                       <span className="nav-item-label" style={{
-                        color: isActive ? item.color : '#e2e8f0',
+                        color: isActive ? item.color : 'var(--theme-text, #e2e8f0)',
                         fontWeight: isActive ? 700 : 500,
                         textShadow: isActive ? `0 0 12px ${item.color}60` : 'none',
                         transition: 'all 0.2s ease'

@@ -1,6 +1,8 @@
 ﻿export function numbers(text) {
  if(!text.trim())throw new Error('Enter at least one number.');
- const values=text.trim().split(/[\s,;]+/).map(Number);
+ const tokens=text.trim().split(/[\s,;]+/);
+ if(tokens.some(v=>v===''))throw new Error('Enter a number between separators.');
+ const values=tokens.map(Number);
  if(values.length>10000||values.some(v=>!Number.isFinite(v)))throw new Error('Enter up to 10,000 finite numbers separated by spaces or commas.');
  return values;
 }
@@ -10,7 +12,7 @@ export function statistics(text){
  const counts=new Map();values.forEach(v=>counts.set(v,(counts.get(v)||0)+1));const max=Math.max(...counts.values());
  const modes=max===1?[]:[...counts].filter(([,c])=>c===max).map(([v])=>v);
  if(!Number.isFinite(mean)||!Number.isFinite(m2))throw new Error('Numbers are too large to calculate reliably.');
- return {Count:n,Mean:mean,Median:n%2?values[(n-1)/2]:(values[n/2-1]+values[n/2])/2,Mode:modes.length?modes.join(', '):'No repeated mode',Minimum:values[0],Maximum:values[n-1],'Sample variance':n>1?m2/(n-1):'Undefined for one value','Sample standard deviation':n>1?Math.sqrt(m2/(n-1)):'Undefined for one value'};
+ return {Count:n,Mean:mean,Median:n%2?values[(n-1)/2]:values[n/2-1]/2+values[n/2]/2,Mode:modes.length?modes.join(', '):'No repeated mode',Minimum:values[0],Maximum:values[n-1],'Sample variance':n>1?m2/(n-1):'Undefined for one value','Sample standard deviation':n>1?Math.sqrt(m2/(n-1)):'Undefined for one value'};
 }
 export function weightedGrade(text,scale){
  const rows=text.trim().split('\n').map(line=>line.split(',').map(v=>v.trim()));
@@ -22,6 +24,7 @@ export function weightedGrade(text,scale){
  return {'Weighted grade':average,'Total credits':credits,'Grade scale':scale};
 }
 export function validateCsv(text){
+ text=text.replace(/^\uFEFF/,'');
  if(!text.trim())throw new Error('Enter CSV text with a header row.');
  let rows=[],row=[],cell='',quoted=false,closed=false;
  for(let i=0;i<text.length;i++){
@@ -47,5 +50,7 @@ export function convertUnit(value,group,from,to){
  if(c < -273.15)throw new Error('Temperature cannot be below absolute zero.');
  return to==='F'?c*9/5+32:to==='K'?c+273.15:c;
  }
- return value*units[group][from]/units[group][to];
+ const result=value*(units[group][from]/units[group][to]);
+ if(!Number.isFinite(result))throw new Error('The result exceeds the supported numeric range.');
+ return result;
 }

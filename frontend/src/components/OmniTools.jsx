@@ -1,21 +1,21 @@
 import React, { useState, useRef } from 'react';
-import { 
-  UploadCloud, 
-  Download, 
-  RefreshCw, 
-  CheckCircle2, 
-  AlertCircle, 
-  FileSpreadsheet, 
-  FileText, 
-  FileArchive, 
-  FileCode, 
-  Layers, 
-  Minimize2, 
-  Image as ImageIcon, 
-  Crop, 
-  Search, 
-  Wand2, 
-  CopyMinus, 
+import {
+  UploadCloud,
+  Download,
+  RefreshCw,
+  CheckCircle2,
+  AlertCircle,
+  FileSpreadsheet,
+  FileText,
+  FileArchive,
+  FileCode,
+  Layers,
+  Minimize2,
+  Image as ImageIcon,
+  Crop,
+  Search,
+  Wand2,
+  CopyMinus,
   Code,
   Copy,
   Trash2,
@@ -40,20 +40,15 @@ export default function OmniTools({ toolId, onToast }) {
   const [cleanTrim, setCleanTrim] = useState(true);
   const [cleanEmptyRows, setCleanEmptyRows] = useState(true);
   const [cleanEmptyCols, setCleanEmptyCols] = useState(true);
-  
+
   // JSON Formatter states
   const [jsonInput, setJsonInput] = useState('{\n  "name": "DataSphere AI",\n  "status": "production",\n  "tools_count": 19,\n  "supported_formats": ["csv", "xlsx", "pdf", "jpg", "png", "json"]\n}');
   const [jsonResult, setJsonResult] = useState(null);
   const [jsonIndent, setJsonIndent] = useState(2);
 
-  // Clear state when toolId changes
-  React.useEffect(() => {
-    setFile(null);
-    setMultiFiles([]);
-    setResult(null);
-    setDownloadUrl(null);
-    setDownloadName('');
-  }, [toolId]);
+  React.useEffect(() => () => {
+    if (downloadUrl) URL.revokeObjectURL(downloadUrl);
+  }, [downloadUrl]);
 
   const handleFileChange = (e) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -65,14 +60,36 @@ export default function OmniTools({ toolId, onToast }) {
     }
   };
 
+  const loadSampleCsv = (e) => {
+    e?.stopPropagation();
+    const sampleCsvContent = `Order_ID,Order_Date,Customer_ID,Product_Name,Category,Region,Sales,Quantity,Profit,Payment_Mode
+ORD100496,2025-06-03,CUST1880,Tennis Racket,Sports,Central,291.27,1,75.33,UPI
+ORD100165,2026-02-11,CUST1489,Formal Shirt,Apparel,West,102.49,1,19.38,Cash
+ORD100055,2025-12-01,CUST1274,Trail Backpack,Sports,South,178.80,1,13.78,Net Banking
+ORD100583,2025-08-19,CUST1516,Denim Jacket,Apparel,Central,69.06,1,19.20,UPI
+ORD100609,2025-03-05,CUST1818,Electric Kettle,Home,South,41.86,1,2.62,Net Banking
+ORD100368,2025-12-13,CUST1006,Formal Shirt,Apparel,South,249.21,3,81.82,Debit Card
+ORD100372,2024-09-25,CUST1224,Wireless Mouse,Electronics,Central,782.81,1,175.37,Debit Card
+ORD100671,2024-10-06,CUST1027,Noise-Cancel Headphones,Electronics,East,365.82,1,117.77,Credit Card
+ORD100584,2025-07-08,CUST1322,Scented Candle,Home,West,133.78,1,15.33,Debit Card
+ORD100584,2025-07-08,CUST1322,Scented Candle,Home,West,133.78,1,15.33,Debit Card`;
+    const blob = new Blob([sampleCsvContent], { type: 'text/csv' });
+    const sampleFile = new File([blob], 'retail_sales_sample.csv', { type: 'text/csv' });
+    setFile(sampleFile);
+    setResult(null);
+    setDownloadUrl(null);
+    onToast?.('Loaded retail sales sample dataset!');
+  };
+
+
   const getToolMeta = () => {
     switch (toolId) {
       case 'csv-to-excel':
         return { title: 'CSV to Excel Converter', color: '#22c55e', desc: 'Transform raw CSV data into a fully formatted Microsoft Excel (.xlsx) workbook.', accept: '.csv', icon: FileSpreadsheet };
       case 'excel-to-csv':
-        return { title: 'Excel to CSV Converter', color: '#38bdf8', desc: 'Extract any Excel (.xlsx/.xls) worksheet into a lightweight, portable CSV file.', accept: '.xlsx, .xls', icon: FileText };
+        return { title: 'Excel to CSV Converter', color: '#38bdf8', desc: 'Extract any Excel (.xlsx) worksheet into a lightweight, portable CSV file.', accept: '.xlsx', icon: FileText };
       case 'excel-to-pdf':
-        return { title: 'Excel to PDF Converter', color: '#f43f5e', desc: 'Generate printable, beautifully styled PDF tables from your Excel or CSV files.', accept: '.xlsx, .xls, .csv', icon: FileArchive };
+        return { title: 'Excel to PDF Converter', color: '#f43f5e', desc: 'Generate printable, beautifully styled PDF tables from your Excel or CSV files.', accept: '.xlsx, .csv', icon: FileArchive };
       case 'csv-to-json':
         return { title: 'CSV to JSON Converter', color: '#f59e0b', desc: 'Convert structured CSV tabular rows into web-ready JSON objects with customizable orientation.', accept: '.csv', icon: FileCode };
       case 'json-to-csv':
@@ -98,11 +115,11 @@ export default function OmniTools({ toolId, onToast }) {
       case 'analyze-csv':
         return { title: 'Deep CSV Analyzer', color: '#38bdf8', desc: 'Inspect CSV schema, row count, null percentages, data completeness, and column profiling.', accept: '.csv', icon: Search };
       case 'analyze-excel':
-        return { title: 'Excel Workbook Analyzer', color: '#10b981', desc: 'Analyze all worksheets, calculate dimensional density, cell counts, and duplicate frequency.', accept: '.xlsx, .xls', icon: Search };
+        return { title: 'Excel Workbook Analyzer', color: '#10b981', desc: 'Analyze all worksheets, calculate dimensional density, cell counts, and duplicate frequency.', accept: '.xlsx', icon: Search };
       case 'clean-csv':
         return { title: 'Automated CSV Cleaner', color: '#a855f7', desc: 'Remove leading/trailing whitespaces, drop completely empty rows and unpopulated columns.', accept: '.csv', icon: Wand2 };
       case 'remove-duplicates':
-        return { title: 'Intelligent Duplicate Remover', color: '#f43f5e', desc: 'Detect and eliminate redundant duplicate records from Excel or CSV files.', accept: '.csv, .xlsx, .xls', icon: CopyMinus };
+        return { title: 'Intelligent Duplicate Remover', color: '#f43f5e', desc: 'Detect and eliminate redundant duplicate records from Excel or CSV files.', accept: '.csv, .xlsx', icon: CopyMinus };
       case 'format-json':
         return { title: 'JSON Validator & Formatter', color: '#f59e0b', desc: 'Beautify, minify, validate syntax, and format JSON payloads instantly.', icon: Code };
       default:
@@ -168,16 +185,17 @@ export default function OmniTools({ toolId, onToast }) {
       if (toolId === 'analyze-csv' || toolId === 'analyze-excel') {
         const data = await res.json();
         setResult(data.analysis);
-        onToast && onToast('Analysis generated successfully!');
+        onToast?.('Analysis generated successfully!');
       } else {
         // Blob response for downloads
         const blob = await res.blob();
         const url = window.URL.createObjectURL(blob);
-        
+
         let outName = 'downloaded_file';
         const disposition = res.headers.get('Content-Disposition');
         if (disposition && disposition.includes('filename=')) {
-          outName = disposition.split('filename=')[1].replace(/"/g, '');
+          const encoded = disposition.match(/filename\*=UTF-8''([^;]+)/i);
+          outName = encoded ? decodeURIComponent(encoded[1]) : disposition.match(/filename="?([^";]+)/i)?.[1] || outName;
         } else {
           outName = `${toolId}_result`;
         }
@@ -203,7 +221,7 @@ export default function OmniTools({ toolId, onToast }) {
         setDownloadUrl(url);
         setDownloadName(outName);
         setResult({ success: true, metaInfo });
-        onToast && onToast('File processed successfully!');
+        onToast?.('File processed successfully!');
       }
     } catch (err) {
       alert(`Error: ${err.message}`);
@@ -225,10 +243,11 @@ export default function OmniTools({ toolId, onToast }) {
         })
       });
       const data = await res.json();
+      if (!res.ok || !data.result) throw new Error(data.detail || 'Could not format JSON.');
       setJsonResult(data.result);
       if (data.result.valid) {
         setJsonInput(data.result.formatted);
-        onToast && onToast(minify ? 'JSON minified!' : 'JSON beautified!');
+        onToast?.(minify ? 'JSON minified!' : 'JSON beautified!');
       }
     } catch (err) {
       alert(err.message);
@@ -241,12 +260,11 @@ export default function OmniTools({ toolId, onToast }) {
     <div className="tool-view-container">
       {/* Tool Header */}
       <div className="tool-view-header">
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          <div style={{ 
-            width: 48, 
-            height: 48, 
+        <div className="responsive-row" style={{ alignItems: 'center', gap: 16 }}>
+          <div className="responsive-row" style={{
+            width: 48,
+            height: 48,
             borderRadius: 14,
-            display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             background: `${meta.color || '#38bdf8'}25`,
@@ -256,10 +274,10 @@ export default function OmniTools({ toolId, onToast }) {
             <IconComponent size={24} color={meta.color || '#38bdf8'} style={{ filter: `drop-shadow(0 0 8px ${meta.color || '#38bdf8'})` }} />
           </div>
           <div>
-            <h2 style={{ 
-              fontSize: '1.45rem', 
+            <h2 style={{
+              fontSize: '1.45rem',
               fontWeight: 800,
-              background: `linear-gradient(135deg, #ffffff 30%, ${meta.color || '#38bdf8'} 100%)`,
+              background: `linear-gradient(135deg, var(--theme-text, #ffffff) 30%, ${meta.color || '#38bdf8'} 100%)`,
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               letterSpacing: '-0.02em',
@@ -267,7 +285,7 @@ export default function OmniTools({ toolId, onToast }) {
             }}>
               {meta.title}
             </h2>
-            <p style={{ fontSize: '0.88rem', color: '#cbd5e1' }}>{meta.desc}</p>
+            <p style={{ fontSize: '0.88rem', color: 'var(--theme-text, #cbd5e1)' }}>{meta.desc}</p>
           </div>
         </div>
       </div>
@@ -275,9 +293,9 @@ export default function OmniTools({ toolId, onToast }) {
       {/* Special case: JSON Formatter */}
       {toolId === 'format-json' ? (
         <div className="chart-card" style={{ marginTop: 20 }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14, flexWrap: 'wrap', gap: 10 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <button 
+          <div className="responsive-row" style={{ alignItems: 'center', justifyContent: 'space-between', marginBottom: 14, gap: 10 }}>
+            <div className="responsive-row" style={{ alignItems: 'center', gap: 10 }}>
+              <button
                 className="btn btn-primary btn-sm"
                 onClick={() => handleJsonFormat(false)}
                 disabled={loading}
@@ -286,7 +304,7 @@ export default function OmniTools({ toolId, onToast }) {
                 <span>Beautify JSON</span>
               </button>
 
-              <button 
+              <button
                 className="btn btn-secondary btn-sm"
                 onClick={() => handleJsonFormat(true)}
                 disabled={loading}
@@ -295,10 +313,10 @@ export default function OmniTools({ toolId, onToast }) {
                 <span>Minify (Compact)</span>
               </button>
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.825rem', color: 'var(--text-secondary)' }}>
+              <div className="responsive-row" style={{ alignItems: 'center', gap: 6, fontSize: '0.825rem', color: 'var(--text-secondary)' }}>
                 <span>Indent:</span>
-                <select 
-                  className="control-select" 
+                <select
+                  className="control-select"
                   style={{ padding: '4px 8px', fontSize: '0.8rem' }}
                   value={jsonIndent}
                   onChange={(e) => setJsonIndent(Number(e.target.value))}
@@ -309,18 +327,18 @@ export default function OmniTools({ toolId, onToast }) {
               </div>
             </div>
 
-            <div style={{ display: 'flex', gap: 8 }}>
-              <button 
+            <div className="responsive-row" style={{ gap: 8 }}>
+              <button
                 className="btn btn-secondary btn-sm"
                 onClick={() => {
                   navigator.clipboard.writeText(jsonInput);
-                  onToast && onToast('Copied to clipboard!');
+                  onToast?.('Copied to clipboard!');
                 }}
               >
                 <Copy size={14} />
                 <span>Copy</span>
               </button>
-              <button 
+              <button
                 className="btn btn-secondary btn-sm"
                 onClick={() => {
                   setJsonInput('');
@@ -334,15 +352,14 @@ export default function OmniTools({ toolId, onToast }) {
           </div>
 
           {jsonResult && (
-            <div style={{ 
-              marginBottom: 14, 
-              padding: '10px 14px', 
+            <div className="responsive-row" style={{
+              marginBottom: 14,
+              padding: '10px 14px',
               borderRadius: 8,
               background: jsonResult.valid ? 'rgba(16, 185, 129, 0.12)' : 'rgba(244, 63, 94, 0.12)',
               border: `1px solid ${jsonResult.valid ? 'rgba(16, 185, 129, 0.3)' : 'rgba(244, 63, 94, 0.3)'}`,
               color: jsonResult.valid ? '#34d399' : '#fb7185',
               fontSize: '0.85rem',
-              display: 'flex',
               alignItems: 'center',
               gap: 8
             }}>
@@ -357,11 +374,11 @@ export default function OmniTools({ toolId, onToast }) {
             style={{
               width: '100%',
               minHeight: 380,
-              background: 'rgba(10, 15, 26, 0.9)',
+              background: 'var(--theme-panel, rgba(10, 15, 26, 0.9))',
               border: '1px solid var(--border-subtle)',
               borderRadius: 10,
               padding: 16,
-              color: '#f8fafc',
+              color: 'var(--theme-text, #f8fafc)',
               fontFamily: "'JetBrains Mono', monospace",
               fontSize: '0.875rem',
               lineHeight: 1.6,
@@ -375,12 +392,12 @@ export default function OmniTools({ toolId, onToast }) {
         /* Standard File Processing View */
         <div style={{ marginTop: 24 }}>
           {/* Dropzone Card */}
-          <div 
+          <div
             className="dropzone-container"
             onClick={() => fileInputRef.current && fileInputRef.current.click()}
           >
-            <input 
-              type="file" 
+            <input
+              type="file"
               ref={fileInputRef}
               style={{ display: 'none' }}
               accept={meta.accept}
@@ -397,41 +414,63 @@ export default function OmniTools({ toolId, onToast }) {
             </div>
 
             <h3 className="dropzone-title">
-              {meta.isMulti 
-                ? (multiFiles.length > 0 
-                    ? <span style={{ color: meta.color || '#38bdf8' }}>Selected {multiFiles.length} files</span> 
+              {meta.isMulti
+                ? (multiFiles.length > 0
+                    ? <span style={{ color: meta.color || '#38bdf8' }}>Selected {multiFiles.length} files</span>
                     : 'Select Multiple Files to Combine')
-                : (file 
-                    ? <span>Selected: <span style={{ color: meta.color || '#38bdf8', fontWeight: 800 }}>{file.name}</span></span> 
+                : (file
+                    ? <span>Selected: <span style={{ color: meta.color || '#38bdf8', fontWeight: 800 }}>{file.name}</span></span>
                     : <span>Select or Drag & Drop <span style={{ color: meta.color || '#38bdf8' }}>{meta.accept}</span> file</span>)}
             </h3>
 
-            <p className="dropzone-desc" style={{ color: '#cbd5e1' }}>
+            <p className="dropzone-desc" style={{ color: 'var(--theme-text, #cbd5e1)' }}>
               Accepted formats: <strong style={{ color: meta.color || '#38bdf8' }}>{meta.accept}</strong>
             </p>
 
-            <span className="btn btn-secondary btn-sm" style={{ 
-              pointerEvents: 'none',
-              borderColor: `${meta.color || '#38bdf8'}50`,
-              background: `${meta.color || '#38bdf8'}15`,
-              color: '#ffffff',
-              fontWeight: 600
-            }}>
-              Browse File{meta.isMulti ? 's' : ''}
-            </span>
+            <div className="responsive-row" style={{ gap: 10, alignItems: 'center', justifyContent: 'center', marginTop: 14 }}>
+              <span className="btn btn-secondary btn-sm" style={{
+                pointerEvents: 'none',
+                borderColor: `${meta.color || '#38bdf8'}50`,
+                background: `${meta.color || '#38bdf8'}15`,
+                color: 'var(--theme-text, #ffffff)',
+                fontWeight: 600
+              }}>
+                Browse File{meta.isMulti ? 's' : ''}
+              </span>
+
+              {meta.accept?.includes('.csv') && (
+                <button
+                  type="button"
+                  className="btn btn-secondary btn-sm"
+                  onClick={loadSampleCsv}
+                  style={{
+                    borderColor: 'rgba(56, 189, 248, 0.45)',
+                    background: 'rgba(56, 189, 248, 0.15)',
+                    color: 'var(--theme-ink-teal, #38bdf8)',
+                    fontWeight: 600,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 6
+                  }}
+                >
+                  <Sparkles size={14} color="#38bdf8" />
+                  <span>Try Sample Dataset</span>
+                </button>
+              )}
+            </div>
           </div>
 
           {/* Tool specific options */}
           {toolId === 'compress-image' && (
             <div className="clean-panel" style={{ marginTop: 18 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+              <div className="responsive-row" style={{ alignItems: 'center', gap: 14 }}>
                 <span style={{ fontSize: '0.875rem', fontWeight: 600 }}>Compression Quality:</span>
-                <input 
-                  type="range" 
-                  min="10" 
-                  max="95" 
-                  value={quality} 
-                  onChange={(e) => setQuality(Number(e.target.value))} 
+                <input
+                  type="range"
+                  min="10"
+                  max="95"
+                  value={quality}
+                  onChange={(e) => setQuality(Number(e.target.value))}
                   style={{ width: 180 }}
                 />
                 <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.9rem', color: 'var(--primary)' }}>
@@ -446,55 +485,55 @@ export default function OmniTools({ toolId, onToast }) {
 
           {toolId === 'resize-image' && (
             <div className="clean-panel" style={{ marginTop: 18 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
+              <div className="responsive-row" style={{ alignItems: 'center', gap: 16, }}>
                 <label className="clean-checkbox-label">
-                  <input 
-                    type="radio" 
-                    name="rmode" 
-                    checked={resizeMode === 'scale'} 
-                    onChange={() => setResizeMode('scale')} 
+                  <input
+                    type="radio"
+                    name="rmode"
+                    checked={resizeMode === 'scale'}
+                    onChange={() => setResizeMode('scale')}
                   />
                   <span>Scale Percentage</span>
                 </label>
 
                 <label className="clean-checkbox-label">
-                  <input 
-                    type="radio" 
-                    name="rmode" 
-                    checked={resizeMode === 'custom'} 
-                    onChange={() => setResizeMode('custom')} 
+                  <input
+                    type="radio"
+                    name="rmode"
+                    checked={resizeMode === 'custom'}
+                    onChange={() => setResizeMode('custom')}
                   />
                   <span>Custom Width & Height</span>
                 </label>
 
                 {resizeMode === 'scale' ? (
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <input 
-                      type="range" 
-                      min="10" 
-                      max="200" 
-                      value={scalePct} 
-                      onChange={(e) => setScalePct(Number(e.target.value))} 
+                  <div className="responsive-row" style={{ alignItems: 'center', gap: 8 }}>
+                    <input
+                      type="range"
+                      min="10"
+                      max="200"
+                      value={scalePct}
+                      onChange={(e) => setScalePct(Number(e.target.value))}
                     />
                     <span style={{ fontFamily: 'monospace', color: 'var(--primary)' }}>{scalePct}%</span>
                   </div>
                 ) : (
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <input 
-                      type="number" 
-                      className="control-input" 
-                      style={{ width: 90 }} 
-                      value={customWidth} 
-                      onChange={(e) => setCustomWidth(Number(e.target.value))} 
+                  <div className="responsive-row" style={{ alignItems: 'center', gap: 8 }}>
+                    <input
+                      type="number"
+                      className="control-input"
+                      style={{ width: 90 }}
+                      value={customWidth}
+                      onChange={(e) => setCustomWidth(Number(e.target.value))}
                       placeholder="Width"
                     />
                     <span>×</span>
-                    <input 
-                      type="number" 
-                      className="control-input" 
-                      style={{ width: 90 }} 
-                      value={customHeight} 
-                      onChange={(e) => setCustomHeight(Number(e.target.value))} 
+                    <input
+                      type="number"
+                      className="control-input"
+                      style={{ width: 90 }}
+                      value={customHeight}
+                      onChange={(e) => setCustomHeight(Number(e.target.value))}
                       placeholder="Height"
                     />
                     <span>px</span>
@@ -506,28 +545,28 @@ export default function OmniTools({ toolId, onToast }) {
 
           {toolId === 'clean-csv' && (
             <div className="clean-panel" style={{ marginTop: 18 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 20, flexWrap: 'wrap' }}>
+              <div className="responsive-row" style={{ alignItems: 'center', gap: 20, }}>
                 <label className="clean-checkbox-label">
-                  <input 
-                    type="checkbox" 
-                    checked={cleanTrim} 
-                    onChange={(e) => setCleanTrim(e.target.checked)} 
+                  <input
+                    type="checkbox"
+                    checked={cleanTrim}
+                    onChange={(e) => setCleanTrim(e.target.checked)}
                   />
                   <span>Trim whitespace from cells & headers</span>
                 </label>
                 <label className="clean-checkbox-label">
-                  <input 
-                    type="checkbox" 
-                    checked={cleanEmptyRows} 
-                    onChange={(e) => setCleanEmptyRows(e.target.checked)} 
+                  <input
+                    type="checkbox"
+                    checked={cleanEmptyRows}
+                    onChange={(e) => setCleanEmptyRows(e.target.checked)}
                   />
                   <span>Drop completely empty rows</span>
                 </label>
                 <label className="clean-checkbox-label">
-                  <input 
-                    type="checkbox" 
-                    checked={cleanEmptyCols} 
-                    onChange={(e) => setCleanEmptyCols(e.target.checked)} 
+                  <input
+                    type="checkbox"
+                    checked={cleanEmptyCols}
+                    onChange={(e) => setCleanEmptyCols(e.target.checked)}
                   />
                   <span>Drop completely blank columns</span>
                 </label>
@@ -536,11 +575,11 @@ export default function OmniTools({ toolId, onToast }) {
           )}
 
           {/* Action Button */}
-          <div style={{ marginTop: 24, display: 'flex', justifyContent: 'center' }}>
-            <button 
+          <div className="responsive-row" style={{ marginTop: 24, justifyContent: 'center' }}>
+            <button
               className="btn btn-primary"
-              style={{ 
-                padding: '14px 40px', 
+              style={{
+                padding: '14px 40px',
                 fontSize: '1rem',
                 fontWeight: 700,
                 background: `linear-gradient(135deg, ${meta.color || '#38bdf8'} 0%, #6366f1 50%, #d946ef 100%)`,
@@ -553,7 +592,7 @@ export default function OmniTools({ toolId, onToast }) {
               {loading ? (
                 <RefreshCw size={18} className="spinner" style={{ width: 18, height: 18, borderWidth: 2 }} />
               ) : (
-                <Sparkles size={18} color="#ffffff" style={{ filter: 'drop-shadow(0 0 4px #ffffff)' }} />
+                <Sparkles size={18} color="var(--theme-text, #ffffff)" style={{ filter: 'drop-shadow(0 0 4px var(--theme-text, #ffffff))' }} />
               )}
               <span>{loading ? 'Processing File...' : `Process & Convert Now`}</span>
             </button>
@@ -561,46 +600,45 @@ export default function OmniTools({ toolId, onToast }) {
 
           {/* Result / Download Card */}
           {downloadUrl && (
-            <div className="chart-card" style={{ 
-              marginTop: 26, 
-              border: '1px solid rgba(16, 185, 129, 0.45)', 
+            <div className="chart-card" style={{
+              marginTop: 26,
+              border: '1px solid rgba(16, 185, 129, 0.45)',
               background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(6, 182, 212, 0.08) 100%)',
-              boxShadow: '0 12px 32px rgba(0, 0, 0, 0.5), 0 0 20px rgba(16, 185, 129, 0.2)'
+              boxShadow: 'var(--theme-shadow, 0 12px 32px rgba(0, 0, 0, 0.5), 0 0 20px rgba(16, 185, 129, 0.2))'
             }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-                  <div style={{ 
-                    width: 46, 
-                    height: 46, 
-                    borderRadius: 12, 
-                    background: 'rgba(16, 185, 129, 0.25)', 
-                    border: '1px solid rgba(16, 185, 129, 0.5)', 
-                    color: '#34d399', 
-                    display: 'flex', 
-                    alignItems: 'center', 
+              <div className="responsive-row" style={{ alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
+                <div className="responsive-row" style={{ alignItems: 'center', gap: 14 }}>
+                  <div className="responsive-row" style={{
+                    width: 46,
+                    height: 46,
+                    borderRadius: 12,
+                    background: 'rgba(16, 185, 129, 0.25)',
+                    border: '1px solid rgba(16, 185, 129, 0.5)',
+                    color: 'var(--theme-ink-green, #34d399)',
+                    alignItems: 'center',
                     justifyContent: 'center',
-                    boxShadow: '0 0 16px rgba(16, 185, 129, 0.45)'
+                    boxShadow: 'var(--theme-shadow, 0 0 16px rgba(16, 185, 129, 0.45))'
                   }}>
                     <CheckCircle2 size={24} style={{ filter: 'drop-shadow(0 0 6px #10b981)' }} />
                   </div>
                   <div>
-                    <h4 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#34d399' }}>
+                    <h4 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--theme-ink-green, #34d399)' }}>
                       Success! File Processed & Ready
                     </h4>
-                    <p style={{ fontSize: '0.85rem', color: '#e2e8f0', marginTop: 2 }}>
+                    <p style={{ fontSize: '0.85rem', color: 'var(--theme-text, #e2e8f0)', marginTop: 2 }}>
                       {result?.metaInfo || downloadName}
                     </p>
                   </div>
                 </div>
 
-                <a 
-                  href={downloadUrl} 
+                <a
+                  href={downloadUrl}
                   download={downloadName}
                   className="btn btn-primary"
-                  style={{ 
+                  style={{
                     textDecoration: 'none',
                     background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-                    boxShadow: '0 6px 20px rgba(16, 185, 129, 0.45)',
+                    boxShadow: 'var(--theme-shadow, 0 6px 20px rgba(16, 185, 129, 0.45))',
                     fontWeight: 700,
                     padding: '12px 24px'
                   }}

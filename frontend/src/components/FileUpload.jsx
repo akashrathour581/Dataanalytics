@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { UploadCloud, FileSpreadsheet, ArrowUpRight, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { UploadCloud, FileSpreadsheet, ArrowUpRight, AlertCircle } from 'lucide-react';
 
 export default function FileUpload({ onFileUpload, onLoadSample, loading }) {
   const [isDragOver, setIsDragOver] = useState(false);
@@ -31,13 +31,15 @@ export default function FileUpload({ onFileUpload, onLoadSample, loading }) {
   };
 
   const processFile = (file) => {
+    if (loading) return;
     setErrorMessage(null);
-    const validExtensions = ['.xlsx', '.xls', '.csv'];
+    if (file.size > 10 * 1024 * 1024) {setErrorMessage('Choose a file no larger than 10 MB.');return;}
+    const validExtensions = ['.xlsx', '.json', '.csv'];
     const fileName = file.name.toLowerCase();
     const isValid = validExtensions.some(ext => fileName.endsWith(ext));
 
     if (!isValid) {
-      setErrorMessage('Please upload a valid Excel (.xlsx, .xls) or CSV file.');
+      setErrorMessage('Please upload a valid Excel (.xlsx), JSON or CSV file.');
       return;
     }
 
@@ -57,7 +59,7 @@ export default function FileUpload({ onFileUpload, onLoadSample, loading }) {
           type="file" 
           ref={fileInputRef}
           style={{ display: 'none' }}
-          accept=".xlsx, .xls, .csv"
+          accept=".xlsx,.json,.csv" disabled={loading} aria-label="Upload dataset"
           onChange={handleFileInputChange}
         />
 
@@ -75,7 +77,7 @@ export default function FileUpload({ onFileUpload, onLoadSample, loading }) {
 
         <div className="dropzone-pills">
           <span className="pill-format">.XLSX</span>
-          <span className="pill-format">.XLS</span>
+          <span className="pill-format">.JSON</span>
           <span className="pill-format">.CSV</span>
           <span className="pill-format">Multi-Sheet Supported</span>
         </div>
@@ -83,7 +85,7 @@ export default function FileUpload({ onFileUpload, onLoadSample, loading }) {
         {loading && (
           <div style={{ marginTop: 24 }}>
             <div className="spinner" style={{ margin: '0 auto' }}></div>
-            <p style={{ marginTop: 12, fontSize: '0.85rem', color: '#38bdf8' }}>
+            <p style={{ marginTop: 12, fontSize: '0.85rem', color: 'var(--theme-ink-teal, #38bdf8)' }}>
               Parsing sheets, calculating correlations, and building dashboards...
             </p>
           </div>
@@ -100,7 +102,7 @@ export default function FileUpload({ onFileUpload, onLoadSample, loading }) {
           display: 'flex',
           alignItems: 'center',
           gap: 10,
-          color: '#fb7185',
+          color: 'var(--theme-ink-pink, #fb7185)',
           fontSize: '0.875rem'
         }}>
           <AlertCircle size={18} />

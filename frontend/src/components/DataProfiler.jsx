@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ShieldCheck, CheckCircle, Wand2, RefreshCw } from 'lucide-react';
 
-export default function DataProfiler({ datasetId, analysis, onDataCleaned }) {
+export default function DataProfiler({ datasetId, analysis, revision, onDataCleaned }) {
   const [dropDuplicates, setDropDuplicates] = useState(true);
   const [fillNumeric, setFillNumeric] = useState('median');
   const [fillCategorical, setFillCategorical] = useState('mode');
@@ -16,26 +16,67 @@ export default function DataProfiler({ datasetId, analysis, onDataCleaned }) {
     setCleaning(true);
     setCleanResult(null);
     try {
+      // Build operations array matching backend CleaningOperation schema (uses 'kind', per-column fills)
+      const operations = [];
+
+      if (dropDuplicates) {
+        operations.push({ kind: 'duplicates', column: '', value: '', replacement: '', method: 'median', columns: [] });
+      }
+
+      if (fillNumeric !== 'none') {
+        const numericCols = column_profiles.filter(c => c.type === 'numeric' && c.null_count > 0 && (c.count > 0 || fillNumeric === 'zero'));
+        for (const col of numericCols) {
+          if (fillNumeric === 'zero') {
+            operations.push({ kind: 'fill', column: col.name, value: '0', replacement: '', method: 'custom', columns: [] });
+          } else {
+            // 'mean' or 'median'
+            operations.push({ kind: 'fill', column: col.name, value: '', replacement: '', method: fillNumeric, columns: [] });
+          }
+        }
+      }
+
+      if (fillCategorical !== 'none') {
+        const catCols = column_profiles.filter(c => c.type === 'categorical' && c.null_count > 0 && (c.count > 0 || fillCategorical === 'unknown'));
+        for (const col of catCols) {
+          if (fillCategorical === 'unknown') {
+            operations.push({ kind: 'fill', column: col.name, value: 'Unknown', replacement: '', method: 'custom', columns: [] });
+          } else {
+            // 'mode'
+            operations.push({ kind: 'fill', column: col.name, value: '', replacement: '', method: 'mode', columns: [] });
+          }
+        }
+      }
+
       const res = await fetch('/api/clean', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           dataset_id: datasetId,
-          drop_duplicates: dropDuplicates,
-          fill_numeric: fillNumeric,
-          fill_categorical: fillCategorical
+          operations,
+          action: 'apply',
+          revision
         })
       });
 
       const data = await res.json();
       if (res.ok && data.success) {
-        setCleanResult(`Cleaned successfully: Removed ${data.rows_removed} duplicate row(s) and imputed ${data.nulls_fixed} missing value(s).`);
+        // Use preview.before / preview.after from the API response for accurate diff stats
+        const before = data.preview?.before;
+        const after = data.preview?.after;
+        const rowsRemoved = (before && after) ? before.rows - after.rows : 0;
+        const missingFixed = (before && after) ? before.missing - after.missing : 0;
+        setCleanResult(
+          `Cleaning applied! Removed ${Math.max(0, rowsRemoved)} duplicate row(s) and filled ${Math.max(0, missingFixed)} missing value(s).`
+        );
         if (onDataCleaned) {
-          onDataCleaned(data.analysis);
+          onDataCleaned(data);
         }
+      } else {
+        setCleanResult(`Error: ${data.detail || 'Cleaning failed. Please try again.'}`);
       }
     } catch (err) {
       console.error(err);
+      setCleanResult(`Error: ${err.message}`);
     } finally {
       setCleaning(false);
     }
@@ -45,18 +86,17 @@ export default function DataProfiler({ datasetId, analysis, onDataCleaned }) {
     <div>
       {/* 1-Click Clean Data Panel */}
       <div className="clean-panel">
-        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-          <div style={{
+        <div className="responsive-row" style={{ alignItems: 'center', gap: 14 }}>
+          <div className="responsive-row" style={{
             width: 42,
             height: 42,
             borderRadius: 12,
             background: 'rgba(56, 189, 248, 0.2)',
             border: '1px solid rgba(56, 189, 248, 0.5)',
-            color: '#38bdf8',
-            display: 'flex',
+            color: 'var(--theme-ink-teal, #38bdf8)',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 0 16px rgba(56, 189, 248, 0.4)'
+            boxShadow: 'var(--theme-shadow, 0 0 16px rgba(56, 189, 248, 0.4))'
           }}>
             <Wand2 size={20} color="#38bdf8" style={{ filter: 'drop-shadow(0 0 6px #38bdf8)' }} />
           </div>
@@ -64,13 +104,13 @@ export default function DataProfiler({ datasetId, analysis, onDataCleaned }) {
             <h4 style={{ 
               fontSize: '1.05rem', 
               fontWeight: 800,
-              background: 'linear-gradient(135deg, #ffffff 30%, #38bdf8 100%)',
+              background: 'linear-gradient(135deg, var(--theme-text, #ffffff) 30%, #38bdf8 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent'
             }}>
               Automated Data Hygiene & Cleaning
             </h4>
-            <p style={{ fontSize: '0.82rem', color: '#cbd5e1' }}>
+            <p style={{ fontSize: '0.82rem', color: 'var(--theme-text, #cbd5e1)' }}>
               Impute missing values and strip duplicate records to ensure analysis integrity
             </p>
           </div>
@@ -86,7 +126,7 @@ export default function DataProfiler({ datasetId, analysis, onDataCleaned }) {
             <span>Drop Duplicates ({summary.duplicate_rows})</span>
           </label>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.825rem' }}>
+          <div className="responsive-row" style={{ alignItems: 'center', gap: 6, fontSize: '0.825rem' }}>
             <span style={{ color: 'var(--text-secondary)' }}>Numeric Nulls:</span>
             <select 
               className="control-select"
@@ -101,7 +141,7 @@ export default function DataProfiler({ datasetId, analysis, onDataCleaned }) {
             </select>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.825rem' }}>
+          <div className="responsive-row" style={{ alignItems: 'center', gap: 6, fontSize: '0.825rem' }}>
             <span style={{ color: 'var(--text-secondary)' }}>Categorical Nulls:</span>
             <select 
               className="control-select"
@@ -121,7 +161,7 @@ export default function DataProfiler({ datasetId, analysis, onDataCleaned }) {
               padding: '8px 18px', 
               fontWeight: 700, 
               background: 'linear-gradient(135deg, #0284c7 0%, #6366f1 100%)',
-              boxShadow: '0 4px 14px rgba(56, 189, 248, 0.4)'
+              boxShadow: 'var(--theme-shadow, 0 4px 14px rgba(56, 189, 248, 0.4))'
             }}
             onClick={handleCleanData}
             disabled={cleaning}
@@ -129,7 +169,7 @@ export default function DataProfiler({ datasetId, analysis, onDataCleaned }) {
             {cleaning ? (
               <RefreshCw size={14} className="spinner" style={{ width: 14, height: 14, borderWidth: 2 }} />
             ) : (
-              <ShieldCheck size={15} color="#ffffff" />
+              <ShieldCheck size={15} color="var(--theme-text, #ffffff)" />
             )}
             <span>Execute Cleaning</span>
           </button>
@@ -137,15 +177,14 @@ export default function DataProfiler({ datasetId, analysis, onDataCleaned }) {
       </div>
 
       {cleanResult && (
-        <div style={{
+        <div className="responsive-row" style={{
           marginBottom: 20,
           padding: '12px 18px',
           background: 'rgba(16, 185, 129, 0.12)',
           border: '1px solid rgba(16, 185, 129, 0.3)',
           borderRadius: 10,
-          color: '#34d399',
+          color: 'var(--theme-ink-green, #34d399)',
           fontSize: '0.875rem',
-          display: 'flex',
           alignItems: 'center',
           gap: 10
         }}>
@@ -167,7 +206,7 @@ export default function DataProfiler({ datasetId, analysis, onDataCleaned }) {
           return (
             <div key={col.name} className="profile-card" style={{ borderTop: `3px solid ${curTypeCol}` }}>
               <div className="profile-card-header">
-                <span className="col-name" style={{ color: '#ffffff', fontWeight: 700 }}>
+                <span className="col-name" style={{ color: 'var(--theme-text, #ffffff)', fontWeight: 700 }}>
                   <span style={{ color: curTypeCol, marginRight: 6 }}>●</span>
                   {col.name}
                 </span>
@@ -177,7 +216,7 @@ export default function DataProfiler({ datasetId, analysis, onDataCleaned }) {
               </div>
 
               {/* Progress bar for completeness */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+              <div className="responsive-row" style={{ justifyContent: 'space-between', fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
                 <span>Missing: {col.null_count.toLocaleString()} ({col.null_pct}%)</span>
                 <span>{100 - col.null_pct}% valid</span>
               </div>

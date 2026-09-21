@@ -50,6 +50,10 @@ def parse_uploaded_file(content, filename, sheet_name=None):
             worksheet = book.book[active]
             if (worksheet.max_row or 0) > MAX_ROWS + 1 or (worksheet.max_column or 0) > MAX_COLS or (worksheet.max_row or 0) * (worksheet.max_column or 0) > MAX_CELLS + MAX_COLS:
                 raise ValueError('Use at most 100,000 rows, 200 columns and 2 million cells per worksheet.')
+            header = next(worksheet.iter_rows(min_row=1, max_row=1, values_only=True), ())
+            names = [str(v) if v is not None else '' for v in header]
+            if any(not name.strip() for name in names) or len(set(names)) != len(names):
+                raise ValueError('Column names must be non-empty and unique.')
             df = book.parse(active, nrows=MAX_ROWS + 1)
     elif ext == 'csv':
         if b'\x00' in content:
@@ -79,7 +83,9 @@ def parse_uploaded_file(content, filename, sheet_name=None):
         except UnicodeDecodeError:
             df = pd.read_csv(io.BytesIO(content), nrows=MAX_ROWS + 1, encoding='latin1')
     elif ext == 'json':
-        data = json.loads(content.decode('utf-8-sig'))
+        def reject_constant(value):
+            raise ValueError('Use valid JSON numbers, without NaN or Infinity.')
+        data = json.loads(content.decode('utf-8-sig'), parse_constant=reject_constant)
         if not isinstance(data, list) or not all(isinstance(r, dict) for r in data):
             raise ValueError('Use a JSON array of objects.')
         if len(data) > MAX_ROWS:
@@ -146,7 +152,8 @@ class DatasetStore:
     def update_df(self, key, df, action=''):
         validate_frame(df)
         d = self._datasets[key]
-        if self.size() + int(df.memory_usage(deep=True).sum()) > self.max_bytes:
+        evicted = int(d['undo'][0].memory_usage(deep=True).sum()) if len(d['undo']) == 3 else 0
+        if self.size() - evicted + int(df.memory_usage(deep=True).sum()) > self.max_bytes:
             raise ValueError('Memory capacity reached. Delete an earlier dataset and retry.')
         d['undo'] = (d['undo'] + [d['cleaned_df']])[-3:]
         d['cleaned_df'] = df.copy()

@@ -1,4 +1,5 @@
-import React, { useState, useMemo, useEffect, useRef } from 'react';
+import { evaluateExpression } from '../data/expression';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   GraduationCap,
   Calculator,
@@ -7,23 +8,12 @@ import {
   BookOpen,
   Plus,
   Trash2,
-  RefreshCw,
   Copy,
-  CheckCircle2,
-  TrendingUp,
   Target,
-  Sparkles,
-  Info,
-  ChevronRight,
   HelpCircle,
   Sigma,
   History,
-  Delete,
-  RotateCcw,
-  Hash,
   Binary,
-  Divide,
-  CornerDownLeft,
   Volume2,
   VolumeX
 } from 'lucide-react';
@@ -33,13 +23,6 @@ export default function StudentTools({ toolId = 'calculator', onToast, onNavigat
     toolId === 'scientific-calculator' ? 'calculator' : (toolId || 'calculator')
   );
 
-  // Synchronize when toolId prop changes from parent / URL
-  React.useEffect(() => {
-    if (toolId) {
-      setActiveTab(toolId === 'scientific-calculator' ? 'calculator' : toolId);
-    }
-  }, [toolId]);
-
   const switchTab = (tab) => {
     setActiveTab(tab);
     if (onNavigate) {
@@ -47,25 +30,24 @@ export default function StudentTools({ toolId = 'calculator', onToast, onNavigat
     }
   };
 
-  const copyToClipboard = (text, message = 'Copied to clipboard!') => {
-    navigator.clipboard.writeText(text);
-    if (onToast) onToast(message);
+  const copyToClipboard = async (text, message = 'Copied to clipboard!') => {
+    try { await navigator.clipboard.writeText(text); onToast?.(message); }
+    catch { onToast?.('Clipboard is unavailable. Select and copy the result.', 'error'); }
   };
 
   return (
-    <div className="tool-view-container" style={{ maxWidth: 1120, margin: '0 auto', paddingBottom: 48 }}>
+    <div className="tool-view-container student-tools">
       {/* Top Student Tools Hub Navigation Banner */}
-      <div style={{
+      <div className="student-panel" style={{
         background: 'linear-gradient(135deg, rgba(129, 140, 248, 0.14) 0%, rgba(192, 132, 252, 0.12) 50%, rgba(56, 189, 248, 0.08) 100%)',
         border: '1px solid rgba(129, 140, 248, 0.3)',
         borderRadius: 18,
-        padding: '24px 28px',
         marginBottom: 24,
-        boxShadow: '0 12px 36px -10px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.15)',
+        boxShadow: 'var(--theme-shadow, 0 12px 36px -10px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.15))',
         position: 'relative',
         overflow: 'hidden'
       }}>
-        <div style={{
+        <div className="responsive-row" style={{
           position: 'absolute',
           top: -30,
           right: -30,
@@ -76,27 +58,26 @@ export default function StudentTools({ toolId = 'calculator', onToast, onNavigat
           pointerEvents: 'none'
         }} />
 
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-            <div style={{
+        <div style={{ alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
+          <div className="responsive-row" style={{ alignItems: 'center', gap: 16 }}>
+            <div className="responsive-row" style={{
               width: 52,
               height: 52,
               borderRadius: 14,
               background: 'linear-gradient(135deg, #818cf8 0%, #c084fc 100%)',
-              display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: '0 0 20px rgba(129, 140, 248, 0.55)',
+              boxShadow: 'var(--theme-shadow, 0 0 20px rgba(129, 140, 248, 0.55))',
               color: '#090d16'
             }}>
               <GraduationCap size={28} />
             </div>
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
+              <div className="responsive-row" style={{ alignItems: 'center', gap: 10, marginBottom: 4 }}>
                 <h1 style={{
                   fontSize: '1.65rem',
                   fontWeight: 800,
-                  background: 'linear-gradient(135deg, #ffffff 30%, #818cf8 70%, #c084fc 100%)',
+                  background: 'linear-gradient(135deg, var(--theme-text, #ffffff) 30%, #818cf8 70%, #c084fc 100%)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
                   margin: 0,
@@ -111,12 +92,12 @@ export default function StudentTools({ toolId = 'calculator', onToast, onNavigat
                   borderRadius: 6,
                   background: 'rgba(129, 140, 248, 0.2)',
                   border: '1px solid rgba(129, 140, 248, 0.4)',
-                  color: '#818cf8'
+                  color: 'var(--theme-ink-cyan, #818cf8)'
                 }}>
                   ACADEMIC v2.0
                 </span>
               </div>
-              <p style={{ margin: 0, fontSize: '0.88rem', color: '#cbd5e1' }}>
+              <p style={{ margin: 0, fontSize: '0.88rem', color: 'var(--theme-text, #cbd5e1)' }}>
                 Accurate Indian & Global university grading calculators: CGPA, SGPA, Percentage & Target Planner.
               </p>
             </div>
@@ -124,13 +105,7 @@ export default function StudentTools({ toolId = 'calculator', onToast, onNavigat
         </div>
 
         {/* Tab Switcher */}
-        <div style={{
-          display: 'flex',
-          gap: 8,
-          marginTop: 20,
-          overflowX: 'auto',
-          paddingBottom: 4
-        }}>
+        <div className="student-tabs" aria-label="Student tools">
           {[
             { id: 'calculator', name: 'Scientific Calculator', icon: Sigma, color: '#38bdf8' },
             { id: 'cgpa-calculator', name: 'CGPA Calculator', icon: GraduationCap, color: '#818cf8' },
@@ -156,14 +131,14 @@ export default function StudentTools({ toolId = 'calculator', onToast, onNavigat
                   fontFamily: 'Inter, sans-serif',
                   cursor: 'pointer',
                   border: isActive ? `1px solid ${tab.color}70` : '1px solid rgba(255, 255, 255, 0.08)',
-                  background: isActive ? `${tab.color}25` : 'rgba(18, 22, 29, 0.65)',
-                  color: isActive ? tab.color : '#cbd5e1',
+                  background: isActive ? `${tab.color}25` : 'var(--theme-panel, rgba(18, 22, 29, 0.65))',
+                  color: isActive ? tab.color : 'var(--theme-text, #cbd5e1)',
                   boxShadow: isActive ? `0 0 16px ${tab.color}35` : 'none',
                   transition: 'all 0.2s ease',
                   whiteSpace: 'nowrap'
                 }}
               >
-                <Icon size={15} color={isActive ? tab.color : '#94a3b8'} />
+                <Icon size={15} color={isActive ? tab.color : 'var(--theme-text, #94a3b8)'} />
                 <span>{tab.name}</span>
               </button>
             );
@@ -188,7 +163,6 @@ export default function StudentTools({ toolId = 'calculator', onToast, onNavigat
 function ScientificCalculatorSection({ onToast, onCopy }) {
   const [expression, setExpression] = useState('');
   const [result, setResult] = useState('0');
-  const [previewResult, setPreviewResult] = useState('');
   const [isDeg, setIsDeg] = useState(true);
   const [is2nd, setIs2nd] = useState(false);
   const [memory, setMemory] = useState(0);
@@ -242,89 +216,9 @@ function ScientificCalculatorSection({ onToast, onCopy }) {
     } catch {}
   };
 
-  // Math Evaluator Engine
-  const evaluateMath = (exprStr, degMode = isDeg) => {
-    if (!exprStr || !exprStr.trim()) return null;
-    try {
-      let clean = exprStr
-        .replace(/×/g, '*')
-        .replace(/÷/g, '/')
-        .replace(/−/g, '-')
-        .replace(/\^/g, '**')
-        .replace(/π/g, '(' + Math.PI + ')')
-        .replace(/\be\b/g, '(' + Math.E + ')');
-
-      // Factorial function
-      const fact = (n) => {
-        n = Math.floor(Number(n));
-        if (n < 0) return NaN;
-        if (n <= 1) return 1;
-        let r = 1;
-        for (let i = 2; i <= Math.min(n, 170); i++) r *= i;
-        return r;
-      };
-
-      const toRad = (d) => degMode ? (d * Math.PI / 180) : d;
-      const fromRad = (r) => degMode ? (r * 180 / Math.PI) : r;
-
-      const scope = {
-        sin: (x) => Math.sin(toRad(x)),
-        cos: (x) => Math.cos(toRad(x)),
-        tan: (x) => Math.tan(toRad(x)),
-        asin: (x) => fromRad(Math.asin(x)),
-        acos: (x) => fromRad(Math.acos(x)),
-        atan: (x) => fromRad(Math.atan(x)),
-        sqrt: (x) => Math.sqrt(x),
-        cbrt: (x) => Math.cbrt(x),
-        log: (x) => Math.log10(x),
-        ln: (x) => Math.log(x),
-        abs: (x) => Math.abs(x),
-        exp: (x) => Math.exp(x),
-        fact: fact
-      };
-
-      clean = clean.replace(/(\d+(\.\d+)?)!/g, 'scope.fact($1)');
-      clean = clean.replace(/\bsin\(/g, 'scope.sin(')
-                   .replace(/\bcos\(/g, 'scope.cos(')
-                   .replace(/\btan\(/g, 'scope.tan(')
-                   .replace(/\basin\(/g, 'scope.asin(')
-                   .replace(/\bacos\(/g, 'scope.acos(')
-                   .replace(/\batan\(/g, 'scope.atan(')
-                   .replace(/\bsqrt\(/g, 'scope.sqrt(')
-                   .replace(/\bcbrt\(/g, 'scope.cbrt(')
-                   .replace(/\blog\(/g, 'scope.log(')
-                   .replace(/\bln\(/g, 'scope.ln(')
-                   .replace(/\babs\(/g, 'scope.abs(')
-                   .replace(/\bexp\(/g, 'scope.exp(');
-
-      // Handle simple percent e.g. 50% -> (50/100)
-      clean = clean.replace(/(\d+(\.\d+)?)%/g, '($1/100)');
-
-      const fn = new Function('scope', 'Math', 'return (' + clean + ');');
-      const val = fn(scope, Math);
-
-      if (typeof val === 'number' && !isNaN(val) && isFinite(val)) {
-        return parseFloat(val.toFixed(12));
-      }
-      return val;
-    } catch {
-      return null;
-    }
-  };
-
-  // Live preview update
-  useEffect(() => {
-    if (!expression) {
-      setPreviewResult('');
-      return;
-    }
-    const val = evaluateMath(expression);
-    if (val !== null && typeof val === 'number' && !isNaN(val)) {
-      setPreviewResult(val.toString());
-    } else {
-      setPreviewResult('');
-    }
-  }, [expression, isDeg]);
+  const evaluateMath = (text, degrees = isDeg) => evaluateExpression(text, degrees);
+  const previewValue = evaluateMath(expression);
+  const previewResult = previewValue === null ? '' : String(previewValue);
 
   // Insert token into expression
   const insertToken = (token) => {
@@ -360,7 +254,6 @@ function ScientificCalculatorSection({ onToast, onCopy }) {
   const handleClear = () => {
     playClickSound('click');
     setExpression('');
-    setPreviewResult('');
   };
 
   // All Clear
@@ -368,7 +261,6 @@ function ScientificCalculatorSection({ onToast, onCopy }) {
     playClickSound('click');
     setExpression('');
     setResult('0');
-    setPreviewResult('');
   };
 
   // Evaluate Expression
@@ -378,7 +270,7 @@ function ScientificCalculatorSection({ onToast, onCopy }) {
     const val = evaluateMath(expression);
     if (val === null || (typeof val === 'number' && isNaN(val))) {
       setResult('Syntax Error');
-      onToast && onToast('Invalid mathematical syntax', 'error');
+      onToast?.('Invalid mathematical syntax', 'error');
     } else {
       const resStr = val.toString();
       setResult(resStr);
@@ -403,21 +295,21 @@ function ScientificCalculatorSection({ onToast, onCopy }) {
     if (op === 'MC') {
       setMemory(0);
       setHasMemory(false);
-      onToast && onToast('Memory Cleared (MC)');
+      onToast?.('Memory Cleared (MC)');
     } else if (op === 'MR') {
       insertToken(memory.toString());
     } else if (op === 'M+') {
       setMemory((prev) => prev + currentVal);
       setHasMemory(true);
-      onToast && onToast(`M+ (${currentVal})`);
+      onToast?.(`M+ (${currentVal})`);
     } else if (op === 'M-') {
       setMemory((prev) => prev - currentVal);
       setHasMemory(true);
-      onToast && onToast(`M- (${currentVal})`);
+      onToast?.(`M- (${currentVal})`);
     } else if (op === 'MS') {
       setMemory(currentVal);
       setHasMemory(true);
-      onToast && onToast(`Memory Stored: ${currentVal}`);
+      onToast?.(`Memory Stored: ${currentVal}`);
     }
   };
 
@@ -565,25 +457,22 @@ function ScientificCalculatorSection({ onToast, onCopy }) {
   // Percentage Assistant State
   const [pctP, setPctP] = useState(15);
   const [pctV, setPctV] = useState(250);
-  const [pctV1, setPctV1] = useState(45);
-  const [pctV2, setPctV2] = useState(180);
   const [pctOld, setPctOld] = useState(80);
   const [pctNew, setPctNew] = useState(120);
 
   return (
     <div className="student-tool-grid">
       {/* Left Column: The Main Scientific Console */}
-      <div style={{
-        background: 'linear-gradient(145deg, rgba(24, 30, 42, 0.96) 0%, rgba(12, 15, 22, 0.98) 100%)',
+      <div className="student-panel" style={{
+        background: 'linear-gradient(145deg, var(--theme-panel, rgba(24, 30, 42, 0.96)) 0%, var(--theme-panel, rgba(12, 15, 22, 0.98)) 100%)',
         border: '1px solid rgba(56, 189, 248, 0.3)',
         borderRadius: 20,
-        padding: 24,
-        boxShadow: '0 24px 60px -15px rgba(0, 0, 0, 0.8), 0 0 35px rgba(56, 189, 248, 0.12)',
+        boxShadow: 'var(--theme-shadow, 0 24px 60px -15px rgba(0, 0, 0, 0.8), 0 0 35px rgba(56, 189, 248, 0.12))',
         position: 'relative'
       }}>
         {/* Top Control Bar */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14, flexWrap: 'wrap', gap: 10 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <div className="responsive-row" style={{ alignItems: 'center', justifyContent: 'space-between', marginBottom: 14, gap: 10 }}>
+          <div className="responsive-row" style={{ alignItems: 'center', gap: 8 }}>
             <span style={{
               display: 'flex',
               alignItems: 'center',
@@ -591,7 +480,7 @@ function ScientificCalculatorSection({ onToast, onCopy }) {
               fontSize: '0.78rem',
               fontWeight: 800,
               letterSpacing: '0.08em',
-              color: '#38bdf8',
+              color: 'var(--theme-ink-teal, #38bdf8)',
               textTransform: 'uppercase'
             }}>
               <Sigma size={16} />
@@ -605,7 +494,7 @@ function ScientificCalculatorSection({ onToast, onCopy }) {
                 padding: '2px 6px',
                 borderRadius: 4,
                 background: 'rgba(245, 158, 11, 0.25)',
-                color: '#f59e0b',
+                color: 'var(--theme-ink-orange, #f59e0b)',
                 border: '1px solid rgba(245, 158, 11, 0.4)'
               }}>
                 M = {memory}
@@ -613,7 +502,7 @@ function ScientificCalculatorSection({ onToast, onCopy }) {
             )}
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <div className="responsive-row" style={{ alignItems: 'center', gap: 8 }}>
             {/* Sound Toggle */}
             <button
               onClick={() => setSoundEnabled(!soundEnabled)}
@@ -621,7 +510,7 @@ function ScientificCalculatorSection({ onToast, onCopy }) {
               style={{
                 background: soundEnabled ? 'rgba(56, 189, 248, 0.2)' : 'rgba(255, 255, 255, 0.04)',
                 border: soundEnabled ? '1px solid #38bdf8' : '1px solid rgba(255, 255, 255, 0.08)',
-                color: soundEnabled ? '#38bdf8' : '#94a3b8',
+                color: soundEnabled ? '#38bdf8' : 'var(--theme-text, #94a3b8)',
                 borderRadius: 8,
                 padding: '5px 8px',
                 cursor: 'pointer',
@@ -656,11 +545,11 @@ function ScientificCalculatorSection({ onToast, onCopy }) {
 
         {/* OLED Glass Screen Display */}
         <div style={{
-          background: 'linear-gradient(180deg, #05070a 0%, #090d14 100%)',
+          background: 'linear-gradient(180deg, var(--theme-panel, #05070a) 0%, var(--theme-panel, #090d14) 100%)',
           border: '1px solid rgba(56, 189, 248, 0.35)',
           borderRadius: 14,
           padding: '16px 20px',
-          boxShadow: 'inset 0 2px 10px rgba(0, 0, 0, 0.8), 0 0 20px rgba(56, 189, 248, 0.08)',
+          boxShadow: 'var(--theme-shadow, inset 0 2px 10px rgba(0, 0, 0, 0.8), 0 0 20px rgba(56, 189, 248, 0.08))',
           marginBottom: 20,
           position: 'relative'
         }}>
@@ -668,7 +557,7 @@ function ScientificCalculatorSection({ onToast, onCopy }) {
           <div style={{
             minHeight: 28,
             fontSize: '1.05rem',
-            color: '#94a3b8',
+            color: 'var(--theme-text, #94a3b8)',
             fontFamily: 'JetBrains Mono, monospace',
             overflowX: 'auto',
             whiteSpace: 'nowrap',
@@ -685,19 +574,18 @@ function ScientificCalculatorSection({ onToast, onCopy }) {
           </div>
 
           {/* Lower: High-Contrast LED Result & Live Preview */}
-          <div style={{
-            display: 'flex',
+          <div className="responsive-row" style={{
             alignItems: 'baseline',
             justifyContent: 'space-between',
             marginTop: 6,
             gap: 12
           }}>
             {/* Live Preview Pill */}
-            <div style={{ minWidth: 60 }}>
+            <div className="calc-preview">
               {previewResult && previewResult !== result && (
                 <span style={{
                   fontSize: '0.82rem',
-                  color: '#38bdf8',
+                  color: 'var(--theme-ink-teal, #38bdf8)',
                   background: 'rgba(56, 189, 248, 0.15)',
                   padding: '3px 8px',
                   borderRadius: 6,
@@ -713,7 +601,7 @@ function ScientificCalculatorSection({ onToast, onCopy }) {
             <div 
               className="calc-screen-result"
               style={{
-                color: result === 'Syntax Error' ? '#f43f5e' : '#ffffff',
+                color: result === 'Syntax Error' ? '#f43f5e' : 'var(--theme-text, #ffffff)',
                 textShadow: result === 'Syntax Error' ? '0 0 15px rgba(244, 63, 94, 0.6)' : '0 0 20px rgba(56, 189, 248, 0.4)'
               }}
             >
@@ -722,15 +610,15 @@ function ScientificCalculatorSection({ onToast, onCopy }) {
           </div>
 
           {/* Quick Screen Actions */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 12, paddingTop: 10, borderTop: '1px solid rgba(255, 255, 255, 0.06)' }}>
-            <div style={{ display: 'flex', gap: 6 }}>
+          <div className="responsive-row" style={{ justifyContent: 'space-between', alignItems: 'center', marginTop: 12, paddingTop: 10, borderTop: '1px solid rgba(255, 255, 255, 0.06)' }}>
+            <div className="responsive-row" style={{ gap: 6 }}>
               {fractionResult && (
                 <button
                   onClick={() => onCopy(fractionResult, `Fraction ${fractionResult} copied!`)}
                   style={{
                     background: 'rgba(129, 140, 248, 0.15)',
                     border: '1px solid rgba(129, 140, 248, 0.3)',
-                    color: '#818cf8',
+                    color: 'var(--theme-ink-cyan, #818cf8)',
                     borderRadius: 6,
                     padding: '3px 8px',
                     fontSize: '0.74rem',
@@ -743,13 +631,13 @@ function ScientificCalculatorSection({ onToast, onCopy }) {
               )}
             </div>
 
-            <div style={{ display: 'flex', gap: 8 }}>
+            <div className="responsive-row" style={{ gap: 8 }}>
               <button
                 onClick={() => onCopy(result, 'Result copied to clipboard!')}
                 style={{
                   background: 'rgba(255, 255, 255, 0.05)',
                   border: '1px solid rgba(255, 255, 255, 0.12)',
-                  color: '#cbd5e1',
+                  color: 'var(--theme-text, #cbd5e1)',
                   borderRadius: 6,
                   padding: '4px 8px',
                   fontSize: '0.74rem',
@@ -768,7 +656,7 @@ function ScientificCalculatorSection({ onToast, onCopy }) {
                 style={{
                   background: 'rgba(244, 63, 94, 0.12)',
                   border: '1px solid rgba(244, 63, 94, 0.25)',
-                  color: '#f43f5e',
+                  color: 'var(--theme-ink-pink, #f43f5e)',
                   borderRadius: 6,
                   padding: '4px 8px',
                   fontSize: '0.74rem',
@@ -791,7 +679,7 @@ function ScientificCalculatorSection({ onToast, onCopy }) {
               borderRadius: 8,
               border: is2nd ? '1px solid #c084fc' : '1px solid rgba(255,255,255,0.08)',
               background: is2nd ? 'rgba(192, 132, 252, 0.3)' : 'rgba(255, 255, 255, 0.04)',
-              color: is2nd ? '#e879f9' : '#cbd5e1',
+              color: is2nd ? '#e879f9' : 'var(--theme-text, #cbd5e1)',
               fontWeight: 800,
               fontSize: '0.76rem',
               cursor: 'pointer'
@@ -859,14 +747,14 @@ function ScientificCalculatorSection({ onToast, onCopy }) {
 
       {/* Right Column: Assistant Dock (History, Solvers, Conversions, Guide) */}
       <div style={{
-        background: 'rgba(18, 22, 29, 0.85)',
+        background: 'var(--theme-panel, rgba(18, 22, 29, 0.85))',
         border: '1px solid rgba(255, 255, 255, 0.08)',
         borderRadius: 20,
         padding: 20,
-        boxShadow: '0 12px 36px rgba(0, 0, 0, 0.5)'
+        boxShadow: 'var(--theme-shadow, 0 12px 36px rgba(0, 0, 0, 0.5))'
       }}>
         {/* Helper Tab Switcher */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 6, marginBottom: 16 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: 6, marginBottom: 16 }}>
           {[
             { id: 'history', label: 'History', icon: History },
             { id: 'solvers', label: 'Solvers', icon: Target },
@@ -890,7 +778,7 @@ function ScientificCalculatorSection({ onToast, onCopy }) {
                   fontWeight: isSel ? 700 : 500,
                   border: isSel ? '1px solid #38bdf8' : '1px solid rgba(255,255,255,0.06)',
                   background: isSel ? 'rgba(56, 189, 248, 0.2)' : 'rgba(255, 255, 255, 0.02)',
-                  color: isSel ? '#38bdf8' : '#94a3b8',
+                  color: isSel ? '#38bdf8' : 'var(--theme-text, #94a3b8)',
                   cursor: 'pointer',
                   transition: 'all 0.2s ease'
                 }}
@@ -905,18 +793,18 @@ function ScientificCalculatorSection({ onToast, onCopy }) {
         {/* Tab 1: Persistent Calculation History */}
         {activeSideTab === 'history' && (
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
-              <span style={{ fontSize: '0.76rem', fontWeight: 700, color: '#e2e8f0' }}>CALCULATION LOG</span>
+            <div className="responsive-row" style={{ alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+              <span style={{ fontSize: '0.76rem', fontWeight: 700, color: 'var(--theme-text, #e2e8f0)' }}>CALCULATION LOG</span>
               {history.length > 0 && (
                 <button
                   onClick={() => {
                     setHistory([]);
-                    onToast && onToast('History Cleared');
+                    onToast?.('History Cleared');
                   }}
                   style={{
                     background: 'transparent',
                     border: 'none',
-                    color: '#f43f5e',
+                    color: 'var(--theme-ink-pink, #f43f5e)',
                     fontSize: '0.72rem',
                     cursor: 'pointer',
                     fontWeight: 600
@@ -937,7 +825,7 @@ function ScientificCalculatorSection({ onToast, onCopy }) {
                   <div
                     key={item.id}
                     style={{
-                      background: 'rgba(10, 13, 18, 0.65)',
+                      background: 'var(--theme-panel, rgba(10, 13, 18, 0.65))',
                       border: '1px solid rgba(255, 255, 255, 0.06)',
                       borderRadius: 10,
                       padding: '10px 12px',
@@ -951,10 +839,10 @@ function ScientificCalculatorSection({ onToast, onCopy }) {
                     title="Click to insert result"
                   >
                     <div>
-                      <div style={{ fontSize: '0.78rem', color: '#94a3b8', fontFamily: 'JetBrains Mono, monospace' }}>
+                      <div style={{ fontSize: '0.78rem', color: 'var(--theme-text, #94a3b8)', fontFamily: 'JetBrains Mono, monospace' }}>
                         {item.expr}
                       </div>
-                      <div style={{ fontSize: '1rem', fontWeight: 800, color: '#38bdf8', marginTop: 2, fontFamily: 'JetBrains Mono, monospace' }}>
+                      <div style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--theme-ink-teal, #38bdf8)', marginTop: 2, fontFamily: 'JetBrains Mono, monospace' }}>
                         = {item.res}
                       </div>
                     </div>
@@ -985,12 +873,12 @@ function ScientificCalculatorSection({ onToast, onCopy }) {
         {/* Tab 2: Math Solvers (Quadratic & Percentages) */}
         {activeSideTab === 'solvers' && (
           <div>
-            <h4 style={{ fontSize: '0.84rem', fontWeight: 700, color: '#38bdf8', margin: '0 0 10px' }}>
+            <h4 style={{ fontSize: '0.84rem', fontWeight: 700, color: 'var(--theme-ink-teal, #38bdf8)', margin: '0 0 10px' }}>
               Quadratic Equation Solver (ax² + bx + c = 0)
             </h4>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8, marginBottom: 12 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 8, marginBottom: 12 }}>
               <div>
-                <label style={{ fontSize: '0.7rem', color: '#94a3b8' }}>a</label>
+                <label style={{ fontSize: '0.7rem', color: 'var(--theme-text, #94a3b8)' }}>a</label>
                 <input
                   type="number"
                   value={qa}
@@ -999,7 +887,7 @@ function ScientificCalculatorSection({ onToast, onCopy }) {
                 />
               </div>
               <div>
-                <label style={{ fontSize: '0.7rem', color: '#94a3b8' }}>b</label>
+                <label style={{ fontSize: '0.7rem', color: 'var(--theme-text, #94a3b8)' }}>b</label>
                 <input
                   type="number"
                   value={qb}
@@ -1008,7 +896,7 @@ function ScientificCalculatorSection({ onToast, onCopy }) {
                 />
               </div>
               <div>
-                <label style={{ fontSize: '0.7rem', color: '#94a3b8' }}>c</label>
+                <label style={{ fontSize: '0.7rem', color: 'var(--theme-text, #94a3b8)' }}>c</label>
                 <input
                   type="number"
                   value={qc}
@@ -1019,13 +907,13 @@ function ScientificCalculatorSection({ onToast, onCopy }) {
             </div>
 
             {quadResult.error ? (
-              <div style={{ fontSize: '0.75rem', color: '#f43f5e' }}>{quadResult.error}</div>
+              <div style={{ fontSize: '0.75rem', color: 'var(--theme-ink-pink, #f43f5e)' }}>{quadResult.error}</div>
             ) : (
-              <div style={{ background: 'rgba(10, 13, 18, 0.7)', padding: 12, borderRadius: 10, border: '1px solid rgba(255,255,255,0.06)' }}>
-                <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Discriminant D = {quadResult.d} ({quadResult.type})</div>
-                <div style={{ display: 'flex', gap: 10, marginTop: 6, flexWrap: 'wrap' }}>
+              <div style={{ background: 'var(--theme-panel, rgba(10, 13, 18, 0.7))', padding: 12, borderRadius: 10, border: '1px solid rgba(255,255,255,0.06)' }}>
+                <div style={{ fontSize: '0.75rem', color: 'var(--theme-text, #94a3b8)' }}>Discriminant D = {quadResult.d} ({quadResult.type})</div>
+                <div className="responsive-row" style={{ gap: 10, marginTop: 6, }}>
                   {quadResult.roots.map((r, i) => (
-                    <span key={i} style={{ fontSize: '0.9rem', fontWeight: 800, color: '#34d399', background: 'rgba(52,211,153,0.15)', padding: '3px 8px', borderRadius: 6 }}>
+                    <span key={i} style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--theme-ink-green, #34d399)', background: 'rgba(52,211,153,0.15)', padding: '3px 8px', borderRadius: 6 }}>
                       {r}
                     </span>
                   ))}
@@ -1038,25 +926,25 @@ function ScientificCalculatorSection({ onToast, onCopy }) {
 
             <hr style={{ border: 'none', borderTop: '1px solid rgba(255,255,255,0.08)', margin: '16px 0' }} />
 
-            <h4 style={{ fontSize: '0.84rem', fontWeight: 700, color: '#f59e0b', margin: '0 0 10px' }}>
+            <h4 style={{ fontSize: '0.84rem', fontWeight: 700, color: 'var(--theme-ink-orange, #f59e0b)', margin: '0 0 10px' }}>
               Percentage Assistant
             </h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-              <div style={{ background: 'rgba(10, 13, 18, 0.7)', padding: 10, borderRadius: 8, fontSize: '0.78rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
+              <div style={{ background: 'var(--theme-panel, rgba(10, 13, 18, 0.7))', padding: 10, borderRadius: 8, fontSize: '0.78rem' }}>
+                <div className="responsive-row" style={{ alignItems: 'center', gap: 6, marginBottom: 4 }}>
                   <span>What is</span>
                   <input type="number" value={pctP} onChange={(e) => setPctP(e.target.value)} style={miniInputStyle} />
                   <span>% of</span>
                   <input type="number" value={pctV} onChange={(e) => setPctV(e.target.value)} style={miniInputStyle} />
                   <span>?</span>
                 </div>
-                <div style={{ fontWeight: 800, color: '#f59e0b' }}>
+                <div style={{ fontWeight: 800, color: 'var(--theme-ink-orange, #f59e0b)' }}>
                   = {((parseFloat(pctP) || 0) / 100 * (parseFloat(pctV) || 0)).toFixed(2)}
                 </div>
               </div>
 
-              <div style={{ background: 'rgba(10, 13, 18, 0.7)', padding: 10, borderRadius: 8, fontSize: '0.78rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
+              <div style={{ background: 'var(--theme-panel, rgba(10, 13, 18, 0.7))', padding: 10, borderRadius: 8, fontSize: '0.78rem' }}>
+                <div className="responsive-row" style={{ alignItems: 'center', gap: 6, marginBottom: 4 }}>
                   <span>% Change from</span>
                   <input type="number" value={pctOld} onChange={(e) => setPctOld(e.target.value)} style={miniInputStyle} />
                   <span>to</span>
@@ -1073,7 +961,7 @@ function ScientificCalculatorSection({ onToast, onCopy }) {
         {/* Tab 3: Base & Fraction Conversions */}
         {activeSideTab === 'conversions' && (
           <div>
-            <span style={{ fontSize: '0.76rem', fontWeight: 700, color: '#e2e8f0', display: 'block', marginBottom: 10 }}>
+            <span style={{ fontSize: '0.76rem', fontWeight: 700, color: 'var(--theme-text, #e2e8f0)', display: 'block', marginBottom: 10 }}>
               NUMBER BASE CONVERSIONS (FROM: {result})
             </span>
 
@@ -1081,27 +969,27 @@ function ScientificCalculatorSection({ onToast, onCopy }) {
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                 <div style={convBoxStyle}>
                   <span style={convLabelStyle}>EXACT FRACTION</span>
-                  <span style={{ ...convValStyle, color: '#38bdf8' }}>{fractionResult || 'Not a decimal'}</span>
+                  <span style={{ ...convValStyle, color: 'var(--theme-ink-teal, #38bdf8)' }}>{fractionResult || 'Not a decimal'}</span>
                 </div>
 
                 <div style={convBoxStyle}>
                   <span style={convLabelStyle}>BINARY (BASE 2)</span>
-                  <span style={{ ...convValStyle, color: '#34d399' }}>0b{baseConversions.bin}</span>
+                  <span style={{ ...convValStyle, color: 'var(--theme-ink-green, #34d399)' }}>0b{baseConversions.bin}</span>
                 </div>
 
                 <div style={convBoxStyle}>
                   <span style={convLabelStyle}>HEXADECIMAL (BASE 16)</span>
-                  <span style={{ ...convValStyle, color: '#c084fc' }}>0x{baseConversions.hex}</span>
+                  <span style={{ ...convValStyle, color: 'var(--theme-ink-violet, #c084fc)' }}>0x{baseConversions.hex}</span>
                 </div>
 
                 <div style={convBoxStyle}>
                   <span style={convLabelStyle}>OCTAL (BASE 8)</span>
-                  <span style={{ ...convValStyle, color: '#f59e0b' }}>0o{baseConversions.oct}</span>
+                  <span style={{ ...convValStyle, color: 'var(--theme-ink-orange, #f59e0b)' }}>0o{baseConversions.oct}</span>
                 </div>
 
                 <div style={convBoxStyle}>
                   <span style={convLabelStyle}>SCIENTIFIC NOTATION</span>
-                  <span style={{ ...convValStyle, color: '#cbd5e1' }}>{baseConversions.exp}</span>
+                  <span style={{ ...convValStyle, color: 'var(--theme-text, #cbd5e1)' }}>{baseConversions.exp}</span>
                 </div>
               </div>
             ) : (
@@ -1115,7 +1003,7 @@ function ScientificCalculatorSection({ onToast, onCopy }) {
         {/* Tab 4: Keyboard Shortcuts Guide */}
         {activeSideTab === 'keyboard' && (
           <div>
-            <span style={{ fontSize: '0.76rem', fontWeight: 700, color: '#e2e8f0', display: 'block', marginBottom: 10 }}>
+            <span style={{ fontSize: '0.76rem', fontWeight: 700, color: 'var(--theme-text, #e2e8f0)', display: 'block', marginBottom: 10 }}>
               KEYBOARD POWER SHORTCUTS
             </span>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: '0.78rem' }}>
@@ -1132,10 +1020,10 @@ function ScientificCalculatorSection({ onToast, onCopy }) {
                 { k: '(  )', d: 'Parentheses' }
               ].map((item, idx) => (
                 <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 8px', borderRadius: 6, background: 'rgba(255,255,255,0.02)' }}>
-                  <kbd style={{ background: 'rgba(56, 189, 248, 0.15)', border: '1px solid rgba(56, 189, 248, 0.3)', color: '#38bdf8', padding: '2px 6px', borderRadius: 4, fontFamily: 'JetBrains Mono, monospace', fontWeight: 700 }}>
+                  <kbd style={{ background: 'rgba(56, 189, 248, 0.15)', border: '1px solid rgba(56, 189, 248, 0.3)', color: 'var(--theme-ink-teal, #38bdf8)', padding: '2px 6px', borderRadius: 4, fontFamily: 'JetBrains Mono, monospace', fontWeight: 700 }}>
                     {item.k}
                   </kbd>
-                  <span style={{ color: '#94a3b8' }}>{item.d}</span>
+                  <span style={{ color: 'var(--theme-text, #94a3b8)' }}>{item.d}</span>
                 </div>
               ))}
             </div>
@@ -1152,7 +1040,7 @@ const numBtnStyle = {
   borderRadius: 12,
   background: 'rgba(255, 255, 255, 0.05)',
   border: '1px solid rgba(255, 255, 255, 0.09)',
-  color: '#ffffff',
+  color: 'var(--theme-text, #ffffff)',
   fontSize: '1.15rem',
   fontWeight: 700,
   cursor: 'pointer',
@@ -1164,7 +1052,7 @@ const sciBtnStyle = {
   borderRadius: 12,
   background: 'rgba(129, 140, 248, 0.12)',
   border: '1px solid rgba(129, 140, 248, 0.22)',
-  color: '#cbd5e1',
+  color: 'var(--theme-text, #cbd5e1)',
   fontSize: '0.88rem',
   fontWeight: 700,
   cursor: 'pointer',
@@ -1176,7 +1064,7 @@ const opBtnStyle = {
   borderRadius: 12,
   background: 'rgba(56, 189, 248, 0.14)',
   border: '1px solid rgba(56, 189, 248, 0.35)',
-  color: '#38bdf8',
+  color: 'var(--theme-ink-teal, #38bdf8)',
   fontSize: '1.2rem',
   fontWeight: 800,
   cursor: 'pointer',
@@ -1192,7 +1080,7 @@ const equalsBtnStyle = {
   fontSize: '1.5rem',
   fontWeight: 900,
   cursor: 'pointer',
-  boxShadow: '0 0 20px rgba(56, 189, 248, 0.45)',
+  boxShadow: 'var(--theme-shadow, 0 0 20px rgba(56, 189, 248, 0.45))',
   transition: 'all 0.15s ease'
 };
 
@@ -1201,7 +1089,7 @@ const ansBtnStyle = {
   borderRadius: 12,
   background: 'rgba(245, 158, 11, 0.15)',
   border: '1px solid rgba(245, 158, 11, 0.35)',
-  color: '#f59e0b',
+  color: 'var(--theme-ink-orange, #f59e0b)',
   fontSize: '0.88rem',
   fontWeight: 800,
   cursor: 'pointer'
@@ -1212,7 +1100,7 @@ const delBtnStyle = {
   borderRadius: 12,
   background: 'rgba(244, 63, 94, 0.12)',
   border: '1px solid rgba(244, 63, 94, 0.3)',
-  color: '#f43f5e',
+  color: 'var(--theme-ink-pink, #f43f5e)',
   fontSize: '0.8rem',
   fontWeight: 700,
   cursor: 'pointer'
@@ -1223,7 +1111,7 @@ const memBtnStyle = {
   borderRadius: 6,
   background: 'rgba(255, 255, 255, 0.03)',
   border: '1px solid rgba(255, 255, 255, 0.06)',
-  color: '#94a3b8',
+  color: 'var(--theme-text, #94a3b8)',
   fontSize: '0.72rem',
   fontWeight: 700,
   cursor: 'pointer'
@@ -1234,7 +1122,7 @@ const bracketBtnStyle = {
   borderRadius: 6,
   background: 'rgba(56, 189, 248, 0.08)',
   border: '1px solid rgba(56, 189, 248, 0.2)',
-  color: '#38bdf8',
+  color: 'var(--theme-ink-teal, #38bdf8)',
   fontSize: '0.8rem',
   fontWeight: 800,
   cursor: 'pointer'
@@ -1245,7 +1133,7 @@ const acBtnStyle = {
   borderRadius: 6,
   background: 'rgba(244, 63, 94, 0.2)',
   border: '1px solid rgba(244, 63, 94, 0.4)',
-  color: '#f43f5e',
+  color: 'var(--theme-ink-pink, #f43f5e)',
   fontSize: '0.76rem',
   fontWeight: 800,
   cursor: 'pointer'
@@ -1257,7 +1145,7 @@ const solverInputStyle = {
   borderRadius: 6,
   background: 'rgba(255, 255, 255, 0.05)',
   border: '1px solid rgba(255, 255, 255, 0.12)',
-  color: '#ffffff',
+  color: 'var(--theme-text, #ffffff)',
   fontWeight: 700,
   outline: 'none',
   fontSize: '0.85rem'
@@ -1269,14 +1157,14 @@ const miniInputStyle = {
   borderRadius: 4,
   background: 'rgba(255, 255, 255, 0.08)',
   border: '1px solid rgba(255, 255, 255, 0.15)',
-  color: '#38bdf8',
+  color: 'var(--theme-ink-teal, #38bdf8)',
   fontWeight: 700,
   fontSize: '0.78rem',
   outline: 'none'
 };
 
 const convBoxStyle = {
-  background: 'rgba(10, 13, 18, 0.7)',
+  background: 'var(--theme-panel, rgba(10, 13, 18, 0.7))',
   padding: '8px 12px',
   borderRadius: 8,
   border: '1px solid rgba(255, 255, 255, 0.05)',
@@ -1287,7 +1175,7 @@ const convBoxStyle = {
 
 const convLabelStyle = {
   fontSize: '0.7rem',
-  color: '#94a3b8',
+  color: 'var(--theme-text, #94a3b8)',
   fontWeight: 600
 };
 
@@ -1318,7 +1206,7 @@ function CgpaCalculatorSection({ onToast, onCopy }) {
 
   const removeSemester = (id) => {
     if (semesters.length <= 1) {
-      onToast && onToast('At least 1 semester is required', 'error');
+      onToast?.('At least 1 semester is required', 'error');
       return;
     }
     setSemesters(semesters.filter(s => s.id !== id));
@@ -1337,7 +1225,7 @@ function CgpaCalculatorSection({ onToast, onCopy }) {
       { id: 5, name: 'Semester 5', gpa: '9.25', credits: '24' },
       { id: 6, name: 'Semester 6', gpa: '9.40', credits: '22' }
     ]);
-    onToast && onToast('Demo 6-semester grades loaded!');
+    onToast?.('Demo 6-semester grades loaded!');
   };
 
   const clearAll = () => {
@@ -1410,31 +1298,30 @@ function CgpaCalculatorSection({ onToast, onCopy }) {
   return (
     <div className="student-tool-grid">
       {/* Left Column: Semester Input List */}
-      <div style={{
-        background: 'rgba(18, 22, 29, 0.75)',
+      <div className="student-panel" style={{
+        background: 'var(--theme-panel, rgba(18, 22, 29, 0.75))',
         border: '1px solid rgba(255, 255, 255, 0.08)',
         borderRadius: 16,
-        padding: 24,
-        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)'
+        boxShadow: 'var(--theme-shadow, 0 8px 32px rgba(0, 0, 0, 0.4))'
       }}>
         {/* Controls Bar */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 18, flexWrap: 'wrap', gap: 12 }}>
+        <div className="responsive-row" style={{ alignItems: 'center', justifyContent: 'space-between', marginBottom: 18, gap: 12 }}>
           <div>
-            <h3 style={{ fontSize: '1.15rem', fontWeight: 700, margin: '0 0 4px', color: '#ffffff' }}>
+            <h3 style={{ fontSize: '1.15rem', fontWeight: 700, margin: '0 0 4px', color: 'var(--theme-text, #ffffff)' }}>
               Semester Grade Point Average (SGPA) Entries
             </h3>
-            <p style={{ margin: 0, fontSize: '0.8rem', color: '#94a3b8' }}>
+            <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--theme-text, #94a3b8)' }}>
               Add all completed semesters with SGPA and credit hours.
             </p>
           </div>
 
-          <div style={{ display: 'flex', gap: 8 }}>
+          <div className="responsive-row" style={{ gap: 8 }}>
             <button
               onClick={loadDemo}
               style={{
                 background: 'rgba(129, 140, 248, 0.15)',
                 border: '1px solid rgba(129, 140, 248, 0.35)',
-                color: '#818cf8',
+                color: 'var(--theme-ink-cyan, #818cf8)',
                 borderRadius: 8,
                 padding: '6px 12px',
                 fontSize: '0.78rem',
@@ -1449,7 +1336,7 @@ function CgpaCalculatorSection({ onToast, onCopy }) {
               style={{
                 background: 'rgba(244, 63, 94, 0.12)',
                 border: '1px solid rgba(244, 63, 94, 0.3)',
-                color: '#f43f5e',
+                color: 'var(--theme-ink-pink, #f43f5e)',
                 borderRadius: 8,
                 padding: '6px 12px',
                 fontSize: '0.78rem',
@@ -1463,21 +1350,20 @@ function CgpaCalculatorSection({ onToast, onCopy }) {
         </div>
 
         {/* Configuration Switches */}
-        <div style={{
+        <div className="responsive-pair" style={{
           display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
           gap: 12,
           padding: '12px 14px',
-          background: 'rgba(10, 13, 18, 0.65)',
+          background: 'var(--theme-panel, rgba(10, 13, 18, 0.65))',
           borderRadius: 12,
           border: '1px solid rgba(255, 255, 255, 0.05)',
           marginBottom: 20
         }}>
           <div>
-            <label style={{ fontSize: '0.75rem', fontWeight: 600, color: '#94a3b8', display: 'block', marginBottom: 6 }}>
+            <label style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--theme-text, #94a3b8)', display: 'block', marginBottom: 6 }}>
               GRADING SCALE
             </label>
-            <div style={{ display: 'flex', gap: 6 }}>
+            <div className="responsive-row" style={{ gap: 6 }}>
               <button
                 onClick={() => setScale(10)}
                 style={{
@@ -1486,7 +1372,7 @@ function CgpaCalculatorSection({ onToast, onCopy }) {
                   borderRadius: 6,
                   border: scale === 10 ? '1px solid #818cf8' : '1px solid rgba(255,255,255,0.08)',
                   background: scale === 10 ? 'rgba(129, 140, 248, 0.25)' : 'transparent',
-                  color: scale === 10 ? '#818cf8' : '#cbd5e1',
+                  color: scale === 10 ? '#818cf8' : 'var(--theme-text, #cbd5e1)',
                   fontSize: '0.78rem',
                   fontWeight: 600,
                   cursor: 'pointer'
@@ -1502,7 +1388,7 @@ function CgpaCalculatorSection({ onToast, onCopy }) {
                   borderRadius: 6,
                   border: scale === 4 ? '1px solid #818cf8' : '1px solid rgba(255,255,255,0.08)',
                   background: scale === 4 ? 'rgba(129, 140, 248, 0.25)' : 'transparent',
-                  color: scale === 4 ? '#818cf8' : '#cbd5e1',
+                  color: scale === 4 ? '#818cf8' : 'var(--theme-text, #cbd5e1)',
                   fontSize: '0.78rem',
                   fontWeight: 600,
                   cursor: 'pointer'
@@ -1514,10 +1400,10 @@ function CgpaCalculatorSection({ onToast, onCopy }) {
           </div>
 
           <div>
-            <label style={{ fontSize: '0.75rem', fontWeight: 600, color: '#94a3b8', display: 'block', marginBottom: 6 }}>
+            <label style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--theme-text, #94a3b8)', display: 'block', marginBottom: 6 }}>
               CALCULATION METHOD
             </label>
-            <div style={{ display: 'flex', gap: 6 }}>
+            <div className="responsive-row" style={{ gap: 6 }}>
               <button
                 onClick={() => setIsWeighted(true)}
                 style={{
@@ -1526,7 +1412,7 @@ function CgpaCalculatorSection({ onToast, onCopy }) {
                   borderRadius: 6,
                   border: isWeighted ? '1px solid #34d399' : '1px solid rgba(255,255,255,0.08)',
                   background: isWeighted ? 'rgba(52, 211, 153, 0.2)' : 'transparent',
-                  color: isWeighted ? '#34d399' : '#cbd5e1',
+                  color: isWeighted ? '#34d399' : 'var(--theme-text, #cbd5e1)',
                   fontSize: '0.78rem',
                   fontWeight: 600,
                   cursor: 'pointer'
@@ -1542,7 +1428,7 @@ function CgpaCalculatorSection({ onToast, onCopy }) {
                   borderRadius: 6,
                   border: !isWeighted ? '1px solid #34d399' : '1px solid rgba(255,255,255,0.08)',
                   background: !isWeighted ? 'rgba(52, 211, 153, 0.2)' : 'transparent',
-                  color: !isWeighted ? '#34d399' : '#cbd5e1',
+                  color: !isWeighted ? '#34d399' : 'var(--theme-text, #cbd5e1)',
                   fontSize: '0.78rem',
                   fontWeight: 600,
                   cursor: 'pointer'
@@ -1569,7 +1455,7 @@ function CgpaCalculatorSection({ onToast, onCopy }) {
             <span></span>
           </div>
 
-          {semesters.map((sem, index) => (
+          {semesters.map((sem) => (
             <div
               key={sem.id}
               className="semester-entry-row"
@@ -1584,7 +1470,7 @@ function CgpaCalculatorSection({ onToast, onCopy }) {
                 style={{
                   background: 'transparent',
                   border: 'none',
-                  color: '#ffffff',
+                  color: 'var(--theme-text, #ffffff)',
                   fontWeight: 600,
                   fontSize: '0.86rem',
                   outline: 'none',
@@ -1605,7 +1491,7 @@ function CgpaCalculatorSection({ onToast, onCopy }) {
                   border: '1px solid rgba(255, 255, 255, 0.1)',
                   borderRadius: 6,
                   padding: '6px 10px',
-                  color: '#38bdf8',
+                  color: 'var(--theme-ink-teal, #38bdf8)',
                   fontWeight: 700,
                   fontSize: '0.88rem',
                   outline: 'none'
@@ -1639,7 +1525,7 @@ function CgpaCalculatorSection({ onToast, onCopy }) {
                 style={{
                   background: 'transparent',
                   border: 'none',
-                  color: '#f43f5e',
+                  color: 'var(--theme-ink-pink, #f43f5e)',
                   cursor: 'pointer',
                   padding: 4,
                   display: 'flex',
@@ -1664,7 +1550,7 @@ function CgpaCalculatorSection({ onToast, onCopy }) {
             borderRadius: 10,
             background: 'rgba(129, 140, 248, 0.08)',
             border: '1px dashed rgba(129, 140, 248, 0.4)',
-            color: '#818cf8',
+            color: 'var(--theme-ink-cyan, #818cf8)',
             fontSize: '0.85rem',
             fontWeight: 600,
             cursor: 'pointer',
@@ -1683,20 +1569,20 @@ function CgpaCalculatorSection({ onToast, onCopy }) {
       {/* Right Column: Dynamic CGPA Result Card */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
         <div style={{
-          background: 'linear-gradient(145deg, rgba(28, 34, 46, 0.95) 0%, rgba(14, 17, 24, 0.98) 100%)',
+          background: 'linear-gradient(145deg, var(--theme-panel, rgba(28, 34, 46, 0.95)) 0%, var(--theme-panel, rgba(14, 17, 24, 0.98)) 100%)',
           border: '1px solid rgba(129, 140, 248, 0.35)',
           borderRadius: 18,
           padding: 26,
-          boxShadow: '0 20px 48px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(129, 140, 248, 0.15)',
+          boxShadow: 'var(--theme-shadow, 0 20px 48px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(129, 140, 248, 0.15))',
           position: 'relative'
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+          <div className="responsive-row" style={{ alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
             <span style={{
               fontSize: '0.75rem',
               fontWeight: 700,
               textTransform: 'uppercase',
               letterSpacing: '0.08em',
-              color: '#818cf8'
+              color: 'var(--theme-ink-cyan, #818cf8)'
             }}>
               CUMULATIVE RESULT
             </span>
@@ -1711,7 +1597,7 @@ function CgpaCalculatorSection({ onToast, onCopy }) {
                 borderRadius: 6,
                 background: 'rgba(255, 255, 255, 0.06)',
                 border: '1px solid rgba(255, 255, 255, 0.12)',
-                color: '#cbd5e1',
+                color: 'var(--theme-text, #cbd5e1)',
                 fontSize: '0.74rem',
                 cursor: 'pointer'
               }}
@@ -1727,7 +1613,7 @@ function CgpaCalculatorSection({ onToast, onCopy }) {
               fontSize: '3.8rem',
               fontWeight: 900,
               fontFamily: 'JetBrains Mono, monospace',
-              background: 'linear-gradient(135deg, #ffffff 10%, #818cf8 60%, #c084fc 100%)',
+              background: 'linear-gradient(135deg, var(--theme-text, #ffffff) 10%, #818cf8 60%, #c084fc 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               filter: 'drop-shadow(0 0 20px rgba(129, 140, 248, 0.45))',
@@ -1735,7 +1621,7 @@ function CgpaCalculatorSection({ onToast, onCopy }) {
             }}>
               {stats.cgpa}
             </div>
-            <div style={{ fontSize: '0.85rem', color: '#94a3b8', marginTop: 8 }}>
+            <div style={{ fontSize: '0.85rem', color: 'var(--theme-text, #94a3b8)', marginTop: 8 }}>
               Cumulative Grade Point Average ({scale}-Point Scale)
             </div>
 
@@ -1757,34 +1643,33 @@ function CgpaCalculatorSection({ onToast, onCopy }) {
           </div>
 
           {/* Quick Metrics Grid */}
-          <div style={{
+          <div className="responsive-pair" style={{
             display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
             gap: 12,
             paddingTop: 18,
             borderTop: '1px solid rgba(255, 255, 255, 0.08)'
           }}>
             <div style={{
-              background: 'rgba(10, 13, 18, 0.7)',
+              background: 'var(--theme-panel, rgba(10, 13, 18, 0.7))',
               borderRadius: 10,
               padding: '12px 14px',
               border: '1px solid rgba(255, 255, 255, 0.05)'
             }}>
-              <span style={{ fontSize: '0.72rem', color: '#94a3b8', display: 'block' }}>PERCENTAGE EQUIV.</span>
-              <div style={{ fontSize: '1.25rem', fontWeight: 700, color: '#34d399', marginTop: 4 }}>
+              <span style={{ fontSize: '0.72rem', color: 'var(--theme-text, #94a3b8)', display: 'block' }}>PERCENTAGE EQUIV.</span>
+              <div style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--theme-ink-green, #34d399)', marginTop: 4 }}>
                 {stats.percentage}%
               </div>
               <span style={{ fontSize: '0.7rem', color: '#64748b' }}>Formula: CGPA × {multiplier}</span>
             </div>
 
             <div style={{
-              background: 'rgba(10, 13, 18, 0.7)',
+              background: 'var(--theme-panel, rgba(10, 13, 18, 0.7))',
               borderRadius: 10,
               padding: '12px 14px',
               border: '1px solid rgba(255, 255, 255, 0.05)'
             }}>
-              <span style={{ fontSize: '0.72rem', color: '#94a3b8', display: 'block' }}>TOTAL CREDITS</span>
-              <div style={{ fontSize: '1.25rem', fontWeight: 700, color: '#f59e0b', marginTop: 4 }}>
+              <span style={{ fontSize: '0.72rem', color: 'var(--theme-text, #94a3b8)', display: 'block' }}>TOTAL CREDITS</span>
+              <div style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--theme-ink-orange, #f59e0b)', marginTop: 4 }}>
                 {stats.totalCredits}
               </div>
               <span style={{ fontSize: '0.7rem', color: '#64748b' }}>Across {stats.validCount} Semesters</span>
@@ -1793,11 +1678,11 @@ function CgpaCalculatorSection({ onToast, onCopy }) {
 
           {/* Percentage Multiplier Adjustment */}
           <div style={{ marginTop: 18 }}>
-            <label style={{ fontSize: '0.74rem', color: '#94a3b8', display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
+            <label style={{ fontSize: '0.74rem', color: 'var(--theme-text, #94a3b8)', display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
               <span>Percentage Conversion Multiplier:</span>
-              <span style={{ color: '#38bdf8', fontWeight: 700 }}>× {multiplier}</span>
+              <span style={{ color: 'var(--theme-ink-teal, #38bdf8)', fontWeight: 700 }}>× {multiplier}</span>
             </label>
-            <div style={{ display: 'flex', gap: 6 }}>
+            <div className="responsive-row" style={{ gap: 6 }}>
               {[9.5, 10.0, 9.0].map(val => (
                 <button
                   key={val}
@@ -1810,7 +1695,7 @@ function CgpaCalculatorSection({ onToast, onCopy }) {
                     fontWeight: multiplier === val ? 700 : 500,
                     border: multiplier === val ? '1px solid #38bdf8' : '1px solid rgba(255,255,255,0.08)',
                     background: multiplier === val ? 'rgba(56, 189, 248, 0.2)' : 'transparent',
-                    color: multiplier === val ? '#38bdf8' : '#cbd5e1',
+                    color: multiplier === val ? '#38bdf8' : 'var(--theme-text, #cbd5e1)',
                     cursor: 'pointer'
                   }}
                 >
@@ -1823,12 +1708,12 @@ function CgpaCalculatorSection({ onToast, onCopy }) {
 
         {/* Semester Trend Preview */}
         <div style={{
-          background: 'rgba(18, 22, 29, 0.6)',
+          background: 'var(--theme-panel, rgba(18, 22, 29, 0.6))',
           border: '1px solid rgba(255, 255, 255, 0.06)',
           borderRadius: 14,
           padding: 18
         }}>
-          <h4 style={{ fontSize: '0.84rem', fontWeight: 700, color: '#e2e8f0', margin: '0 0 12px' }}>
+          <h4 style={{ fontSize: '0.84rem', fontWeight: 700, color: 'var(--theme-text, #e2e8f0)', margin: '0 0 12px' }}>
             Semester Progression Trend
           </h4>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -1837,7 +1722,7 @@ function CgpaCalculatorSection({ onToast, onCopy }) {
               const pct = Math.min(100, (val / scale) * 100);
               return (
                 <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: '0.78rem' }}>
-                  <span style={{ width: 80, color: '#94a3b8', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
+                  <span style={{ width: 80, color: 'var(--theme-text, #94a3b8)', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
                     {s.name}
                   </span>
                   <div style={{ flex: 1, height: 8, background: 'rgba(255,255,255,0.06)', borderRadius: 4, overflow: 'hidden' }}>
@@ -1849,7 +1734,7 @@ function CgpaCalculatorSection({ onToast, onCopy }) {
                       transition: 'width 0.3s ease'
                     }} />
                   </div>
-                  <span style={{ width: 42, textAlign: 'right', fontWeight: 700, color: '#38bdf8' }}>
+                  <span style={{ width: 42, textAlign: 'right', fontWeight: 700, color: 'var(--theme-ink-teal, #38bdf8)' }}>
                     {val > 0 ? val.toFixed(2) : '-'}
                   </span>
                 </div>
@@ -1866,7 +1751,6 @@ function CgpaCalculatorSection({ onToast, onCopy }) {
 // 2. SGPA CALCULATOR SECTION
 // =============================================================================
 function SgpaCalculatorSection({ onToast, onCopy }) {
-  const [scale, setScale] = useState(10);
   const [subjects, setSubjects] = useState([
     { id: 1, name: 'Data Structures & Algorithms', gradePoint: 9, credits: 4, letter: 'A+' },
     { id: 2, name: 'Database Management Systems', gradePoint: 10, credits: 4, letter: 'O' },
@@ -1894,7 +1778,7 @@ function SgpaCalculatorSection({ onToast, onCopy }) {
 
   const removeSubject = (id) => {
     if (subjects.length <= 1) {
-      onToast && onToast('At least 1 subject is required', 'error');
+      onToast?.('At least 1 subject is required', 'error');
       return;
     }
     setSubjects(subjects.filter(s => s.id !== id));
@@ -1921,7 +1805,7 @@ function SgpaCalculatorSection({ onToast, onCopy }) {
       { id: 4, name: 'Software Engineering', gradePoint: 9, credits: 3 },
       { id: 5, name: 'Cloud Computing Lab', gradePoint: 10, credits: 2 }
     ]);
-    onToast && onToast('Loaded B.Tech 5-course semester subjects!');
+    onToast?.('Loaded B.Tech 5-course semester subjects!');
   };
 
   const sgpaStats = useMemo(() => {
@@ -1964,19 +1848,18 @@ function SgpaCalculatorSection({ onToast, onCopy }) {
   return (
     <div className="student-tool-grid">
       {/* Left Column: Subject Entry List */}
-      <div style={{
-        background: 'rgba(18, 22, 29, 0.75)',
+      <div className="student-panel" style={{
+        background: 'var(--theme-panel, rgba(18, 22, 29, 0.75))',
         border: '1px solid rgba(255, 255, 255, 0.08)',
         borderRadius: 16,
-        padding: 24,
-        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)'
+        boxShadow: 'var(--theme-shadow, 0 8px 32px rgba(0, 0, 0, 0.4))'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 18 }}>
+        <div className="responsive-row" style={{ alignItems: 'center', justifyContent: 'space-between', marginBottom: 18 }}>
           <div>
-            <h3 style={{ fontSize: '1.15rem', fontWeight: 700, margin: '0 0 4px', color: '#ffffff' }}>
+            <h3 style={{ fontSize: '1.15rem', fontWeight: 700, margin: '0 0 4px', color: 'var(--theme-text, #ffffff)' }}>
               Semester Subject Courses
             </h3>
-            <p style={{ margin: 0, fontSize: '0.8rem', color: '#94a3b8' }}>
+            <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--theme-text, #94a3b8)' }}>
               Enter each theory & lab course with assigned credit weightage.
             </p>
           </div>
@@ -1986,7 +1869,7 @@ function SgpaCalculatorSection({ onToast, onCopy }) {
             style={{
               background: 'rgba(56, 189, 248, 0.15)',
               border: '1px solid rgba(56, 189, 248, 0.35)',
-              color: '#38bdf8',
+              color: 'var(--theme-ink-teal, #38bdf8)',
               borderRadius: 8,
               padding: '6px 12px',
               fontSize: '0.78rem',
@@ -2025,7 +1908,7 @@ function SgpaCalculatorSection({ onToast, onCopy }) {
                 style={{
                   background: 'transparent',
                   border: 'none',
-                  color: '#ffffff',
+                  color: 'var(--theme-text, #ffffff)',
                   fontWeight: 600,
                   fontSize: '0.85rem',
                   outline: 'none'
@@ -2040,14 +1923,14 @@ function SgpaCalculatorSection({ onToast, onCopy }) {
                   border: '1px solid rgba(255, 255, 255, 0.12)',
                   borderRadius: 6,
                   padding: '6px 8px',
-                  color: '#38bdf8',
+                  color: 'var(--theme-ink-teal, #38bdf8)',
                   fontWeight: 700,
                   fontSize: '0.82rem',
                   outline: 'none'
                 }}
               >
                 {GRADE_OPTIONS.map(opt => (
-                  <option key={opt.points} value={opt.points} style={{ background: '#090d16', color: '#ffffff' }}>
+                  <option key={opt.points} value={opt.points} style={{ background: 'var(--theme-panel, #090d16)', color: 'var(--theme-text, #ffffff)' }}>
                     {opt.label} ({opt.points} pts)
                   </option>
                 ))}
@@ -2065,7 +1948,7 @@ function SgpaCalculatorSection({ onToast, onCopy }) {
                   border: '1px solid rgba(255, 255, 255, 0.12)',
                   borderRadius: 6,
                   padding: '6px 10px',
-                  color: '#f59e0b',
+                  color: 'var(--theme-ink-orange, #f59e0b)',
                   fontWeight: 700,
                   fontSize: '0.86rem',
                   outline: 'none'
@@ -2077,7 +1960,7 @@ function SgpaCalculatorSection({ onToast, onCopy }) {
                 style={{
                   background: 'transparent',
                   border: 'none',
-                  color: '#f43f5e',
+                  color: 'var(--theme-ink-pink, #f43f5e)',
                   cursor: 'pointer',
                   padding: 4,
                   display: 'flex',
@@ -2100,7 +1983,7 @@ function SgpaCalculatorSection({ onToast, onCopy }) {
             borderRadius: 10,
             background: 'rgba(56, 189, 248, 0.08)',
             border: '1px dashed rgba(56, 189, 248, 0.4)',
-            color: '#38bdf8',
+            color: 'var(--theme-ink-teal, #38bdf8)',
             fontSize: '0.85rem',
             fontWeight: 600,
             cursor: 'pointer',
@@ -2118,14 +2001,14 @@ function SgpaCalculatorSection({ onToast, onCopy }) {
       {/* Right Column: SGPA Score Display */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
         <div style={{
-          background: 'linear-gradient(145deg, rgba(28, 34, 46, 0.95) 0%, rgba(14, 17, 24, 0.98) 100%)',
+          background: 'linear-gradient(145deg, var(--theme-panel, rgba(28, 34, 46, 0.95)) 0%, var(--theme-panel, rgba(14, 17, 24, 0.98)) 100%)',
           border: '1px solid rgba(56, 189, 248, 0.35)',
           borderRadius: 18,
           padding: 26,
-          boxShadow: '0 20px 48px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(56, 189, 248, 0.15)'
+          boxShadow: 'var(--theme-shadow, 0 20px 48px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(56, 189, 248, 0.15))'
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#38bdf8', textTransform: 'uppercase' }}>
+          <div className="responsive-row" style={{ alignItems: 'center', justifyContent: 'space-between' }}>
+            <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--theme-ink-teal, #38bdf8)', textTransform: 'uppercase' }}>
               SEMESTER GRADE REPORT
             </span>
             <button
@@ -2138,7 +2021,7 @@ function SgpaCalculatorSection({ onToast, onCopy }) {
                 borderRadius: 6,
                 background: 'rgba(255, 255, 255, 0.06)',
                 border: '1px solid rgba(255, 255, 255, 0.12)',
-                color: '#cbd5e1',
+                color: 'var(--theme-text, #cbd5e1)',
                 fontSize: '0.74rem',
                 cursor: 'pointer'
               }}
@@ -2153,7 +2036,7 @@ function SgpaCalculatorSection({ onToast, onCopy }) {
               fontSize: '4rem',
               fontWeight: 900,
               fontFamily: 'JetBrains Mono, monospace',
-              background: 'linear-gradient(135deg, #ffffff 10%, #38bdf8 60%, #34d399 100%)',
+              background: 'linear-gradient(135deg, var(--theme-text, #ffffff) 10%, #38bdf8 60%, #34d399 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               filter: 'drop-shadow(0 0 20px rgba(56, 189, 248, 0.5))',
@@ -2161,7 +2044,7 @@ function SgpaCalculatorSection({ onToast, onCopy }) {
             }}>
               {sgpaStats.sgpa}
             </div>
-            <div style={{ fontSize: '0.85rem', color: '#94a3b8', marginTop: 8 }}>
+            <div style={{ fontSize: '0.85rem', color: 'var(--theme-text, #94a3b8)', marginTop: 8 }}>
               Semester Grade Point Average (SGPA)
             </div>
 
@@ -2180,39 +2063,37 @@ function SgpaCalculatorSection({ onToast, onCopy }) {
             </div>
           </div>
 
-          <div style={{
+          <div className="responsive-pair" style={{
             display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
             gap: 12,
             paddingTop: 18,
             borderTop: '1px solid rgba(255, 255, 255, 0.08)'
           }}>
-            <div style={{ background: 'rgba(10, 13, 18, 0.7)', borderRadius: 10, padding: '12px 14px' }}>
-              <span style={{ fontSize: '0.72rem', color: '#94a3b8' }}>TOTAL CREDITS</span>
-              <div style={{ fontSize: '1.25rem', fontWeight: 700, color: '#f59e0b', marginTop: 4 }}>
+            <div style={{ background: 'var(--theme-panel, rgba(10, 13, 18, 0.7))', borderRadius: 10, padding: '12px 14px' }}>
+              <span style={{ fontSize: '0.72rem', color: 'var(--theme-text, #94a3b8)' }}>TOTAL CREDITS</span>
+              <div style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--theme-ink-orange, #f59e0b)', marginTop: 4 }}>
                 {sgpaStats.totalCredits}
               </div>
             </div>
-            <div style={{ background: 'rgba(10, 13, 18, 0.7)', borderRadius: 10, padding: '12px 14px' }}>
-              <span style={{ fontSize: '0.72rem', color: '#94a3b8' }}>TOTAL CREDIT PTS</span>
-              <div style={{ fontSize: '1.25rem', fontWeight: 700, color: '#34d399', marginTop: 4 }}>
+            <div style={{ background: 'var(--theme-panel, rgba(10, 13, 18, 0.7))', borderRadius: 10, padding: '12px 14px' }}>
+              <span style={{ fontSize: '0.72rem', color: 'var(--theme-text, #94a3b8)' }}>TOTAL CREDIT PTS</span>
+              <div style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--theme-ink-green, #34d399)', marginTop: 4 }}>
                 {sgpaStats.earnedPoints}
               </div>
             </div>
           </div>
 
-          <div style={{
+          <div className="responsive-row" style={{
             marginTop: 18,
             padding: '12px 14px',
             borderRadius: 10,
             background: 'rgba(56, 189, 248, 0.08)',
             border: '1px solid rgba(56, 189, 248, 0.2)',
-            display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between'
           }}>
-            <span style={{ fontSize: '0.82rem', color: '#cbd5e1' }}>Semester Equivalent Percentage:</span>
-            <span style={{ fontSize: '1.1rem', fontWeight: 800, color: '#38bdf8' }}>{sgpaStats.percentage}%</span>
+            <span style={{ fontSize: '0.82rem', color: 'var(--theme-text, #cbd5e1)' }}>Semester Equivalent Percentage:</span>
+            <span style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--theme-ink-teal, #38bdf8)' }}>{sgpaStats.percentage}%</span>
           </div>
         </div>
       </div>
@@ -2223,7 +2104,7 @@ function SgpaCalculatorSection({ onToast, onCopy }) {
 // =============================================================================
 // 3. CGPA TO PERCENTAGE CONVERTER SECTION
 // =============================================================================
-function CgpaToPercentageSection({ onToast, onCopy }) {
+function CgpaToPercentageSection({ onCopy }) {
   const [cgpa, setCgpa] = useState(8.40);
   const [formulaKey, setFormulaKey] = useState('cbse');
   const [customMultiplier, setCustomMultiplier] = useState(9.5);
@@ -2282,28 +2163,28 @@ function CgpaToPercentageSection({ onToast, onCopy }) {
     <div className="student-tool-grid">
       {/* Left Column: Interactive Controls */}
       <div style={{
-        background: 'rgba(18, 22, 29, 0.75)',
+        background: 'var(--theme-panel, rgba(18, 22, 29, 0.75))',
         border: '1px solid rgba(255, 255, 255, 0.08)',
         borderRadius: 16,
         padding: 24
       }}>
-        <h3 style={{ fontSize: '1.15rem', fontWeight: 700, margin: '0 0 6px', color: '#ffffff' }}>
+        <h3 style={{ fontSize: '1.15rem', fontWeight: 700, margin: '0 0 6px', color: 'var(--theme-text, #ffffff)' }}>
           CGPA to Percentage Converter
         </h3>
-        <p style={{ margin: '0 0 20px', fontSize: '0.82rem', color: '#94a3b8' }}>
+        <p style={{ margin: '0 0 20px', fontSize: '0.82rem', color: 'var(--theme-text, #94a3b8)' }}>
           Convert your Cumulative Grade Point Average into exact percentage using university standards.
         </p>
 
         {/* CGPA Slider & Number Input */}
         <div style={{
-          background: 'rgba(10, 13, 18, 0.7)',
+          background: 'var(--theme-panel, rgba(10, 13, 18, 0.7))',
           padding: '18px 20px',
           borderRadius: 14,
           border: '1px solid rgba(255, 255, 255, 0.06)',
           marginBottom: 20
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
-            <span style={{ fontSize: '0.82rem', fontWeight: 700, color: '#e2e8f0' }}>YOUR CGPA (10-POINT SCALE)</span>
+          <div className="responsive-row" style={{ alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+            <span style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--theme-text, #e2e8f0)' }}>YOUR CGPA (10-POINT SCALE)</span>
             <input
               type="number"
               step="0.01"
@@ -2317,7 +2198,7 @@ function CgpaToPercentageSection({ onToast, onCopy }) {
                 borderRadius: 8,
                 background: 'rgba(56, 189, 248, 0.15)',
                 border: '1px solid rgba(56, 189, 248, 0.4)',
-                color: '#38bdf8',
+                color: 'var(--theme-ink-teal, #38bdf8)',
                 fontWeight: 800,
                 fontSize: '1.1rem',
                 textAlign: 'center',
@@ -2340,7 +2221,7 @@ function CgpaToPercentageSection({ onToast, onCopy }) {
             }}
           />
 
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', color: '#64748b', marginTop: 6 }}>
+          <div className="responsive-row" style={{ justifyContent: 'space-between', fontSize: '0.72rem', color: '#64748b', marginTop: 6 }}>
             <span>0.00</span>
             <span>4.00 (Pass)</span>
             <span>6.00 (1st Div)</span>
@@ -2350,7 +2231,7 @@ function CgpaToPercentageSection({ onToast, onCopy }) {
         </div>
 
         {/* University Formula Selector */}
-        <label style={{ fontSize: '0.76rem', fontWeight: 700, color: '#94a3b8', display: 'block', marginBottom: 8 }}>
+        <label style={{ fontSize: '0.76rem', fontWeight: 700, color: 'var(--theme-text, #94a3b8)', display: 'block', marginBottom: 8 }}>
           SELECT UNIVERSITY / BOARD FORMULA
         </label>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -2364,7 +2245,7 @@ function CgpaToPercentageSection({ onToast, onCopy }) {
                   padding: '12px 14px',
                   borderRadius: 10,
                   border: isSelected ? '1px solid #34d399' : '1px solid rgba(255, 255, 255, 0.06)',
-                  background: isSelected ? 'rgba(52, 211, 153, 0.14)' : 'rgba(10, 13, 18, 0.5)',
+                  background: isSelected ? 'rgba(52, 211, 153, 0.14)' : 'var(--theme-panel, rgba(10, 13, 18, 0.5))',
                   cursor: 'pointer',
                   transition: 'all 0.2s ease',
                   display: 'flex',
@@ -2373,23 +2254,22 @@ function CgpaToPercentageSection({ onToast, onCopy }) {
                 }}
               >
                 <div>
-                  <div style={{ fontSize: '0.86rem', fontWeight: isSelected ? 700 : 600, color: isSelected ? '#34d399' : '#ffffff' }}>
+                  <div style={{ fontSize: '0.86rem', fontWeight: isSelected ? 700 : 600, color: isSelected ? '#34d399' : 'var(--theme-text, #ffffff)' }}>
                     {item.name}
                   </div>
-                  <div style={{ fontSize: '0.74rem', color: '#94a3b8', marginTop: 2 }}>
+                  <div style={{ fontSize: '0.74rem', color: 'var(--theme-text, #94a3b8)', marginTop: 2 }}>
                     {item.desc}
                   </div>
                 </div>
-                <div style={{
+                <div className="responsive-row" style={{
                   width: 18,
                   height: 18,
                   borderRadius: '50%',
                   border: isSelected ? '2px solid #34d399' : '2px solid rgba(255,255,255,0.2)',
-                  display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center'
                 }}>
-                  {isSelected && <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#34d399' }} />}
+                  {isSelected && <div className="responsive-row" style={{ width: 8, height: 8, borderRadius: '50%', background: '#34d399' }} />}
                 </div>
               </div>
             );
@@ -2397,8 +2277,8 @@ function CgpaToPercentageSection({ onToast, onCopy }) {
         </div>
 
         {formulaKey === 'custom' && (
-          <div style={{ marginTop: 14, display: 'flex', alignItems: 'center', gap: 10 }}>
-            <span style={{ fontSize: '0.82rem', color: '#cbd5e1' }}>Custom Multiplier:</span>
+          <div style={{ marginTop: 14, alignItems: 'center', gap: 10 }}>
+            <span style={{ fontSize: '0.82rem', color: 'var(--theme-text, #cbd5e1)' }}>Custom Multiplier:</span>
             <input
               type="number"
               step="0.05"
@@ -2410,7 +2290,7 @@ function CgpaToPercentageSection({ onToast, onCopy }) {
                 borderRadius: 6,
                 background: 'rgba(255,255,255,0.06)',
                 border: '1px solid rgba(255,255,255,0.15)',
-                color: '#34d399',
+                color: 'var(--theme-ink-green, #34d399)',
                 fontWeight: 700
               }}
             />
@@ -2420,16 +2300,15 @@ function CgpaToPercentageSection({ onToast, onCopy }) {
 
       {/* Right Column: Calculated Percentage Hero */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-        <div style={{
-          background: 'linear-gradient(145deg, rgba(28, 34, 46, 0.95) 0%, rgba(14, 17, 24, 0.98) 100%)',
+        <div className="student-panel" style={{
+          background: 'linear-gradient(145deg, var(--theme-panel, rgba(28, 34, 46, 0.95)) 0%, var(--theme-panel, rgba(14, 17, 24, 0.98)) 100%)',
           border: '1px solid rgba(52, 211, 153, 0.35)',
           borderRadius: 18,
-          padding: 28,
-          boxShadow: '0 20px 48px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(52, 211, 153, 0.15)',
+          boxShadow: 'var(--theme-shadow, 0 20px 48px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(52, 211, 153, 0.15))',
           textAlign: 'center'
         }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span style={{ fontSize: '0.74rem', fontWeight: 700, color: '#34d399', letterSpacing: '0.08em' }}>
+          <div className="responsive-row" style={{ justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ fontSize: '0.74rem', fontWeight: 700, color: 'var(--theme-ink-green, #34d399)', letterSpacing: '0.08em' }}>
               CONVERTED PERCENTAGE
             </span>
             <button
@@ -2442,7 +2321,7 @@ function CgpaToPercentageSection({ onToast, onCopy }) {
                 borderRadius: 6,
                 background: 'rgba(255, 255, 255, 0.06)',
                 border: '1px solid rgba(255, 255, 255, 0.12)',
-                color: '#cbd5e1',
+                color: 'var(--theme-text, #cbd5e1)',
                 fontSize: '0.74rem',
                 cursor: 'pointer'
               }}
@@ -2457,7 +2336,7 @@ function CgpaToPercentageSection({ onToast, onCopy }) {
               fontSize: '4.2rem',
               fontWeight: 900,
               fontFamily: 'JetBrains Mono, monospace',
-              background: 'linear-gradient(135deg, #ffffff 10%, #34d399 60%, #06b6d4 100%)',
+              background: 'linear-gradient(135deg, var(--theme-text, #ffffff) 10%, #34d399 60%, #06b6d4 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               filter: 'drop-shadow(0 0 20px rgba(52, 211, 153, 0.45))',
@@ -2465,7 +2344,7 @@ function CgpaToPercentageSection({ onToast, onCopy }) {
             }}>
               {percentage.toFixed(2)}%
             </div>
-            <div style={{ fontSize: '0.85rem', color: '#94a3b8', marginTop: 8 }}>
+            <div style={{ fontSize: '0.85rem', color: 'var(--theme-text, #94a3b8)', marginTop: 8 }}>
               Formula: {currentFormula.expr(cgpa)} = {percentage.toFixed(2)}%
             </div>
 
@@ -2486,16 +2365,16 @@ function CgpaToPercentageSection({ onToast, onCopy }) {
 
           {/* Quick Conversion Chart */}
           <div style={{
-            background: 'rgba(10, 13, 18, 0.75)',
+            background: 'var(--theme-panel, rgba(10, 13, 18, 0.75))',
             borderRadius: 12,
             padding: 16,
             border: '1px solid rgba(255, 255, 255, 0.06)',
             textAlign: 'left'
           }}>
-            <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#94a3b8', display: 'block', marginBottom: 10 }}>
+            <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--theme-text, #94a3b8)', display: 'block', marginBottom: 10 }}>
               QUICK REFERENCE LOOKUP
             </span>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, fontSize: '0.78rem' }}>
+            <div className="responsive-pair" style={{ display: 'grid', gap: 8, fontSize: '0.78rem' }}>
               {[
                 { c: 10.0, p: (10.0 * 9.5).toFixed(1) },
                 { c: 9.0, p: (9.0 * 9.5).toFixed(1) },
@@ -2507,8 +2386,8 @@ function CgpaToPercentageSection({ onToast, onCopy }) {
                 { c: 6.0, p: (6.0 * 9.5).toFixed(1) }
               ].map((item, i) => (
                 <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '4px 6px', borderRadius: 4, background: 'rgba(255,255,255,0.02)' }}>
-                  <span style={{ color: '#ffffff', fontWeight: 600 }}>{item.c.toFixed(1)} CGPA</span>
-                  <span style={{ color: '#34d399', fontWeight: 700 }}>{item.p}%</span>
+                  <span style={{ color: 'var(--theme-text, #ffffff)', fontWeight: 600 }}>{item.c.toFixed(1)} CGPA</span>
+                  <span style={{ color: 'var(--theme-ink-green, #34d399)', fontWeight: 700 }}>{item.p}%</span>
                 </div>
               ))}
             </div>
@@ -2522,7 +2401,7 @@ function CgpaToPercentageSection({ onToast, onCopy }) {
 // =============================================================================
 // 4. PERCENTAGE TO CGPA CONVERTER SECTION
 // =============================================================================
-function PercentageToCgpaSection({ onToast, onCopy }) {
+function PercentageToCgpaSection({ onCopy }) {
   const [percent, setPercent] = useState(82.5);
   const [formulaKey, setFormulaKey] = useState('cbse');
   const [customDivisor, setCustomDivisor] = useState(9.5);
@@ -2574,28 +2453,28 @@ function PercentageToCgpaSection({ onToast, onCopy }) {
     <div className="student-tool-grid">
       {/* Left Column */}
       <div style={{
-        background: 'rgba(18, 22, 29, 0.75)',
+        background: 'var(--theme-panel, rgba(18, 22, 29, 0.75))',
         border: '1px solid rgba(255, 255, 255, 0.08)',
         borderRadius: 16,
         padding: 24
       }}>
-        <h3 style={{ fontSize: '1.15rem', fontWeight: 700, margin: '0 0 6px', color: '#ffffff' }}>
+        <h3 style={{ fontSize: '1.15rem', fontWeight: 700, margin: '0 0 6px', color: 'var(--theme-text, #ffffff)' }}>
           Percentage to CGPA Converter
         </h3>
-        <p style={{ margin: '0 0 20px', fontSize: '0.82rem', color: '#94a3b8' }}>
+        <p style={{ margin: '0 0 20px', fontSize: '0.82rem', color: 'var(--theme-text, #94a3b8)' }}>
           Convert percentage marks into 10-point CGPA or 4.0 US GPA for college applications.
         </p>
 
         {/* Slider & Input */}
         <div style={{
-          background: 'rgba(10, 13, 18, 0.7)',
+          background: 'var(--theme-panel, rgba(10, 13, 18, 0.7))',
           padding: '18px 20px',
           borderRadius: 14,
           border: '1px solid rgba(255, 255, 255, 0.06)',
           marginBottom: 20
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
-            <span style={{ fontSize: '0.82rem', fontWeight: 700, color: '#e2e8f0' }}>YOUR PERCENTAGE (%)</span>
+          <div className="responsive-row" style={{ alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+            <span style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--theme-text, #e2e8f0)' }}>YOUR PERCENTAGE (%)</span>
             <input
               type="number"
               step="0.1"
@@ -2609,7 +2488,7 @@ function PercentageToCgpaSection({ onToast, onCopy }) {
                 borderRadius: 8,
                 background: 'rgba(245, 158, 11, 0.15)',
                 border: '1px solid rgba(245, 158, 11, 0.4)',
-                color: '#f59e0b',
+                color: 'var(--theme-ink-orange, #f59e0b)',
                 fontWeight: 800,
                 fontSize: '1.1rem',
                 textAlign: 'center',
@@ -2628,7 +2507,7 @@ function PercentageToCgpaSection({ onToast, onCopy }) {
             style={{ width: '100%', accentColor: '#f59e0b', cursor: 'pointer' }}
           />
 
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', color: '#64748b', marginTop: 6 }}>
+          <div className="responsive-row" style={{ justifyContent: 'space-between', fontSize: '0.72rem', color: '#64748b', marginTop: 6 }}>
             <span>0%</span>
             <span>40% (Pass)</span>
             <span>60% (1st Div)</span>
@@ -2638,7 +2517,7 @@ function PercentageToCgpaSection({ onToast, onCopy }) {
         </div>
 
         {/* Formula Options */}
-        <label style={{ fontSize: '0.76rem', fontWeight: 700, color: '#94a3b8', display: 'block', marginBottom: 8 }}>
+        <label style={{ fontSize: '0.76rem', fontWeight: 700, color: 'var(--theme-text, #94a3b8)', display: 'block', marginBottom: 8 }}>
           CHOOSE CONVERSION FORMULA
         </label>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -2652,45 +2531,64 @@ function PercentageToCgpaSection({ onToast, onCopy }) {
                   padding: '12px 14px',
                   borderRadius: 10,
                   border: isSelected ? '1px solid #f59e0b' : '1px solid rgba(255, 255, 255, 0.06)',
-                  background: isSelected ? 'rgba(245, 158, 11, 0.14)' : 'rgba(10, 13, 18, 0.5)',
+                  background: isSelected ? 'rgba(245, 158, 11, 0.14)' : 'var(--theme-panel, rgba(10, 13, 18, 0.5))',
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between'
                 }}
               >
-                <span style={{ fontSize: '0.86rem', fontWeight: isSelected ? 700 : 600, color: isSelected ? '#f59e0b' : '#ffffff' }}>
+                <span style={{ fontSize: '0.86rem', fontWeight: isSelected ? 700 : 600, color: isSelected ? '#f59e0b' : 'var(--theme-text, #ffffff)' }}>
                   {item.name}
                 </span>
-                <div style={{
+                <div className="responsive-row" style={{
                   width: 18,
                   height: 18,
                   borderRadius: '50%',
                   border: isSelected ? '2px solid #f59e0b' : '2px solid rgba(255,255,255,0.2)',
-                  display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center'
                 }}>
-                  {isSelected && <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#f59e0b' }} />}
+                  {isSelected && <div className="responsive-row" style={{ width: 8, height: 8, borderRadius: '50%', background: '#f59e0b' }} />}
                 </div>
               </div>
             );
           })}
         </div>
+
+        {formulaKey === 'custom' && (
+          <div style={{ marginTop: 14, alignItems: 'center', gap: 10 }}>
+            <span style={{ fontSize: '0.82rem', color: 'var(--theme-text, #cbd5e1)' }}>Custom Divisor:</span>
+            <input
+              type="number"
+              step="0.05"
+              value={customDivisor}
+              onChange={(e) => setCustomDivisor(parseFloat(e.target.value) || 1)}
+              style={{
+                width: 80,
+                padding: '5px 10px',
+                borderRadius: 6,
+                background: 'rgba(255,255,255,0.06)',
+                border: '1px solid rgba(255,255,255,0.15)',
+                color: 'var(--theme-ink-orange, #f59e0b)',
+                fontWeight: 700
+              }}
+            />
+          </div>
+        )}
       </div>
 
       {/* Right Column: Calculated CGPA */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-        <div style={{
-          background: 'linear-gradient(145deg, rgba(28, 34, 46, 0.95) 0%, rgba(14, 17, 24, 0.98) 100%)',
+        <div className="student-panel" style={{
+          background: 'linear-gradient(145deg, var(--theme-panel, rgba(28, 34, 46, 0.95)) 0%, var(--theme-panel, rgba(14, 17, 24, 0.98)) 100%)',
           border: '1px solid rgba(245, 158, 11, 0.35)',
           borderRadius: 18,
-          padding: 28,
-          boxShadow: '0 20px 48px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(245, 158, 11, 0.15)',
+          boxShadow: 'var(--theme-shadow, 0 20px 48px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(245, 158, 11, 0.15))',
           textAlign: 'center'
         }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span style={{ fontSize: '0.74rem', fontWeight: 700, color: '#f59e0b', letterSpacing: '0.08em' }}>
+          <div className="responsive-row" style={{ justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ fontSize: '0.74rem', fontWeight: 700, color: 'var(--theme-ink-orange, #f59e0b)', letterSpacing: '0.08em' }}>
               CALCULATED CGPA
             </span>
             <button
@@ -2703,7 +2601,7 @@ function PercentageToCgpaSection({ onToast, onCopy }) {
                 borderRadius: 6,
                 background: 'rgba(255, 255, 255, 0.06)',
                 border: '1px solid rgba(255, 255, 255, 0.12)',
-                color: '#cbd5e1',
+                color: 'var(--theme-text, #cbd5e1)',
                 fontSize: '0.74rem',
                 cursor: 'pointer'
               }}
@@ -2718,7 +2616,7 @@ function PercentageToCgpaSection({ onToast, onCopy }) {
               fontSize: '4.2rem',
               fontWeight: 900,
               fontFamily: 'JetBrains Mono, monospace',
-              background: 'linear-gradient(135deg, #ffffff 10%, #f59e0b 60%, #fb923c 100%)',
+              background: 'linear-gradient(135deg, var(--theme-text, #ffffff) 10%, #f59e0b 60%, #fb923c 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               filter: 'drop-shadow(0 0 20px rgba(245, 158, 11, 0.45))',
@@ -2726,7 +2624,7 @@ function PercentageToCgpaSection({ onToast, onCopy }) {
             }}>
               {calculatedCgpa.toFixed(2)}
             </div>
-            <div style={{ fontSize: '0.85rem', color: '#94a3b8', marginTop: 8 }}>
+            <div style={{ fontSize: '0.85rem', color: 'var(--theme-text, #94a3b8)', marginTop: 8 }}>
               {currentFormula.expr(percent)} = {calculatedCgpa.toFixed(2)} / {maxScale}
             </div>
 
@@ -2746,24 +2644,23 @@ function PercentageToCgpaSection({ onToast, onCopy }) {
           </div>
 
           {/* US GPA vs 10-Point Comparison Box */}
-          <div style={{
+          <div className="responsive-pair" style={{
             display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
             gap: 12,
-            background: 'rgba(10, 13, 18, 0.7)',
+            background: 'var(--theme-panel, rgba(10, 13, 18, 0.7))',
             borderRadius: 12,
             padding: '14px 16px',
             border: '1px solid rgba(255, 255, 255, 0.06)'
           }}>
             <div>
-              <span style={{ fontSize: '0.72rem', color: '#94a3b8' }}>10-POINT SCALE</span>
-              <div style={{ fontSize: '1.3rem', fontWeight: 800, color: '#38bdf8', marginTop: 4 }}>
+              <span style={{ fontSize: '0.72rem', color: 'var(--theme-text, #94a3b8)' }}>10-POINT SCALE</span>
+              <div style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--theme-ink-teal, #38bdf8)', marginTop: 4 }}>
                 {(percent / 9.5).toFixed(2)}
               </div>
             </div>
             <div>
-              <span style={{ fontSize: '0.72rem', color: '#94a3b8' }}>4.0 US GPA SCALE</span>
-              <div style={{ fontSize: '1.3rem', fontWeight: 800, color: '#34d399', marginTop: 4 }}>
+              <span style={{ fontSize: '0.72rem', color: 'var(--theme-text, #94a3b8)' }}>4.0 US GPA SCALE</span>
+              <div style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--theme-ink-green, #34d399)', marginTop: 4 }}>
                 {((percent / 100) * 4.0).toFixed(2)}
               </div>
             </div>
@@ -2777,7 +2674,7 @@ function PercentageToCgpaSection({ onToast, onCopy }) {
 // =============================================================================
 // 5. OVERALL CGPA CALCULATOR & TARGET GOAL PLANNER
 // =============================================================================
-function OverallCgpaSection({ onToast, onCopy }) {
+function OverallCgpaSection({ onCopy }) {
   const [totalSemesters, setTotalSemesters] = useState(8); // 4, 6, 8
   const [targetCgpa, setTargetCgpa] = useState(8.50);
   const [records, setRecords] = useState([
@@ -2894,22 +2791,22 @@ function OverallCgpaSection({ onToast, onCopy }) {
     <div className="student-tool-grid">
       {/* Left Column: All Semesters Grid */}
       <div style={{
-        background: 'rgba(18, 22, 29, 0.75)',
+        background: 'var(--theme-panel, rgba(18, 22, 29, 0.75))',
         border: '1px solid rgba(255, 255, 255, 0.08)',
         borderRadius: 16,
         padding: 24
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16, flexWrap: 'wrap', gap: 12 }}>
+        <div className="responsive-row" style={{ alignItems: 'center', justifyContent: 'space-between', marginBottom: 16, gap: 12 }}>
           <div>
-            <h3 style={{ fontSize: '1.15rem', fontWeight: 700, margin: '0 0 4px', color: '#ffffff' }}>
+            <h3 style={{ fontSize: '1.15rem', fontWeight: 700, margin: '0 0 4px', color: 'var(--theme-text, #ffffff)' }}>
               Overall Degree Semester Tracker
             </h3>
-            <p style={{ margin: 0, fontSize: '0.8rem', color: '#94a3b8' }}>
+            <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--theme-text, #94a3b8)' }}>
               Track completed semesters vs upcoming semesters towards your degree.
             </p>
           </div>
 
-          <div style={{ display: 'flex', gap: 6 }}>
+          <div className="responsive-row" style={{ gap: 6 }}>
             {[4, 6, 8].map(num => (
               <button
                 key={num}
@@ -2919,7 +2816,7 @@ function OverallCgpaSection({ onToast, onCopy }) {
                   borderRadius: 8,
                   border: totalSemesters === num ? '1px solid #ec4899' : '1px solid rgba(255,255,255,0.08)',
                   background: totalSemesters === num ? 'rgba(236, 72, 153, 0.2)' : 'transparent',
-                  color: totalSemesters === num ? '#ec4899' : '#cbd5e1',
+                  color: totalSemesters === num ? '#ec4899' : 'var(--theme-text, #cbd5e1)',
                   fontSize: '0.78rem',
                   fontWeight: 600,
                   cursor: 'pointer'
@@ -2951,11 +2848,11 @@ function OverallCgpaSection({ onToast, onCopy }) {
               key={r.sem}
               className="overall-sem-row"
               style={{
-                background: r.completed ? 'rgba(13, 16, 22, 0.85)' : 'rgba(255, 255, 255, 0.02)',
+                background: r.completed ? 'var(--theme-panel, rgba(13, 16, 22, 0.85))' : 'rgba(255, 255, 255, 0.02)',
                 border: r.completed ? '1px solid rgba(255, 255, 255, 0.07)' : '1px dashed rgba(255, 255, 255, 0.08)'
               }}
             >
-              <span style={{ fontWeight: 700, fontSize: '0.85rem', color: '#e2e8f0' }}>
+              <span style={{ fontWeight: 700, fontSize: '0.85rem', color: 'var(--theme-text, #e2e8f0)' }}>
                 Sem {r.sem}
               </span>
 
@@ -2972,7 +2869,7 @@ function OverallCgpaSection({ onToast, onCopy }) {
                   border: '1px solid rgba(255, 255, 255, 0.1)',
                   borderRadius: 6,
                   padding: '5px 8px',
-                  color: '#38bdf8',
+                  color: 'var(--theme-ink-teal, #38bdf8)',
                   fontWeight: 700,
                   fontSize: '0.86rem',
                   outline: 'none'
@@ -2990,7 +2887,7 @@ function OverallCgpaSection({ onToast, onCopy }) {
                   border: '1px solid rgba(255, 255, 255, 0.1)',
                   borderRadius: 6,
                   padding: '5px 8px',
-                  color: '#f59e0b',
+                  color: 'var(--theme-ink-orange, #f59e0b)',
                   fontWeight: 600,
                   fontSize: '0.86rem',
                   outline: 'none'
@@ -3020,31 +2917,53 @@ function OverallCgpaSection({ onToast, onCopy }) {
       {/* Right Column: Goal Planner & Overall CGPA */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
         {/* Current Overall CGPA */}
-        <div style={{
-          background: 'linear-gradient(145deg, rgba(28, 34, 46, 0.95) 0%, rgba(14, 17, 24, 0.98) 100%)',
+        <div className="student-panel" style={{
+          background: 'linear-gradient(145deg, var(--theme-panel, rgba(28, 34, 46, 0.95)) 0%, var(--theme-panel, rgba(14, 17, 24, 0.98)) 100%)',
           border: '1px solid rgba(236, 72, 153, 0.35)',
           borderRadius: 18,
-          padding: 24,
-          boxShadow: '0 20px 48px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(236, 72, 153, 0.15)',
+          boxShadow: 'var(--theme-shadow, 0 20px 48px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(236, 72, 153, 0.15))',
           textAlign: 'center'
         }}>
-          <span style={{ fontSize: '0.74rem', fontWeight: 700, color: '#ec4899', letterSpacing: '0.08em' }}>
-            CURRENT CUMULATIVE DEGREE CGPA
-          </span>
+          <div className="responsive-row" style={{ justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ fontSize: '0.74rem', fontWeight: 700, color: 'var(--theme-ink-pink, #ec4899)', letterSpacing: '0.08em' }}>
+              CURRENT CUMULATIVE DEGREE CGPA
+            </span>
+            {onCopy && (
+              <button
+                onClick={() => onCopy(`Cumulative CGPA: ${stats.currentCgpa} (${stats.completedCount}/${totalSemesters} semesters)`)}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 5,
+                  padding: '4px 10px',
+                  borderRadius: 6,
+                  background: 'rgba(255, 255, 255, 0.06)',
+                  border: '1px solid rgba(255, 255, 255, 0.12)',
+                  color: 'var(--theme-ink-purple, #f472b6)',
+                  fontSize: '0.74rem',
+                  cursor: 'pointer',
+                  fontWeight: 600
+                }}
+              >
+                <Copy size={13} />
+                <span>Copy</span>
+              </button>
+            )}
+          </div>
 
           <div style={{ margin: '18px 0' }}>
             <div style={{
               fontSize: '3.8rem',
               fontWeight: 900,
               fontFamily: 'JetBrains Mono, monospace',
-              background: 'linear-gradient(135deg, #ffffff 10%, #ec4899 60%, #c084fc 100%)',
+              background: 'linear-gradient(135deg, var(--theme-text, #ffffff) 10%, #ec4899 60%, #c084fc 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               lineHeight: 1
             }}>
               {stats.currentCgpa}
             </div>
-            <div style={{ fontSize: '0.82rem', color: '#94a3b8', marginTop: 8 }}>
+            <div style={{ fontSize: '0.82rem', color: 'var(--theme-text, #94a3b8)', marginTop: 8 }}>
               Based on {stats.completedCount} of {totalSemesters} Semesters Completed ({stats.completedCredits} Credits)
             </div>
           </div>
@@ -3052,29 +2971,28 @@ function OverallCgpaSection({ onToast, onCopy }) {
 
         {/* Target CGPA Goal Planner */}
         <div style={{
-          background: 'rgba(18, 22, 29, 0.85)',
+          background: 'var(--theme-panel, rgba(18, 22, 29, 0.85))',
           border: '1px solid rgba(129, 140, 248, 0.3)',
           borderRadius: 16,
           padding: 22
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
+          <div className="responsive-row" style={{ alignItems: 'center', gap: 8, marginBottom: 14 }}>
             <Target size={18} color="#818cf8" />
-            <h4 style={{ fontSize: '0.95rem', fontWeight: 700, margin: 0, color: '#ffffff' }}>
+            <h4 style={{ fontSize: '0.95rem', fontWeight: 700, margin: 0, color: 'var(--theme-text, #ffffff)' }}>
               Target CGPA Goal Planner
             </h4>
           </div>
 
-          <div style={{
-            display: 'flex',
+          <div className="responsive-row" style={{
             alignItems: 'center',
             justifyContent: 'space-between',
             padding: '10px 14px',
-            background: 'rgba(10, 13, 18, 0.7)',
+            background: 'var(--theme-panel, rgba(10, 13, 18, 0.7))',
             borderRadius: 10,
             marginBottom: 16
           }}>
-            <span style={{ fontSize: '0.82rem', color: '#cbd5e1' }}>I want to graduate with:</span>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <span style={{ fontSize: '0.82rem', color: 'var(--theme-text, #cbd5e1)' }}>I want to graduate with:</span>
+            <div className="responsive-row" style={{ alignItems: 'center', gap: 6 }}>
               <input
                 type="number"
                 step="0.05"
@@ -3088,13 +3006,13 @@ function OverallCgpaSection({ onToast, onCopy }) {
                   borderRadius: 6,
                   background: 'rgba(129, 140, 248, 0.2)',
                   border: '1px solid rgba(129, 140, 248, 0.4)',
-                  color: '#818cf8',
+                  color: 'var(--theme-ink-cyan, #818cf8)',
                   fontWeight: 800,
                   fontSize: '0.95rem',
                   textAlign: 'center'
                 }}
               />
-              <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>CGPA</span>
+              <span style={{ fontSize: '0.8rem', color: 'var(--theme-text, #94a3b8)' }}>CGPA</span>
             </div>
           </div>
 
@@ -3117,17 +3035,17 @@ function OverallCgpaSection({ onToast, onCopy }) {
               </span>
 
               {stats.requiredSgpa && parseFloat(stats.requiredSgpa) <= 10.0 && (
-                <div style={{ fontSize: '1.6rem', fontWeight: 900, color: '#ffffff', margin: '4px 0' }}>
+                <div style={{ fontSize: '1.6rem', fontWeight: 900, color: 'var(--theme-text, #ffffff)', margin: '4px 0' }}>
                   SGPA <span style={{ color: stats.targetColor }}>{stats.requiredSgpa}</span> Required
                 </div>
               )}
 
-              <p style={{ fontSize: '0.8rem', color: '#cbd5e1', margin: '6px 0 0' }}>
+              <p style={{ fontSize: '0.8rem', color: 'var(--theme-text, #cbd5e1)', margin: '6px 0 0' }}>
                 {stats.targetMessage}
               </p>
             </div>
           ) : (
-            <div style={{ padding: '12px', textAlign: 'center', color: '#94a3b8', fontSize: '0.82rem' }}>
+            <div style={{ padding: '12px', textAlign: 'center', color: 'var(--theme-text, #94a3b8)', fontSize: '0.82rem' }}>
               All semesters are marked as completed!
             </div>
           )}

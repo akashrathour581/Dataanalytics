@@ -4,50 +4,31 @@ import zipfile
 import pandas as pd
 from typing import List, Optional, Tuple, Dict, Any
 from PIL import Image
-import fitz  # PyMuPDF
+import pymupdf as fitz
 from pypdf import PdfReader, PdfWriter
 from reportlab.lib.pagesizes import letter, landscape
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib import colors
+from server.storage import parse_uploaded_file, validate_frame
+from server.analytics_engine import export_dataframe_bytes, sanitize_val
+from server.cleaning import transform
 
 
-def csv_to_excel_bytes(file_bytes: bytes) -> Tuple[io.BytesIO, str]:
-    """Converts CSV bytes to Excel (.xlsx) bytes."""
-    try:
-        df = pd.read_csv(io.BytesIO(file_bytes), encoding="utf-8")
-    except UnicodeDecodeError:
-        df = pd.read_csv(io.BytesIO(file_bytes), encoding="latin1")
-
-    buf = io.BytesIO()
-    with pd.ExcelWriter(buf, engine="openpyxl") as writer:
-        df.to_excel(writer, index=False, sheet_name="Data")
-    buf.seek(0)
-    return buf, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+def csv_to_excel_bytes(file_bytes: bytes):
+    df, _, _ = parse_uploaded_file(file_bytes, 'data.csv')
+    return export_dataframe_bytes(df, 'xlsx')
 
 
-def excel_to_csv_bytes(file_bytes: bytes, sheet_name: Optional[str] = None) -> Tuple[io.BytesIO, str]:
-    """Converts Excel (.xlsx/.xls) bytes to CSV bytes."""
-    excel_file = pd.ExcelFile(io.BytesIO(file_bytes))
-    target_sheet = sheet_name if sheet_name and sheet_name in excel_file.sheet_names else excel_file.sheet_names[0]
-    df = excel_file.parse(target_sheet)
-
-    buf = io.BytesIO()
-    df.to_csv(buf, index=False, encoding="utf-8")
-    buf.seek(0)
-    return buf, "text/csv"
+def excel_to_csv_bytes(file_bytes: bytes, sheet_name=None):
+    df, _, _ = parse_uploaded_file(file_bytes, 'data.xlsx', sheet_name)
+    return export_dataframe_bytes(df, 'csv')
 
 
 def excel_to_pdf_bytes(file_bytes: bytes, max_rows: int = 200) -> Tuple[io.BytesIO, str]:
     """Converts Excel/CSV table data to a formatted PDF document."""
-    try:
-        excel_file = pd.ExcelFile(io.BytesIO(file_bytes))
-        df = excel_file.parse(excel_file.sheet_names[0])
-    except Exception:
-        try:
-            df = pd.read_csv(io.BytesIO(file_bytes), encoding="utf-8")
-        except Exception:
-            df = pd.read_csv(io.BytesIO(file_bytes), encoding="latin1")
+    filename = 'data.xlsx' if zipfile.is_zipfile(io.BytesIO(file_bytes)) else 'data.csv'
+    df, _, _ = parse_uploaded_file(file_bytes, filename)
 
     df_subset = df.head(max_rows)
     buf = io.BytesIO()
@@ -90,28 +71,15 @@ def excel_to_pdf_bytes(file_bytes: bytes, max_rows: int = 200) -> Tuple[io.Bytes
     return buf, "application/pdf"
 
 
-def csv_to_json_bytes(file_bytes: bytes, orient: str = "records") -> Tuple[io.BytesIO, str]:
-    """Converts CSV bytes to formatted JSON bytes."""
-    try:
-        df = pd.read_csv(io.BytesIO(file_bytes), encoding="utf-8")
-    except UnicodeDecodeError:
-        df = pd.read_csv(io.BytesIO(file_bytes), encoding="latin1")
-
-    json_str = df.to_json(orient=orient, indent=2)
-    buf = io.BytesIO(json_str.encode("utf-8"))
-    buf.seek(0)
-    return buf, "application/json"
+def csv_to_json_bytes(file_bytes: bytes, orient='records'):
+    df, _, _ = parse_uploaded_file(file_bytes, 'data.csv')
+    if orient != 'records': raise ValueError('Choose records JSON orientation.')
+    return export_dataframe_bytes(df, 'json')
 
 
-def json_to_csv_bytes(file_bytes: bytes) -> Tuple[io.BytesIO, str]:
-    """Converts JSON bytes to CSV bytes."""
-    data = json.loads(file_bytes.decode("utf-8"))
-    df = pd.json_normalize(data)
-
-    buf = io.BytesIO()
-    df.to_csv(buf, index=False, encoding="utf-8")
-    buf.seek(0)
-    return buf, "text/csv"
+def json_to_csv_bytes(file_bytes: bytes):
+    df, _, _ = parse_uploaded_file(file_bytes, 'data.json')
+    return export_dataframe_bytes(df, 'csv')
 
 
 def pdf_to_excel_bytes(file_bytes: bytes) -> Tuple[io.BytesIO, str]:
@@ -171,8 +139,8 @@ def compress_pdf_bytes(file_bytes: bytes) -> Tuple[io.BytesIO, str]:
     writer = PdfWriter()
 
     for page in reader.pages:
-        page.compress_content_streams()
         writer.add_page(page)
+        writer.pages[-1].compress_content_streams()
 
     buf = io.BytesIO()
     writer.write(buf)
@@ -240,8 +208,7 @@ def png_to_jpg_bytes(file_bytes: bytes) -> Tuple[io.BytesIO, str]:
     img = Image.open(io.BytesIO(file_bytes))
     if img.mode in ("RGBA", "LA") or (img.mode == "P" and "transparency" in img.info):
         bg = Image.new("RGB", img.size, (255, 255, 255))
-        if img.mode == "P":
-            img = img.convert("RGBA")
+        img = img.convert("RGBA")
         bg.paste(img, mask=img.split()[3])
         img = bg
     else:
@@ -298,6 +265,10 @@ def resize_image_bytes(file_bytes: bytes, width: Optional[int] = None, height: O
     else:
         new_w, new_h = orig_dims
 
+    if any(v is not None and v <= 0 for v in (width, height, scale_pct)):
+        raise ValueError('Enter positive image dimensions or scale.')
+    if new_w * new_h > 20_000_000 or max(new_w, new_h) > 16_384:
+        raise ValueError('Use image dimensions up to 16,384 pixels and 20 million pixels total.')
     resized = img.resize((new_w, new_h), Image.Resampling.LANCZOS)
     buf = io.BytesIO()
     fmt = img.format if img.format else "PNG"
@@ -310,10 +281,7 @@ def resize_image_bytes(file_bytes: bytes, width: Optional[int] = None, height: O
 
 def analyze_csv_data(file_bytes: bytes) -> Dict[str, Any]:
     """Generates an instant in-depth structural analysis of a CSV file."""
-    try:
-        df = pd.read_csv(io.BytesIO(file_bytes), encoding="utf-8")
-    except UnicodeDecodeError:
-        df = pd.read_csv(io.BytesIO(file_bytes), encoding="latin1")
+    df, _, _ = parse_uploaded_file(file_bytes, 'data.csv')
 
     total_rows = len(df)
     total_cols = len(df.columns)
@@ -327,7 +295,7 @@ def analyze_csv_data(file_bytes: bytes) -> Dict[str, Any]:
             "name": str(col),
             "dtype": str(s.dtype),
             "nulls": int(s.isna().sum()),
-            "null_pct": round((s.isna().sum() / max(total_rows, 1)) * 100, 1),
+            "null_pct": round((int(s.isna().sum()) / max(total_rows, 1)) * 100, 1),
             "unique": int(s.nunique())
         })
 
@@ -339,17 +307,17 @@ def analyze_csv_data(file_bytes: bytes) -> Dict[str, Any]:
         "completeness_pct": round(((total_rows * total_cols - null_cells) / max(total_rows * total_cols, 1)) * 100, 2),
         "duplicates": dup_rows,
         "columns_detail": cols_info,
-        "preview": df.head(10).to_dict(orient="records")
+        "preview": sanitize_val(df.head(10).to_dict(orient="records"))
     }
 
 
 def analyze_excel_data(file_bytes: bytes) -> Dict[str, Any]:
     """Generates an in-depth multi-sheet analysis of an Excel file."""
-    excel_file = pd.ExcelFile(io.BytesIO(file_bytes))
+    first, sheets, active = parse_uploaded_file(file_bytes, 'data.xlsx')
     sheets_info = []
 
-    for name in excel_file.sheet_names:
-        df = excel_file.parse(name)
+    for name in sheets:
+        df = first if name == active else parse_uploaded_file(file_bytes, 'data.xlsx', name)[0]
         sheets_info.append({
             "sheet_name": name,
             "rows": len(df),
@@ -361,70 +329,40 @@ def analyze_excel_data(file_bytes: bytes) -> Dict[str, Any]:
 
     return {
         "file_type": "Excel Workbook",
-        "total_sheets": len(excel_file.sheet_names),
-        "sheet_names": excel_file.sheet_names,
+        "total_sheets": len(sheets),
+        "sheet_names": sheets,
         "sheets": sheets_info
     }
 
 
-def clean_csv_data(file_bytes: bytes, trim_whitespace: bool = True, drop_empty_rows: bool = True, drop_empty_cols: bool = True) -> Tuple[io.BytesIO, str, int, int]:
-    """Performs automated CSV cleaning: trimming whitespace, dropping blank rows/columns."""
-    try:
-        df = pd.read_csv(io.BytesIO(file_bytes), encoding="utf-8")
-    except UnicodeDecodeError:
-        df = pd.read_csv(io.BytesIO(file_bytes), encoding="latin1")
-
-    orig_rows, orig_cols = len(df), len(df.columns)
-
+def clean_csv_data(file_bytes: bytes, trim_whitespace=True, drop_empty_rows=True, drop_empty_cols=True):
+    df, _, _ = parse_uploaded_file(file_bytes, 'data.csv')
+    orig_rows, orig_cols = df.shape
     if trim_whitespace:
-        df.columns = [str(c).strip() for c in df.columns]
-        for col in df.select_dtypes(include=["object"]).columns:
-            df[col] = df[col].astype(str).str.strip()
-
-    if drop_empty_rows:
-        df = df.dropna(how="all")
-
-    if drop_empty_cols:
-        df = df.dropna(axis=1, how="all")
-
-    buf = io.BytesIO()
-    df.to_csv(buf, index=False, encoding="utf-8")
-    buf.seek(0)
-    return buf, "text/csv", orig_rows - len(df), orig_cols - len(df.columns)
+        df.columns = [c.strip() for c in df.columns]
+        validate_frame(df)
+        df = df.map(lambda v: v.strip() if isinstance(v, str) else v)
+    operations = []
+    if drop_empty_rows: operations.append({'kind': 'empty_rows'})
+    if drop_empty_cols: operations.append({'kind': 'empty_columns'})
+    df = transform(df, operations)
+    buf, media = export_dataframe_bytes(df, 'csv')
+    return buf, media, orig_rows - len(df), orig_cols - len(df.columns)
 
 
-def remove_duplicate_rows(file_bytes: bytes, filename: str) -> Tuple[io.BytesIO, str, int]:
-    """Removes duplicate rows from CSV or Excel file."""
-    is_excel = filename.lower().endswith((".xlsx", ".xls"))
-    if is_excel:
-        df = pd.read_excel(io.BytesIO(file_bytes))
-    else:
-        try:
-            df = pd.read_csv(io.BytesIO(file_bytes), encoding="utf-8")
-        except Exception:
-            df = pd.read_csv(io.BytesIO(file_bytes), encoding="latin1")
-
-    before_count = len(df)
-    df = df.drop_duplicates()
-    dups_removed = before_count - len(df)
-
-    buf = io.BytesIO()
-    if is_excel:
-        with pd.ExcelWriter(buf, engine="openpyxl") as writer:
-            df.to_excel(writer, index=False, sheet_name="Deduplicated")
-        media_type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    else:
-        df.to_csv(buf, index=False, encoding="utf-8")
-        media_type = "text/csv"
-
-    buf.seek(0)
-    return buf, media_type, dups_removed
+def remove_duplicate_rows(file_bytes: bytes, filename: str):
+    df, _, _ = parse_uploaded_file(file_bytes, filename)
+    cleaned = df.drop_duplicates()
+    buf, media = export_dataframe_bytes(cleaned, 'xlsx' if filename.lower().endswith('.xlsx') else 'csv')
+    return buf, media, len(df) - len(cleaned)
 
 
 def format_json_string(raw_json: str, indent: int = 2, minify: bool = False) -> Dict[str, Any]:
     """Validates and formats (beautifies or minifies) JSON string."""
     try:
-        parsed = json.loads(raw_json)
+        def invalid_constant(value):
+            raise ValueError('Invalid JSON number: ' + value)
+        parsed = json.loads(raw_json, parse_constant=invalid_constant)
         if minify:
             formatted = json.dumps(parsed, separators=(',', ':'))
         else:

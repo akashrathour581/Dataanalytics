@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import OmniTools from './OmniTools';
 import StudentTools from './StudentTools';
-import { 
-  CheckCircle2, 
-  ChevronDown, 
-  ChevronUp, 
-  ArrowRight, 
-  ShieldCheck, 
-  Zap, 
-  Sparkles, 
-  FileSpreadsheet, 
-  ExternalLink 
+import {
+  CheckCircle2,
+  ChevronDown,
+  ChevronUp,
+  ArrowRight,
+  ShieldCheck,
+  Zap,
+  Sparkles,
+  FileSpreadsheet
 } from 'lucide-react';
 
 export default function SeoLandingPage({ page, onNavigate, onToast, onLaunchAnalytics }) {
@@ -69,7 +68,7 @@ export default function SeoLandingPage({ page, onNavigate, onToast, onLaunchAnal
               Instant automated EDA, KPI cards, monthly sales trends, dynamic query builder, and data cleaning for Excel and CSV files.
             </p>
             <div style={{ display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap' }}>
-              <button 
+              <button
                 className="btn btn-primary"
                 style={{ padding: '12px 28px', fontSize: '0.95rem' }}
                 onClick={() => onLaunchAnalytics(false)}
@@ -77,7 +76,7 @@ export default function SeoLandingPage({ page, onNavigate, onToast, onLaunchAnal
                 <Sparkles size={16} />
                 <span>Open Analytics Studio</span>
               </button>
-              <button 
+              <button
                 className="btn btn-secondary"
                 style={{ padding: '12px 24px', fontSize: '0.95rem' }}
                 onClick={() => onLaunchAnalytics(true)}
@@ -88,9 +87,9 @@ export default function SeoLandingPage({ page, onNavigate, onToast, onLaunchAnal
             </div>
           </div>
         ) : page.toolType === 'student' ? (
-          <StudentTools toolId={page.toolId} onToast={onToast} onNavigate={onNavigate} />
+          <StudentTools key={page.toolId} toolId={page.toolId} onToast={onToast} onNavigate={onNavigate} />
         ) : (
-          <OmniTools toolId={page.toolId} onToast={onToast} />
+          <OmniTools key={page.toolId} toolId={page.toolId} onToast={onToast} />
         )}
       </section>
 
@@ -133,15 +132,15 @@ export default function SeoLandingPage({ page, onNavigate, onToast, onLaunchAnal
             const curColor = featColors[idx % featColors.length];
             return (
               <div key={idx} className="seo-feature-box" style={{ borderColor: `${curColor}25` }}>
-                <div className="feature-check-icon" style={{ 
-                  background: `${curColor}20`, 
+                <div className="feature-check-icon" style={{
+                  background: `${curColor}20`,
                   boxShadow: `0 0 12px ${curColor}40`,
                   border: `1px solid ${curColor}40`
                 }}>
                   <CheckCircle2 size={18} color={curColor} style={{ filter: `drop-shadow(0 0 4px ${curColor})` }} />
                 </div>
                 <div>
-                  <h3 className="feature-box-title" style={{ color: '#ffffff' }}>
+                  <h3 className="feature-box-title" style={{ color: 'var(--theme-text, #ffffff)' }}>
                     <span style={{ color: curColor, marginRight: 6 }}>✦</span>
                     {feat.title}
                   </h3>
@@ -161,17 +160,17 @@ export default function SeoLandingPage({ page, onNavigate, onToast, onLaunchAnal
             const isOpen = openFaq === idx;
             return (
               <div key={idx} className="faq-item" style={{ borderColor: isOpen ? 'rgba(56, 189, 248, 0.4)' : undefined }}>
-                <button 
+                <button
                   className="faq-question-btn"
                   onClick={() => toggleFaq(idx)}
                   aria-expanded={isOpen}
-                  style={{ color: isOpen ? '#38bdf8' : '#ffffff' }}
+                  style={{ color: isOpen ? '#38bdf8' : 'var(--theme-text, #ffffff)' }}
                 >
                   <span style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                     <span style={{ color: isOpen ? '#38bdf8' : '#818cf8', fontWeight: 800 }}>Q{idx + 1}.</span>
                     {faq.q}
                   </span>
-                  {isOpen ? <ChevronUp size={18} color="#38bdf8" /> : <ChevronDown size={18} color="#94a3b8" />}
+                  {isOpen ? <ChevronUp size={18} color="#38bdf8" /> : <ChevronDown size={18} color="var(--theme-text, #94a3b8)" />}
                 </button>
                 {isOpen && (
                   <div className="faq-answer">
@@ -192,8 +191,8 @@ export default function SeoLandingPage({ page, onNavigate, onToast, onLaunchAnal
           </h3>
           <div className="related-pills-list">
             {page.related.map((relSlug) => (
-              <button 
-                key={relSlug} 
+              <button
+                key={relSlug}
                 className="btn btn-secondary btn-sm"
                 onClick={() => onNavigate(relSlug)}
               >

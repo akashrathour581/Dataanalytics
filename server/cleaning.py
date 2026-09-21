@@ -1,5 +1,6 @@
-﻿"""Explicit, deterministic cleaning operations; input is never modified."""
+"""Explicit, deterministic cleaning operations; input is never modified."""
 import re
+import math
 import pandas as pd
 from server.storage import validate_frame
 
@@ -53,6 +54,8 @@ def transform(df, operations):
                     result[col] = result[col].astype(float)
             else: raise ValueError('Choose mean, median, mode or custom.')
             if pd.isna(value): raise ValueError('No valid values to compute this statistic.')
+            if isinstance(value, (int, float)) and not math.isfinite(value):
+                raise ValueError('Enter a finite fill value.')
             result[col] = result[col].fillna(value)
         elif kind == 'convert':
             target = op.get('value')
@@ -60,14 +63,14 @@ def transform(df, operations):
             elif target == 'text': result[col] = result[col].astype('string')
             else: raise ValueError('Conversion target must be number or text.')
         elif kind == 'date':
-            result[col] = pd.to_datetime(result[col], format=op.get('value') or 'ISO8601', errors='raise', utc=True).dt.tz_localize(None)
+            result[col] = pd.to_datetime(result[col], format=op.get('value') or 'ISO8601', errors='raise', utc=True).dt.tz_convert(None)
         elif kind in {'detect_outliers', 'remove_outliers', 'cap_outliers'}:
-            if not pd.api.types.is_numeric_dtype(result[col]): raise ValueError('Outlier operations need a numeric column.')
+            if not pd.api.types.is_numeric_dtype(result[col]) or pd.api.types.is_bool_dtype(result[col]): raise ValueError('Outlier operations need a numeric column.')
             s = result[col]; q1, q3 = s.quantile(.25), s.quantile(.75)
             lower, upper = q1 - 1.5 * (q3 - q1), q3 + 1.5 * (q3 - q1)
             mask = (s < lower) | (s > upper)
             if kind == 'remove_outliers': result = result.loc[~mask]
-            elif kind == 'cap_outliers': result[col] = s.clip(lower, upper)
+            elif kind == 'cap_outliers': result[col] = s.astype(float).clip(lower, upper)
             else:
                 name = col + '_outlier'
                 if name in result: raise ValueError('Outlier flag column already exists.')
@@ -76,6 +79,7 @@ def transform(df, operations):
             sep = str(op.get('value', ''))
             if not sep: raise ValueError('Enter a split separator.')
             parts = result[col].astype('string').str.split(sep, n=1, expand=True, regex=False)
+            parts = parts.reindex(columns=range(2))
             for i in range(parts.shape[1]):
                 name = f'{col}_{i+1}'
                 if name in result: raise ValueError('Split output column already exists.')

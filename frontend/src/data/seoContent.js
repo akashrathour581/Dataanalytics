@@ -406,5 +406,80 @@ export const SEO_PAGES = {
       { q: 'Are past calculations saved?', a: 'Yes, your history is safely preserved in browser local storage and can be copied or reloaded with 1 click.' }
     ],
     related: ['/cgpa-calculator', '/sgpa-calculator', '/overall-cgpa-calculator']
+  },
+
+  '/csv-cleaner': {
+    slug: '/csv-cleaner',
+    toolId: 'clean-csv',
+    title: 'Free CSV Cleaner Online — Trim Whitespace & Remove Empty Rows',
+    metaDesc: 'Clean messy CSV files online for free. Trim whitespace, drop completely empty rows, prune unpopulated columns, and export cleaned CSV instantly.',
+    h1: 'Automated CSV Data Cleaner & Sanitizer',
+    subtitle: 'Instantly sanitize messy CSV exports. Strip leading/trailing whitespace, remove blank rows, and drop unpopulated columns with 1 click.',
+    toolType: 'data',
+    steps: [
+      { step: 1, title: 'Upload CSV File', desc: 'Drag and drop your raw CSV file or load the sample dataset.' },
+      { step: 2, title: 'Select Clean Rules', desc: 'Choose to trim whitespace, drop empty rows, or delete unpopulated columns.' },
+      { step: 3, title: 'Download Clean CSV', desc: 'Download your sanitized, production-ready CSV immediately.' }
+    ],
+    features: [
+      { title: 'Whitespace Stripping', desc: 'Eliminates stubborn leading and trailing spaces that cause database and lookup errors.' },
+      { title: 'Empty Row & Col Pruning', desc: 'Removes ghost records and unused blank fields to reduce file size and speed up processing.' },
+      { title: '100% Client-Safe', desc: 'Processed securely in temporary RAM and never retained or shared.' }
+    ],
+    faqs: [
+      { q: 'Will this alter my column headers?', a: 'Whitespace from headers will be cleanly trimmed without renaming your columns.' },
+      { q: 'Can I undo or preview changes?', a: 'Your original file on your computer remains untouched; you download a freshly cleaned copy.' }
+    ],
+    related: ['/duplicate-remover', '/csv-analyzer', '/csv-to-excel']
+  },
+
+  '/duplicate-remover': {
+    slug: '/duplicate-remover',
+    toolId: 'remove-duplicates',
+    title: 'Duplicate Remover Online — Deduplicate CSV & Excel Files Free',
+    metaDesc: 'Find and remove duplicate rows from CSV and Excel spreadsheets online for free. Clean data redundancy and download deduped files.',
+    h1: 'Intelligent Duplicate Row Remover',
+    subtitle: 'Detect and purge duplicate records from your CSV and Excel files instantly, ensuring clean metrics and unskewed reports.',
+    toolType: 'data',
+    steps: [
+      { step: 1, title: 'Upload Spreadsheet', desc: 'Upload your .csv or .xlsx file with potential duplicate entries.' },
+      { step: 2, title: 'Intelligent Deduplication', desc: 'Our engine identifies identical rows while keeping the first distinct occurrence.' },
+      { step: 3, title: 'Export Clean Data', desc: 'Download your deduplicated dataset with an exact count of removed duplicates.' }
+    ],
+    features: [
+      { title: 'Exact Row Matching', desc: 'Accurately detects identical records across all columns.' },
+      { title: 'Excel & CSV Support', desc: 'Works seamlessly with multi-sheet Excel workbooks and raw CSV files.' },
+      { title: 'Deduplication Metrics', desc: 'Reports the exact count of removed rows for your audit logs.' }
+    ],
+    faqs: [
+      { q: 'Which duplicate row is kept?', a: 'The first occurrence of any duplicate row is preserved, and subsequent identical rows are pruned.' },
+      { q: 'Does it support Excel workbooks?', a: 'Yes, both .csv and .xlsx files are fully supported.' }
+    ],
+    related: ['/csv-cleaner', '/csv-analyzer', '/excel-analyzer']
+  },
+
+  '/json-formatter': {
+    slug: '/json-formatter',
+    toolId: 'format-json',
+    title: 'Free JSON Formatter & Validator Online — Beautify & Minify JSON',
+    metaDesc: 'Beautify, format, validate, and minify JSON online for free. Real-time syntax checking, customizable 2-space or 4-space indentation, and 1-click clipboard copy.',
+    h1: 'JSON Validator, Beautifier & Formatter',
+    subtitle: 'Format messy, unindented JSON payloads into clean, readable structures with custom indentation, or minify for production efficiency.',
+    toolType: 'data',
+    steps: [
+      { step: 1, title: 'Paste JSON Text', desc: 'Paste your raw JSON string or API response into the editor.' },
+      { step: 2, title: 'Select Beautify or Minify', desc: 'Choose 2-space or 4-space indentation, or compact down to single-line JSON.' },
+      { step: 3, title: 'Copy to Clipboard', desc: 'Copy formatted JSON with 1 click for your code, API docs, or debugging.' }
+    ],
+    features: [
+      { title: 'Real-Time Syntax Validation', desc: 'Catches missing brackets, dangling commas, and invalid literals with clear error messages.' },
+      { title: 'Beautify & Minify Modes', desc: 'Easily toggle between human-readable formatted JSON and lightweight production minification.' },
+      { title: 'In-Browser Privacy', desc: 'Your JSON text stays secure and is processed locally.' }
+    ],
+    faqs: [
+      { q: 'Is my JSON data uploaded to external servers?', a: 'No, validation and formatting run locally in your browser memory for maximum security.' },
+      { q: 'Can it handle large JSON payloads?', a: 'Yes, it smoothly handles large objects and arrays with thousands of records.' }
+    ],
+    related: ['/csv-to-json', '/json-to-csv', '/csv-analyzer']
   }
 };

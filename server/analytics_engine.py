@@ -56,7 +56,7 @@ def infer_column_types(df: pd.DataFrame) -> Dict[str, str]:
             sample = series.dropna()
             if len(sample) > 0 and sample.astype(str).str.contains(r"[-/:]").any():
                 try:
-                    parsed = pd.to_datetime(sample, errors="coerce")
+                    parsed = pd.to_datetime(sample, format='mixed', dayfirst=False, errors="coerce", utc=True)
                     if parsed.notna().mean() >= 0.95:
                         column_types[col] = "datetime"
                         continue
@@ -154,7 +154,7 @@ def generate_automated_eda(df: pd.DataFrame, dataset_id: str, filename: str, act
         elif ctype == "datetime":
             datetime_cols.append(col)
             try:
-                parsed = pd.to_datetime(series, errors="coerce").dropna()
+                parsed = pd.to_datetime(series, format="mixed", errors="coerce", utc=True).dropna()
                 if len(parsed) > 0:
                     profile["min_date"] = parsed.min().strftime("%Y-%m-%d")
                     profile["max_date"] = parsed.max().strftime("%Y-%m-%d")
@@ -194,7 +194,7 @@ def generate_automated_eda(df: pd.DataFrame, dataset_id: str, filename: str, act
         metric_col = next((c for c in ["Sales", "Revenue", "Amount", "Profit"] if c in numeric_cols), numeric_cols[0])
         try:
             df_temp = df[[date_col, metric_col]].dropna().copy()
-            df_temp["_date"] = pd.to_datetime(df_temp[date_col], errors="coerce")
+            df_temp["_date"] = pd.to_datetime(df_temp[date_col], format="mixed", errors="coerce", utc=True).dt.tz_convert(None)
             df_temp = df_temp.dropna(subset=["_date"])
             df_temp["_period"] = df_temp["_date"].dt.to_period("M").dt.to_timestamp()
             ts_data = df_temp.groupby("_period")[metric_col].sum().reset_index().sort_values("_period")
@@ -383,6 +383,7 @@ def query_aggregation(df: pd.DataFrame, x_col: str, y_col: Optional[str] = None,
         raise ValueError("Choose a supported aggregation.")
     if not 1 <= limit <= 100:
         raise ValueError("Limit must be between 1 and 100.")
+    df = df.replace([np.inf, -np.inf], np.nan)
     if agg_func == "count":
         result = df.groupby(x_col, dropna=False).size()
     else:
