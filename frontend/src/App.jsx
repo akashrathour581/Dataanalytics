@@ -49,6 +49,8 @@ const PATH_TO_TOOL_ID = {
   '/csv-cleaner': 'clean-csv',
   '/duplicate-remover': 'remove-duplicates',
   '/json-formatter': 'format-json',
+  '/word-to-pdf': 'word-to-pdf',
+  '/pdf-to-word': 'pdf-to-word',
   '/cgpa-calculator': 'cgpa-calculator',
   '/sgpa-calculator': 'sgpa-calculator',
   '/cgpa-to-percentage': 'cgpa-to-percentage',

@@ -28,7 +28,7 @@ from server.tools_engine import (
     merge_pdfs_bytes, compress_pdf_bytes, pdf_to_jpg_bytes, jpg_to_pdf_bytes,
     jpg_to_png_bytes, png_to_jpg_bytes, compress_image_bytes, resize_image_bytes,
     analyze_csv_data, analyze_excel_data, clean_csv_data, remove_duplicate_rows,
-    format_json_string
+    format_json_string, word_to_pdf_bytes, pdf_to_word_bytes
 )
 
 
@@ -536,6 +536,22 @@ async def tool_remove_duplicates(file: UploadFile = File(...)):
     })
 
 
+@app.post('/api/tools/word-to-pdf')
+async def tool_word_to_pdf(file: UploadFile = File(...)):
+    content = await read_upload(file)
+    buf, media = await run_file_tool(word_to_pdf_bytes, content)
+    stem = re.sub(r'[^\w. -]', '_', (file.filename or 'document').rsplit('.', 1)[0])
+    return StreamingResponse(buf, media_type=media, headers={'Content-Disposition': attachment(f'{stem}.pdf')})
+
+
+@app.post('/api/tools/pdf-to-word')
+async def tool_pdf_to_word(file: UploadFile = File(...)):
+    content = await read_upload(file)
+    buf, media = await run_file_tool(pdf_to_word_bytes, content)
+    stem = re.sub(r'[^\w. -]', '_', (file.filename or 'document').rsplit('.', 1)[0])
+    return StreamingResponse(buf, media_type=media, headers={'Content-Disposition': attachment(f'{stem}.docx')})
+
+
 # Built frontend and prerendered tool pages are served from the same origin.
 DIST = Path(__file__).resolve().parent.parent / 'frontend' / 'dist'
 if (DIST / 'assets').is_dir(): app.mount('/assets', StaticFiles(directory=DIST / 'assets'), name='assets')
@@ -560,7 +576,7 @@ def frontend(path: str):
         'image-compressor', 'image-resizer', 'sgpa-calculator', 'cgpa-to-percentage',
         'percentage-to-cgpa', 'overall-cgpa-calculator', 'calculator', 'scientific-calculator',
         'csv-analyzer', 'excel-analyzer', 'csv-cleaner', 'duplicate-remover', 'json-formatter',
-        'clean-csv', 'remove-duplicates', 'format-json'}
+        'clean-csv', 'remove-duplicates', 'format-json', 'word-to-pdf', 'pdf-to-word'}
     if path.removeprefix('tools/').rstrip('/') in legacy:
         return FileResponse(DIST / 'index.html')
     raise HTTPException(404, 'Page not found.')

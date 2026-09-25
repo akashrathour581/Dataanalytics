@@ -5,6 +5,8 @@ const entries = [
   ['excel-cleaner','Excel Cleaner','Data Cleaning','Clean an Excel worksheet with reversible transformations.','clean','.xlsx'],
   ['csv-to-excel','CSV to Excel','Converters','Turn CSV rows into a downloadable XLSX workbook.','convert','.csv','xlsx'],
   ['excel-to-csv','Excel to CSV','Converters','Select an Excel worksheet and download its rows as CSV.','convert','.xlsx','csv'],
+  ['word-to-pdf','Word to PDF','Converters','Convert a Word (.docx) document into a clean, formatted PDF file.','convert','.docx,.doc','pdf'],
+  ['pdf-to-word','PDF to Word','Converters','Extract text from a PDF and download it as an editable Word (.docx) document.','convert','.pdf','docx'],
   ['duplicate-remover','Duplicate Remover','Data Cleaning','Find duplicate rows and preview the deduplicated dataset.','clean','.csv,.xlsx'],
   ['data-quality-checker','Data Quality Checker','Data Analysis','Check completeness, duplicate rows and column quality.','quality','.csv,.xlsx,.json'],
   ['csv-viewer','CSV Viewer','Data Analysis','Browse, search and sort CSV rows with paginated results.','view','.csv'],

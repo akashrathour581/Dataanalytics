@@ -56,6 +56,8 @@ const SECTIONS = [
     items: [
       { id: 'excel-to-pdf', path: '/excel-to-pdf', name: 'Excel → PDF', icon: FileArchive, color: '#f43f5e' },
       { id: 'pdf-to-excel', path: '/pdf-to-excel', name: 'PDF → Excel', icon: FileSpreadsheet, color: '#10b981' },
+      { id: 'word-to-pdf', path: '/word-to-pdf', name: 'Word → PDF', icon: FileText, color: '#7c3aed' },
+      { id: 'pdf-to-word', path: '/pdf-to-word', name: 'PDF → Word', icon: FileText, color: '#4f46e5' },
       { id: 'csv-to-json', path: '/csv-to-json', name: 'CSV → JSON', icon: FileCode, color: '#f59e0b' },
       { id: 'json-to-csv', path: '/json-to-csv', name: 'JSON → CSV', icon: FileSpreadsheet, color: '#06b6d4' },
       { id: 'csv-to-excel', path: '/csv-to-excel', name: 'CSV → Excel', icon: FileSpreadsheet, color: '#22c55e' },

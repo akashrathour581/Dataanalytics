@@ -122,8 +122,13 @@ ORD100584,2025-07-08,CUST1322,Scented Candle,Home,West,133.78,1,15.33,Debit Card
         return { title: 'Intelligent Duplicate Remover', color: '#f43f5e', desc: 'Detect and eliminate redundant duplicate records from Excel or CSV files.', accept: '.csv, .xlsx', icon: CopyMinus };
       case 'format-json':
         return { title: 'JSON Validator & Formatter', color: '#f59e0b', desc: 'Beautify, minify, validate syntax, and format JSON payloads instantly.', icon: Code };
+      case 'word-to-pdf':
+        return { title: 'Word to PDF Converter', color: '#7c3aed', desc: 'Convert a Word (.docx) document into a clean, well-formatted PDF file instantly — preserving headings, body text and document structure.', accept: '.docx', icon: FileText };
+      case 'pdf-to-word':
+        return { title: 'PDF to Word Converter', color: '#4f46e5', desc: 'Extract all text content from a PDF and download it as a fully editable Word (.docx) document — organized page-by-page.', accept: '.pdf', icon: FileText };
       default:
         return { title: 'File Utility Tool', color: '#38bdf8', desc: 'Fast client-server processing utility.', icon: Wand2 };
+
     }
   };
 
